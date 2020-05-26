@@ -1,0 +1,32 @@
+<html>
+<head>
+  <style>
+* {
+  box-sizing: border-box;
+}
+
+#container {
+  width:800px;
+}
+
+
+#container li .hex-grid-content:hover {
+  opacity:0.2;
+}
+
+</style>
+<link href="hex-grid.css" rel="stylesheet" />
+</head>
+<body>
+  <div id="container">
+  <ul class="hex-grid-container">
+<script type="text/javascript">
+for(var i = 0; i < 10; i++){
+  for(var j = 0; j < 10; j++){
+    document.write('<li class="hex-grid-item"><div class="hex-grid-content"></div></li>');
+  }
+}
+</script>
+</ul>
+</div>
+</body>
