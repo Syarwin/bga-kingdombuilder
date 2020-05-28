@@ -30,11 +30,12 @@
   document.write("</ul></div>");
 
 var quadrants = [0,3,2,5];
+var flipped = [true, false, false, true];
 for(var k = 0; k < 4; k++){
   for(var i = 0; i < 10; i++){
     for(var j = 0; j < 10; j++){
-      var _i = i;
-      var _j = j;
+      var _i = flipped[k]? (9 - i) : i;
+      var _j = flipped[k]? (9 - j) : j;
       if(k == 1 || k == 3) _j += 10;
       if(k == 2 || k == 3) _i += 10;
 
@@ -44,6 +45,8 @@ for(var k = 0; k < 4; k++){
       var backgroundLeft = 10.53*j + (i % 2 == 1? 5.25 : 0);
       var backgroundTop = quadrants[k]*12.7 + 1.235*i;
       cell.style.backgroundPosition = backgroundLeft + "% " + backgroundTop + "%";
+      if(flipped[k])
+        cell.style.transform = "skewY(-30deg) rotate(240deg)";
     }
   }
 }
