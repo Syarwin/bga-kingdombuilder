@@ -1,32 +1,52 @@
 <html>
 <head>
   <style>
-* {
+ * {
   box-sizing: border-box;
 }
 
-#container {
-  width:800px;
+#container, .grid-container {
+  width:1200px;
 }
 
 
 #container li .hex-grid-content:hover {
-  opacity:0.2;
+  background-color:rgba(255,255,255,0.5);
 }
-
 </style>
 <link href="hex-grid.css" rel="stylesheet" />
 </head>
 <body>
   <div id="container">
-  <ul class="hex-grid-container">
 <script type="text/javascript">
-for(var i = 0; i < 10; i++){
-  for(var j = 0; j < 10; j++){
-    document.write('<li class="hex-grid-item"><div class="hex-grid-content"></div></li>');
+  document.write('<div class="grid-container"><ul class="hex-grid-container grid-top-left-1 grid-top-right-3 grid-bottom-left-2 grid-bottom-right-5">');
+
+  for(var i = 0; i < 20; i++){
+    for(var j = 0; j < 20; j++){
+      document.write('<li class="hex-grid-item"><div class="hex-grid-content"></div><div class="hex-grid-content-background" id="cell-' + i + '-' + j +'"></div></li>');
+    }
+  }
+
+  document.write("</ul></div>");
+
+var quadrants = [0,3,2,5];
+for(var k = 0; k < 4; k++){
+  for(var i = 0; i < 10; i++){
+    for(var j = 0; j < 10; j++){
+      var _i = i;
+      var _j = j;
+      if(k == 1 || k == 3) _j += 10;
+      if(k == 2 || k == 3) _i += 10;
+
+      var cell = document.getElementById('cell-' + _i + "-" + _j);
+      console.log(cell)
+
+      var backgroundLeft = 10.53*j + (i % 2 == 1? 5.25 : 0);
+      var backgroundTop = quadrants[k]*12.7 + 1.235*i;
+      cell.style.backgroundPosition = backgroundLeft + "% " + backgroundTop + "%";
+    }
   }
 }
 </script>
-</ul>
 </div>
 </body>

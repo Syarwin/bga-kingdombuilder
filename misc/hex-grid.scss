@@ -1,7 +1,19 @@
 $block: '.hex-grid';
 
+@mixin grid-item($amount) {
+  @for $i from 1 through $amount {
+    &:nth-of-type(#{2*$amount}n + #{$amount + $i}) {
+      margin-top: calc(-0.29 * 100% / (var(--amount) + 0.5));
+      margin-bottom: calc(-0.29 * 100% / (var(--amount) + 0.5));
+      transform: translateX(50%) rotate(-60deg) skewY(30deg);
+    }
+  }
+}
+
+
 #{$block} {
   &-container{
+    --amount: 20;
     &:after {
       content: "";
       display: block;
@@ -9,7 +21,9 @@ $block: '.hex-grid';
     }
   }
 
-  &-item  {
+  &-item {
+    @include grid-item(20);
+
     list-style-type: none;
     position: relative;
     float: left;
@@ -30,43 +44,22 @@ $block: '.hex-grid';
     left: 0;
     width: 100%;
     height: 100%;
+    z-index:2;
+    transform: skewY(-30deg) rotate(60deg);
+    background-color:transparent;
+  }
+
+  &-content-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index:1;
     transform: skewY(-30deg) rotate(60deg);
     background-image:url("../img/board.jpg");
-    background-size:1040%;
-  }
-}
-
-@mixin grid-item($amount) {
-  @for $i from 1 through $amount {
-    &:nth-of-type(#{2*$amount}n + #{$amount + $i}) {
-      margin-top: calc(-0.29 * 100% / (var(--amount) + 0.5));
-      margin-bottom: calc(-0.29 * 100% / (var(--amount) + 0.5));
-      transform: translateX(50%) rotate(-60deg) skewY(30deg);
-    }
+    background-size:1035%;
+    background-color:gray;
   }
 
-  @for $j from 1 through $amount {
-    @for $i from 1 through $amount {
-      &:nth-of-type(#{$amount*($j - 1) + $i}) #{$block}-content {
-        @if $j % 2 == 0 {
-          background-position:#{10.57%*($i - 1) + 5.3%} #{2*12.7% + 1.226%*($j - 1)};
-        }
-        @else {
-          background-position:#{10.57%*($i - 1)} #{2*12.7% + 1.226%*($j - 1)};
-        }
-      }
-    }
-  }
-}
-
-
-
-#{$block} {
-	&-container {
-    --amount: 10;
-	}
-
-	&-item {
-		@include grid-item(10);
-	}
 }
