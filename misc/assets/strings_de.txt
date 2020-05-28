@@ -1,0 +1,90 @@
+#
+# KingdomBuilder.string : German strings file for BSW KingdomBuilderBoard.class
+#
+# Fixed Fonts
+#
+tooltipHeader=jGaramond,1,36
+tooltipNormal=jGaramond,0,17
+tooltipBold=jGaramond,1,17
+tooltipItalic=jGaramond,2,17
+#
+headerCardName=jGaramond,1,30
+#
+cardHeader=jGaramond,1,21
+cardNormal=jGaramond,1,13
+cardItalic=jGaramond,2,14
+#
+# Scaled Fonts
+#
+numberBig=SansSerif,1,60
+numberMed=SansSerif,1,30
+#
+namePlayerRect=Serif,1,30
+numberPlayerRect=SansSerif,0,22
+#
+nameScoring=Serif,0,30
+numberScoring=SansSerif,1,40
+cardInfoScoring=jGaramond,2,28
+#
+# Misc strings
+#
+t0=Standby...
+#
+# Tooltips 
+#
+# Format: location tiles -> Header|Text
+#   [n] (combined with their end tags   [/n]) mark regions with tooltipBold/tooltipItalic/tooltipNormal font
+#  marks a new line
+#  marks a position of a conditional split of this word at the end of a line (inserting a ´-´)
+# Other insertion characters are possible, e.g. [-=+] inserts a ´+´ instead of ´-´
+#
+l0=Burg|3 Gold für jedes Burgfeld, an dem bei Spielende mindestens eine Siedlung gebaut ist.
+l1=Orakel|Eine Siedlung auf ein Feld der Geländeart bauen, welche die ausgespielte Geländekarte zeigt. Es muss, wenn möglich, angrenzend gebaut werden.
+l2=Farm|Eine Siedlung auf ein Grasfeld bauen. Es muss, wenn möglich, angrenzend gebaut werden. Existiert kein freies Grasfeld mehr auf dem Spielplan, entfällt die Aktion.
+l3=Taverne|Eine Siedlung an eines der beiden Enden einer eigenen zusammenhängenden Siedlungskette bauen, die aus mindestens 3 Siedlungen besteht. Die Richtung (horizontal oder diagonal) ist ohne Bedeutung. Die Siedlung darf nur auf ein bebaubares Geländefeld gebaut werden.
+l4=Turm|Eine Siedlung am Rand des Spielplans bauen. Es darf jede der 5 bebaubaren Geländearten gewählt werden. Es muss, wenn möglich, angrenzend gebaut werden.
+l5=Hafen|Eine beliebige Siedlung auf ein Wasserfeld versetzen. In diesem Fall darf auf einem Wasserfeld platziert werden. Es muss, wenn möglich, angrenzend gebaut werden.
+l6=Koppel|Eine beliebige Siedlung in beliebiger Richtung (horizontal oder diagonal) zwei Felder weiter in gerader Linie auf ein bebaubares Feld versetzen. Dabei darf jedes Geländefeld, auch Wasser, Berg, Burg und Ort sowie eigene und fremde Siedlungen übersprungen werden. Die Siedlung muss nicht angrenzend gebaut werden (Bauregel 3 gilt hier nicht).
+l7=Scheune|Eine beliebige Siedlung auf ein Feld der Geländeart versetzen, welche die ausgespielte Geländekarte zeigt. Es muss, wenn möglich, angrenzend gebaut werden.
+l8=Oase|Eine Siedlung auf ein Wüstenfeld bauen. Es muss, wenn möglich, angrenzend gebaut werden. Existiert kein freies Wüstenfeld mehr auf dem Spielplan, entfällt die Aktion.
+#
+# Dialog texte
+#
+d0=Abbrechen?|Möchtest Du das Spiel wirklich beenden? Das Spiel wird nicht gewertet.
+#
+# Kingdom Builder Cards
+#
+# Format: Kingdom Builder cards -> Cardname|Text
+#  [n] (combined with their end tags  [/n]) mark regions with cardItalic/cardNormal font
+#  marks a new line. Don't change the number of this tags!
+#  marks a position of a conditional split of this word at the end of a line (inserting a ´-´)
+# Other insertion characters are possible, e.g. [-=+] inserts a ´+´ instead of ´-´
+#
+ci0=Fischer|Baue Siedlungen am Wasser1 Gold für jede eigene Siedlung, die angrenzend an ein oder mehrere Wasserfelder gebaut ist.
+ci1=Händler|Verbinde Orts-/Burgfelder miteinander4 Gold für jedes Orts-/Burgfeld, das durch eigene Siedlungen mit einem oder mehreren anderen Orts-/Burgfeldern verbunden ist.
+ci2=Entdecker|Baue in vielen horizontalen Linien eine Siedlung1 Gold für jede horizontale Linie, auf der mindestens eine eigene Siedlung gebaut ist.
+ci3=Einsiedler|Bilde viele Siedlungsgebiete1 Gold für jede einzelnstehende eigene Siedlung sowie für jedes separate Siedlungsgebiet.
+ci4=Bürger|Bilde ein großes Siedlungsgebiet1 Gold für je 2 eigene Siedlungen im größten eigenen Siedlungsgebiet.
+ci5=Bergleute|Baue Siedlungen am Berg1 Gold für jede eigene Siedlung, die angrenzend an ein oder mehrere Bergfelder gebaut ist.
+ci6=Arbeiter|Baue Siedlungen an Orts- oder Burgfelder1 Gold für jede eigene Siedlung, die angrenzend an ein Orts- oder Burgfeld gebaut ist.
+ci7=Ritter|Baue viele Siedlungen in einer horizontalen Linie2 Gold für jede eigene Siedlung auf der horizontalen Linie mit den meisten eigenen Siedlungen.
+ci8=Lords|Baue die meisten Siedlungen in jedem QuadrantenJe Quadrant: 12 Gold für die größte Anzahl Siedlungen. 6 Gold für die zweitgrößte Anzahl.
+ci9=Bauern|Baue Siedlungen in allen Quadranten3 Gold für jede eigene Siedlung in dem Quadranten mit den wenigsten eigenen Siedlungen.
+#
+# ScoringInfo
+#
+# Format: Kingdom Builder cards -> Text
+#  marks a position of a conditional split of this word at the end of a line (inserting a ´-´)
+# Other insertion characters are possible, e.g. [-=+] inserts a ´+´ instead of ´-´
+#
+si0=3 Gold für jedes Burgfeld, an dem mindestens eine Siedlung gebaut ist.
+si1=1 Gold für jede eigene Siedlung, die angrenzend an ein oder mehrere Wasserfelder gebaut ist.
+si2=4 Gold für jedes Orts-/Burgfeld, das durch eigene Siedlungen mit einem oder mehreren anderen Orts-/Burgfeldern verbunden ist.
+si3=1 Gold für jede horizontale Linie, auf der mindestens eine eigene Siedlung gebaut ist.
+si4=1 Gold für jede einzelnstehende eigene Siedlung sowie für jedes separate Siedlungsgebiet.
+si5=1 Gold für je 2 eigene Siedlungen im größten eigenen Siedlungsgebiet.
+si6=1 Gold für jede eigene Siedlung, die angrenzend an ein oder mehrere Bergfelder gebaut ist.
+si7=1 Gold für jede eigene Siedlung, die angrenzend an ein Orts- oder Burgfeld gebaut ist.
+si8=2 Gold für jede eigene Siedlung auf der horizontalen Linie mit den meisten eigenen Siedlungen.
+si9=Je Quadrant: 12 Gold für die größte Anzahl Siedlungen. 6 Gold für die zweitgrößte Anzahl.
+si10=3 Gold für jede eigene Siedlung in dem Quadranten mit den wenigsten eigenen Siedlungen.

@@ -1,0 +1,90 @@
+#
+# KingdomBuilder.string : German strings file for BSW KingdomBuilderBoard.class
+#
+# Fixed Fonts
+#
+tooltipHeader=jGaramond,1,36
+tooltipNormal=jGaramond,0,17
+tooltipBold=jGaramond,1,17
+tooltipItalic=jGaramond,2,17
+#
+headerCardName=jGaramond,1,30
+#
+cardHeader=jGaramond,1,21
+cardNormal=jGaramond,1,13
+cardItalic=jGaramond,2,14
+#
+# Scaled Fonts
+#
+numberBig=SansSerif,1,60
+numberMed=SansSerif,1,30
+#
+namePlayerRect=Serif,1,30
+numberPlayerRect=SansSerif,0,22
+#
+nameScoring=Serif,0,30
+numberScoring=SansSerif,1,40
+cardInfoScoring=jGaramond,2,28
+#
+# Misc strings
+#
+t0=Standby...
+#
+# Tooltips 
+#
+# Format: location tiles -> Header|Text
+#   [n] (combined with their end tags   [/n]) mark regions with tooltipBold/tooltipItalic/tooltipNormal font
+#  marks a new line
+#  marks a position of a conditional split of this word at the end of a line (inserting a ´-´)
+# Other insertion characters are possible, e.g. [-=+] inserts a ´+´ instead of ´-´
+#
+l0=Castle|At the end of the game,|earn 3 gold for each castle hex|you have built at least one|of your settlements next to it.
+l1=Oracle|Build one settlement on a hex of|the same terrain type as your played|terrain card.|Build adjacent if possible.
+l2=Farm|Build one settlement on|a grass hex.|Build adjacent if possible.
+l3=Tavern|Build one settlement at one end|of a line of at least 3|of your own settlements.|The orientation of the line does|not matter.|The chosen hex must be|suitable for building.
+l4=Tower|Build one settlement at the|edge of the game board.|Choose any of the 5 suitable|terrain type hexes.|Build adjacent if possible.
+l5=Harbor|Move any one of your existing|settlements to a water hex.|Build adjacent if possible.|This is the only way to build|settlements on water hexes.
+l6=Paddock|Move any one of your existing|settlements two hexes in a straight line|in any direction to an eligible hex.|You may jump across any terrain|type hex and/or your own and|other players settlements.|The target hex must not necessarily|be adjacent to one of your|own settlements.
+l7=Barn|Move any one of your existing|settlements to a hex of the same|terrain type as your played|terrain card.|Build adjacent if possible.
+l8=Oasis|Build one settlement on|a desert hex.|Build adjacent if possible.
+#
+# Dialog texte
+#
+d0=Cancel Game?|Do you really want to cancel this game? There won't be any assessment.
+#
+# Kingdom Builder Cards
+#
+# Format: Kingdom Builder cards -> Cardname|Text
+#  [n] (combined with their end tags  [/n]) mark regions with cardItalic/cardNormal font
+#  marks a new line. Don't change the number of this tags!
+#  marks a position of a conditional split of this word at the end of a line (inserting a ´-´)
+# Other insertion characters are possible, e.g. [-=+] inserts a ´+´ instead of ´-´
+#
+ci0=Fischer|Baue Siedlungen am Wasser1 Gold für jede eigene Siedlung, die angrenzend an ein oder mehrere Wasserfelder gebaut ist.
+ci1=Händler|Verbinde Orts-/Burgfelder miteinander4 Gold für jedes Orts-/Burgfeld, das durch eigene Siedlungen mit einem oder mehreren anderen Orts-/Burgfeldern verbunden ist.
+ci2=Entdecker|Baue in vielen horizontalen Linien eine Siedlung1 Gold für jede horizontale Linie, auf der mindestens eine eigene Siedlung gebaut ist.
+ci3=Einsiedler|Bilde viele Siedlungsgebiete1 Gold für jede einzelnstehende eigene Siedlung sowie für jedes separate Siedlungsgebiet.
+ci4=Bürger|Bilde ein großes Siedlungsgebiet1 Gold für je 2 eigene Siedlungen im größten eigenen Siedlungsgebiet.
+ci5=Bergleute|Baue Siedlungen am Berg1 Gold für jede eigene Siedlung, die angrenzend an ein oder mehrere Bergfelder gebaut ist.
+ci6=Arbeiter|Baue Siedlungen an Orts- oder Burgfelder1 Gold für jede eigene Siedlung, die angrenzend an ein Orts- oder Burgfeld gebaut ist.
+ci7=Ritter|Baue viele Siedlungen in einer horizontalen Linie2 Gold für jede eigene Siedlung auf der horizontalen Linie mit den meisten eigenen Siedlungen.
+ci8=Lords|Baue die meisten Siedlungen in jedem QuadrantenJe Quadrant: 12 Gold für die größte Anzahl Siedlungen. 6 Gold für die zweitgrößte Anzahl.
+ci9=Bauern|Baue Siedlungen in allen Quadranten3 Gold für jede eigene Siedlung in dem Quadranten mit den wenigsten eigenen Siedlungen.
+#
+# ScoringInfo
+#
+# Format: Kingdom Builder cards -> Text
+#  marks a position of a conditional split of this word at the end of a line (inserting a ´-´)
+# Other insertion characters are possible, e.g. [-=+] inserts a ´+´ instead of ´-´
+#
+si0=3 Gold for every Castle, you have built a settlement next to it.
+si1=1 gold for each of your own settlements built adjacent to one or more water hexes.
+si2=4 gold for each location and/or castle hex linked contiguously by your own settlements to other location and/or castle hexes.
+si3=1 gold for each horizontal line on which you have built at least one of your own settlements.
+si4=1 gold for each of your own separate settlement and for each separate settlement area.
+si5=1 gold for every 2 of your own settlements in your largest own settlement area.
+si6=1 gold for each of your own settlements built adjacent to one or more mountain hexes
+si7=1 gold for each of your own settlements built adjacent to a location or castle hex.
+si8=2 gold for each of your own settlements built on that horizontal line with the most of your own settlements.
+si9=Each sector: 12 gold for the maximum number of settlements there; 6 gold for the next highest number of settlements.
+si10=3 gold for each of your own settlements in that sector with the fewest of your own settlements.
