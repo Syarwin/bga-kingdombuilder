@@ -1,98 +1,96 @@
-.hex-grid-container {
-  --amount: 20; }
-  .hex-grid-container:after {
-    content: "";
-    display: block;
-    clear: both; }
+.hex-grid-container:after {
+  content: "";
+  display: block;
+  clear: both; }
 .hex-grid-item {
   list-style-type: none;
   position: relative;
   float: left;
-  width: calc(100% / (var(--amount) + 0.5));
-  padding-bottom: calc(1.1579 * 100% / (var(--amount) + 0.5));
+  width: 4.8780487805%;
+  padding-bottom: 5.6482926829%;
   transform: rotate(-60deg) skewY(30deg);
   overflow: hidden;
   visibility: hidden;
   margin: -0.02%; }
   .hex-grid-item:nth-of-type(40n + 21) {
-    margin-top: calc(-0.29 * 100% / (var(--amount) + 0.5));
-    margin-bottom: calc(-0.29 * 100% / (var(--amount) + 0.5));
+    margin-top: -1.4146341463%;
+    margin-bottom: -1.4146341463%;
     transform: translateX(50%) rotate(-60deg) skewY(30deg); }
   .hex-grid-item:nth-of-type(40n + 22) {
-    margin-top: calc(-0.29 * 100% / (var(--amount) + 0.5));
-    margin-bottom: calc(-0.29 * 100% / (var(--amount) + 0.5));
+    margin-top: -1.4146341463%;
+    margin-bottom: -1.4146341463%;
     transform: translateX(50%) rotate(-60deg) skewY(30deg); }
   .hex-grid-item:nth-of-type(40n + 23) {
-    margin-top: calc(-0.29 * 100% / (var(--amount) + 0.5));
-    margin-bottom: calc(-0.29 * 100% / (var(--amount) + 0.5));
+    margin-top: -1.4146341463%;
+    margin-bottom: -1.4146341463%;
     transform: translateX(50%) rotate(-60deg) skewY(30deg); }
   .hex-grid-item:nth-of-type(40n + 24) {
-    margin-top: calc(-0.29 * 100% / (var(--amount) + 0.5));
-    margin-bottom: calc(-0.29 * 100% / (var(--amount) + 0.5));
+    margin-top: -1.4146341463%;
+    margin-bottom: -1.4146341463%;
     transform: translateX(50%) rotate(-60deg) skewY(30deg); }
   .hex-grid-item:nth-of-type(40n + 25) {
-    margin-top: calc(-0.29 * 100% / (var(--amount) + 0.5));
-    margin-bottom: calc(-0.29 * 100% / (var(--amount) + 0.5));
+    margin-top: -1.4146341463%;
+    margin-bottom: -1.4146341463%;
     transform: translateX(50%) rotate(-60deg) skewY(30deg); }
   .hex-grid-item:nth-of-type(40n + 26) {
-    margin-top: calc(-0.29 * 100% / (var(--amount) + 0.5));
-    margin-bottom: calc(-0.29 * 100% / (var(--amount) + 0.5));
+    margin-top: -1.4146341463%;
+    margin-bottom: -1.4146341463%;
     transform: translateX(50%) rotate(-60deg) skewY(30deg); }
   .hex-grid-item:nth-of-type(40n + 27) {
-    margin-top: calc(-0.29 * 100% / (var(--amount) + 0.5));
-    margin-bottom: calc(-0.29 * 100% / (var(--amount) + 0.5));
+    margin-top: -1.4146341463%;
+    margin-bottom: -1.4146341463%;
     transform: translateX(50%) rotate(-60deg) skewY(30deg); }
   .hex-grid-item:nth-of-type(40n + 28) {
-    margin-top: calc(-0.29 * 100% / (var(--amount) + 0.5));
-    margin-bottom: calc(-0.29 * 100% / (var(--amount) + 0.5));
+    margin-top: -1.4146341463%;
+    margin-bottom: -1.4146341463%;
     transform: translateX(50%) rotate(-60deg) skewY(30deg); }
   .hex-grid-item:nth-of-type(40n + 29) {
-    margin-top: calc(-0.29 * 100% / (var(--amount) + 0.5));
-    margin-bottom: calc(-0.29 * 100% / (var(--amount) + 0.5));
+    margin-top: -1.4146341463%;
+    margin-bottom: -1.4146341463%;
     transform: translateX(50%) rotate(-60deg) skewY(30deg); }
   .hex-grid-item:nth-of-type(40n + 30) {
-    margin-top: calc(-0.29 * 100% / (var(--amount) + 0.5));
-    margin-bottom: calc(-0.29 * 100% / (var(--amount) + 0.5));
+    margin-top: -1.4146341463%;
+    margin-bottom: -1.4146341463%;
     transform: translateX(50%) rotate(-60deg) skewY(30deg); }
   .hex-grid-item:nth-of-type(40n + 31) {
-    margin-top: calc(-0.29 * 100% / (var(--amount) + 0.5));
-    margin-bottom: calc(-0.29 * 100% / (var(--amount) + 0.5));
+    margin-top: -1.4146341463%;
+    margin-bottom: -1.4146341463%;
     transform: translateX(50%) rotate(-60deg) skewY(30deg); }
   .hex-grid-item:nth-of-type(40n + 32) {
-    margin-top: calc(-0.29 * 100% / (var(--amount) + 0.5));
-    margin-bottom: calc(-0.29 * 100% / (var(--amount) + 0.5));
+    margin-top: -1.4146341463%;
+    margin-bottom: -1.4146341463%;
     transform: translateX(50%) rotate(-60deg) skewY(30deg); }
   .hex-grid-item:nth-of-type(40n + 33) {
-    margin-top: calc(-0.29 * 100% / (var(--amount) + 0.5));
-    margin-bottom: calc(-0.29 * 100% / (var(--amount) + 0.5));
+    margin-top: -1.4146341463%;
+    margin-bottom: -1.4146341463%;
     transform: translateX(50%) rotate(-60deg) skewY(30deg); }
   .hex-grid-item:nth-of-type(40n + 34) {
-    margin-top: calc(-0.29 * 100% / (var(--amount) + 0.5));
-    margin-bottom: calc(-0.29 * 100% / (var(--amount) + 0.5));
+    margin-top: -1.4146341463%;
+    margin-bottom: -1.4146341463%;
     transform: translateX(50%) rotate(-60deg) skewY(30deg); }
   .hex-grid-item:nth-of-type(40n + 35) {
-    margin-top: calc(-0.29 * 100% / (var(--amount) + 0.5));
-    margin-bottom: calc(-0.29 * 100% / (var(--amount) + 0.5));
+    margin-top: -1.4146341463%;
+    margin-bottom: -1.4146341463%;
     transform: translateX(50%) rotate(-60deg) skewY(30deg); }
   .hex-grid-item:nth-of-type(40n + 36) {
-    margin-top: calc(-0.29 * 100% / (var(--amount) + 0.5));
-    margin-bottom: calc(-0.29 * 100% / (var(--amount) + 0.5));
+    margin-top: -1.4146341463%;
+    margin-bottom: -1.4146341463%;
     transform: translateX(50%) rotate(-60deg) skewY(30deg); }
   .hex-grid-item:nth-of-type(40n + 37) {
-    margin-top: calc(-0.29 * 100% / (var(--amount) + 0.5));
-    margin-bottom: calc(-0.29 * 100% / (var(--amount) + 0.5));
+    margin-top: -1.4146341463%;
+    margin-bottom: -1.4146341463%;
     transform: translateX(50%) rotate(-60deg) skewY(30deg); }
   .hex-grid-item:nth-of-type(40n + 38) {
-    margin-top: calc(-0.29 * 100% / (var(--amount) + 0.5));
-    margin-bottom: calc(-0.29 * 100% / (var(--amount) + 0.5));
+    margin-top: -1.4146341463%;
+    margin-bottom: -1.4146341463%;
     transform: translateX(50%) rotate(-60deg) skewY(30deg); }
   .hex-grid-item:nth-of-type(40n + 39) {
-    margin-top: calc(-0.29 * 100% / (var(--amount) + 0.5));
-    margin-bottom: calc(-0.29 * 100% / (var(--amount) + 0.5));
+    margin-top: -1.4146341463%;
+    margin-bottom: -1.4146341463%;
     transform: translateX(50%) rotate(-60deg) skewY(30deg); }
   .hex-grid-item:nth-of-type(40n + 40) {
-    margin-top: calc(-0.29 * 100% / (var(--amount) + 0.5));
-    margin-bottom: calc(-0.29 * 100% / (var(--amount) + 0.5));
+    margin-top: -1.4146341463%;
+    margin-bottom: -1.4146341463%;
     transform: translateX(50%) rotate(-60deg) skewY(30deg); }
 .hex-grid-item * {
   visibility: visible; }

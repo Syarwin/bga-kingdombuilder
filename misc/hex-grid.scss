@@ -3,8 +3,8 @@ $block: '.hex-grid';
 @mixin grid-item($amount) {
   @for $i from 1 through $amount {
     &:nth-of-type(#{2*$amount}n + #{$amount + $i}) {
-      margin-top: calc(-0.29 * 100% / (var(--amount) + 0.5));
-      margin-bottom: calc(-0.29 * 100% / (var(--amount) + 0.5));
+      margin-top: #{ -0.29 * 100% / ($amount + 0.5) };
+      margin-bottom: #{-0.29 * 100% / ($amount + 0.5) };
       transform: translateX(50%) rotate(-60deg) skewY(30deg);
     }
   }
@@ -13,7 +13,6 @@ $block: '.hex-grid';
 
 #{$block} {
   &-container{
-    --amount: 20;
     &:after {
       content: "";
       display: block;
@@ -27,8 +26,8 @@ $block: '.hex-grid';
     list-style-type: none;
     position: relative;
     float: left;
-    width: calc(100% / (var(--amount) + 0.5));
-    padding-bottom: calc(1.1579 * 100% / (var(--amount) + 0.5));
+    width: #{ 100% / (20 + 0.5) };
+    padding-bottom: #{ 1.1579 * 100% / (20 + 0.5) };
     transform: rotate(-60deg) skewY(30deg);
     overflow:hidden;
     visibility:hidden;

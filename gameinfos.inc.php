@@ -12,22 +12,22 @@
 
 $gameinfos = [
 	'game_name' => "Kingdom Builder",
-	'designer' => 'Donald X. Vaccarino',       
-	'artist' => 'Oliver Schlemmer',         
-	'year' => 2011,                 
+	'designer' => 'Donald X. Vaccarino',
+	'artist' => 'Oliver Schlemmer',
+	'year' => 2011,
 	'publisher' => 'Queen Games',
-	'publisher_website' => 'https://ssl.queen-games.com/',   
+	'publisher_website' => 'https://ssl.queen-games.com/',
 	'publisher_bgg_id' => 47,
 	'bgg_id' => 107529,
-	'players' => [2,3,4],    
+	'players' => [1,2,3,4],    
 
 	'suggest_player_number' => null,
 	'not_recommend_player_number' => null,
 
-	'estimated_duration' => 30,           
-	'fast_additional_time' => 30,           
-	'medium_additional_time' => 40,           
-	'slow_additional_time' => 50,           
+	'estimated_duration' => 30,
+	'fast_additional_time' => 30,
+	'medium_additional_time' => 40,
+	'slow_additional_time' => 50,
 
 // If you are using a tie breaker in your game (using "player_score_aux"), you must describe here
 // the formula used to compute "player_score_aux". This description will be used as a tooltip to explain
@@ -40,12 +40,12 @@ $gameinfos = [
 	'losers_not_ranked' => false,
 
 	// Game is "beta". A game MUST set is_beta=1 when published on BGA for the first time, and must remains like this until all bugs are fixed.
-	'is_beta' => 1,                     
-	'is_coop' => 0, 
+	'is_beta' => 1,
+	'is_coop' => 0,
 
 	'complexity' => 2,
 	'luck' => 2,
-	'strategy' => 3,    
+	'strategy' => 3,
 	'diplomacy' => 3,
 
 	'player_colors' => [ "ff0000", "008000", "0000ff", "ffa500", "773300" ],
