@@ -13,6 +13,9 @@
  *
  */
 
+div#game_play_area {
+  display:flex;
+}
 
 div#board {
   width:900px;
@@ -22,6 +25,85 @@ div#board li .hex-grid-content:hover {
   background-color:rgba(255,255,255,0.5);
 }
 
+div#kb-cards {
+  width:20%;
+  display:flex;
+  flex-flow:column;
+}
+
+div#kb-cards div.kb-card {
+  width:100%;
+  height:0;
+  position:relative;
+  padding-bottom:159%;
+}
+
+div#kb-cards div.kb-card div.kb-card-mask {
+  position:absolute;
+  top:0;
+  left:0;
+  z-index:2;
+  width:100%;
+  height:100%;
+  background-image:url("img/card-mask.png");
+  background-size:cover;
+}
+
+
+div#kb-cards div.kb-card div.kb-card-background {
+  position:absolute;
+  top: 13.5%;
+  left: 7.5%;
+  z-index: 1;
+  width: 85%;
+  height: 48%;
+  background-image:url("img/card-backgrounds.jpg");
+  background-size:1000%;
+}
+
+div#kb-cards div.kb-card.kb-card-0 div.kb-card-background { background-position: 0% 0%; }
+div#kb-cards div.kb-card.kb-card-1 div.kb-card-background { background-position: 11.1% 0%; }
+div#kb-cards div.kb-card.kb-card-2 div.kb-card-background { background-position: 22.2% 0%; }
+div#kb-cards div.kb-card.kb-card-3 div.kb-card-background { background-position: 33.3% 0%; }
+div#kb-cards div.kb-card.kb-card-4 div.kb-card-background { background-position: 44.4% 0%; }
+div#kb-cards div.kb-card.kb-card-5 div.kb-card-background { background-position: 55.5% 0%; }
+div#kb-cards div.kb-card.kb-card-6 div.kb-card-background { background-position: 66.6% 0%; }
+div#kb-cards div.kb-card.kb-card-7 div.kb-card-background { background-position: 77.7% 0%; }
+div#kb-cards div.kb-card.kb-card-8 div.kb-card-background { background-position: 88.8% 0%; }
+div#kb-cards div.kb-card.kb-card-9 div.kb-card-background { background-position: 100% 0%; }
+
+div#kb-cards div.kb-card div.kb-card-name {
+  position: absolute;
+  top: 4%;
+  left: 0;
+  z-index: 3;
+  width: 100%;
+  height: 9%;
+  font-size:1.5em;
+  font-variant:small-caps;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+div#kb-cards div.kb-card div.kb-card-desc {
+  position: absolute;
+  top: 63%;
+  left: 12%;
+  z-index: 3;
+  width: 76%;
+  height: 32%;
+  font-size: 0.9em;
+}
+
+div#kb-cards div.kb-card div.kb-card-desc p:nth-of-type(1){
+  font-weight: bold;
+  margin-bottom: 5%;
+}
+
+div#kb-cards div.kb-card div.kb-card-desc p:nth-of-type(2){
+  font-style: italic;
+}
 
 /* Grid stuff generated from sass */
 .hex-grid-container:after {

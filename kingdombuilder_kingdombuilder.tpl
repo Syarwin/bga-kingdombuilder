@@ -10,4 +10,16 @@
     <!-- END cell -->
   </ul>
 </div>
+
+<div id="kb-cards">
+  <!-- BEGIN kbcard -->
+  <div class="kb-card kb-card-{ID}">
+    <div class="kb-card-background"></div>
+    <div class="kb-card-mask"></div>
+    <div class="kb-card-name">{NAME}</div>
+    <div class="kb-card-desc"><p>{SHORT}</p><p>{POINTS}</p></div>
+  </div>
+  <!-- END kbcard -->
+</div>
+
 {OVERALL_GAME_FOOTER}

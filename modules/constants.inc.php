@@ -25,3 +25,19 @@ define('RANDOM', 1);
  */
 define('CURRENT_ROUND', 20);
 define('FIRST_PLAYER', 21);
+
+
+
+/*
+ * KB Cards
+ */
+define('FISHERMEN', 0);
+define('MERCHANTS', 1);
+define('DISCOVERERS', 2);
+define('HERMITS', 3);
+define('CITIZENS', 4);
+define('MINERS', 5);
+define('WORKERS', 6);
+define('KNIGHTS', 7);
+define('LORDS', 8);
+define('FARMERS', 9);

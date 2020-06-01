@@ -20,6 +20,7 @@
 require_once( APP_GAMEMODULE_PATH.'module/table/table.game.php' );
 require_once('modules/constants.inc.php');
 require_once("modules/KingdomBuilderBoard.class.php");
+require_once("modules/KingdomBuilderCards.class.php");
 require_once("modules/KingdomBuilderLog.class.php");
 
 
@@ -38,9 +39,10 @@ class kingdombuilder extends Table
 //    $this->cards = self::getNew('module.common.deck');
 //    $this->cards->init('card');
 
-    // Initialize logger, board
+    // Initialize logger, board and cards
     $this->log   = new KingdomBuilderLog($this);
     $this->board = new KingdomBuilderBoard($this);
+    $this->cards = new KingdomBuilderCards($this);
   }
 
   protected function getGameName()
@@ -73,11 +75,9 @@ class kingdombuilder extends Table
 
 		$optionSetup = intval(self::getGameStateValue('optionSetup'));
 
-		// Initialize board
+		// Initialize board and cards
 		$this->board->setupNewGame($optionSetup);
-
-    // Create terrains cards TODO
-//    $this->powerManager->createCards();
+    $this->cards->setupNewGame($optionSetup);
 
     // Active first player to play
     $pId = $this->activeNextPlayer();
@@ -94,6 +94,7 @@ class kingdombuilder extends Table
   {
     return [
       'quadrants' => $this->board->getQuadrants(),
+      'kbCards'   => $this->cards->getKbCards(),
     ];
   }
 
