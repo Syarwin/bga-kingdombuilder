@@ -15,10 +15,11 @@
 
 div#game_play_area {
   display:flex;
+  align-items: flex-start;
 }
 
 div#board {
-  width:900px;
+  width:1000px;
 }
 
 div#board li .hex-grid-content.selectable {
@@ -29,6 +30,7 @@ div#board li .hex-grid-content.selectable {
 div#board li .hex-grid-content.selectable:hover {
   background-color:rgba(255,255,255,0.2);
 }
+
 
 
 /*****************
@@ -165,10 +167,43 @@ div#kb-cards div.kb-card div.kb-card-desc p:nth-of-type(2){
   background-repeat: no-repeat;
   z-index:10;
 }
+/* TODO media query sizing */
 .player-panel.player-1 .tokens-container .token.token-settlements::after { background-position:33.33% center; }
 .player-panel.player-2 .tokens-container .token.token-settlements::after { background-position:100% center; }
 .player-panel.player-3 .tokens-container .token.token-settlements::after { background-position:66.66% center; }
 .player-panel.player-4 .tokens-container .token.token-settlements::after { background-position:0% center; }
+
+
+.player-panel .tokens-container .hex-settlement {
+  width:15%;
+  padding-bottom:15%;
+  background-image: url('img/settlements.png');
+  background-size: 400%;
+  background-repeat: no-repeat;
+  z-index:10;
+}
+.player-panel.player-1 .tokens-container .hex-settlement { background-position:33.33% center; }
+.player-panel.player-2 .tokens-container .hex-settlement { background-position:100% center; }
+.player-panel.player-3 .tokens-container .hex-settlement { background-position:66.66% center; }
+.player-panel.player-4 .tokens-container .hex-settlement { background-position:0% center; }
+
+
+.hex-grid-container .hex-settlement {
+  display: block;
+  position: absolute;
+  width:70%;
+  height:70%;
+  left: 15%;
+  top: 15%;
+  background-image: url('img/settlements.png');
+  background-size: 400%;
+  background-repeat: no-repeat;
+  z-index:10;
+}
+.hex-grid-container .hex-settlement.player-1 { background-position:33.33% center; }
+.hex-grid-container .hex-settlement.player-2 { background-position:100% center; }
+.hex-grid-container .hex-settlement.player-3 { background-position:66.66% center; }
+.hex-grid-container .hex-settlement.player-4 { background-position:0% center; }
 
 /**********************************
 *** Grid stuff generated from sass

@@ -241,7 +241,7 @@ return 0.3;
     $arg = [
       'terrain' => $terrain,
       'terrainName' => $this->terrainNames[$terrain],
-      'hexes' => $this->board->getHexesOfType($terrain),
+      'hexes' => $this->board->getHexesOfType($terrain, $this->getActivePlayerId()),
     ];
 
 		// TODO

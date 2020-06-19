@@ -72,8 +72,9 @@ class KingdomBuilderPlayer extends APP_GameClass
     self::DbQuery("UPDATE piece SET x = {$pos['x']}, y = {$pos['y']}, location = 'board' WHERE id = {$settlement['id']}");
     $this->game->notifyAllPlayers('build', clienttranslate('${player_name} build a settlement'), [
       'player_name' => $this->getName(),
-      'playerId' => $this->getId(),
-      'pos' => $pos,
+      'player_id' => $this->getId(),
+      'x' => $pos['x'],
+      'y' => $pos['y'],
     ]);
   }
 }

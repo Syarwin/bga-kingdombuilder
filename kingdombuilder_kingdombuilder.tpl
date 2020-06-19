@@ -28,5 +28,8 @@ var jstpl_player_panel = `<div class="player-panel player-\${no}">
     <div class='token token-settlements'>\${settlements}</div>
   </div>
 </div>`;
+
+var jstpl_settlement = `<div class="hex-settlement player-\${no}"></div>`;
+
 </script>
 {OVERALL_GAME_FOOTER}

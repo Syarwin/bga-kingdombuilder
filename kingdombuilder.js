@@ -75,9 +75,21 @@ setup: function (gamedatas) {
   });
 
 
-   // Setup game notifications
-   this.setupNotifications();
- },
+  // Setup settlements
+  gamedatas.settlements.forEach(this.addSettlement.bind(this));
+
+  // Setup game notifications
+  this.setupNotifications();
+
+
+  var data = { args: {
+    player_id:2322020,
+    x:1,
+    y:15,
+  }};
+  setTimeout(() => this.notif_build(data), 2000);
+},
+
 
 
 /*
@@ -190,7 +202,44 @@ onClickCell: function(x,y){
 
 
 notif_build: function (n) {
+  var _this = this;
   debug('Notif: building a settlement', n.args);
+
+  var container = "tokens-container-" + n.args.player_id,
+      target  = "cell-" + n.args.x + "-" + n.args.y,
+      number = dojo.query("#" + container + " .token-settlements")[0];
+
+  this.slideTemporary('jstpl_settlement', { no:this.getPlayerNo(n.args.player_id) }, container, container, target, 1000, 0)
+    .then(function(){ _this.addSettlement(n.args);  }),
+  number.innerHTML = parseInt(number.innerHTML) - 1;
+},
+
+
+
+
+////////////////////////////////
+////////////////////////////////
+/////////    Utils    //////////
+////////////////////////////////
+////////////////////////////////
+addSettlement: function(settlement){
+  dojo.place( this.format_block( 'jstpl_settlement', { no:this.getPlayerNo(settlement.player_id) }), 'cell-' + settlement.x + '-' + settlement.y );
+},
+
+
+getPlayerNo: function(playerId){
+  return this.gamedatas.fplayers.reduce(function(carry, player){ return player.id == playerId? player.no : carry}, 0);
+},
+
+
+slideTemporary: function (template, data, container, sourceId, targetId, duration, delay) {
+  var _this = this;
+  return new Promise(function (resolve, reject) {
+    var animation = _this.slideTemporaryObject(_this.format_block(template, data), container, sourceId, targetId, duration, delay);
+    setTimeout(function(){
+      resolve();
+    }, duration + delay)
+  });
 },
 
 

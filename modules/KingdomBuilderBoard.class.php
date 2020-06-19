@@ -151,8 +151,33 @@ class KingdomBuilderBoard extends APP_GameClass
   }
 
 
+  public function getNeighbours($space)
+  {
+    $x = (int) $space['x'];
+    $y = (int) $space['y'];
+    $hexes = [];
+    $hexes[] = ['x' => $x, 'y' => $y - 1];
+    $hexes[] = ['x' => $x, 'y' => $y + 1];
+    $hexes[] = ['x' => $x - 1, 'y' => $y];
+    $hexes[] = ['x' => $x - 1, 'y' => $y + ($x % 2 == 0? -1 : 1)];
+    $hexes[] = ['x' => $x + 1, 'y' => $y];
+    $hexes[] = ['x' => $x + 1, 'y' => $y + ($x % 2 == 0? 1 : -1)];
+    return array_values(array_filter($hexes, function($hex){
+      return $hex['x'] >= 0 && $hex['y'] >= 0 && $hex['x'] < 20 && $hex['y'] < 20;
+    }));
+  }
 
-  public function getHexesOfType($type)
+  public function getPlacedSettlementsNeighbouringSpaces($pId)
+  {
+    $settlements = $this->getPlacedSettlements($pId);
+    $hexes = [];
+    foreach($settlements as $settlement){
+      $hexes = array_merge($hexes, $this->getNeighbours($settlement));
+    }
+    return $hexes;
+  }
+
+  public function getHexesOfType($type, $pId)
   {
     $hexes = [];
     $quadrants = $this->getQuadrants();
@@ -177,6 +202,9 @@ class KingdomBuilderBoard extends APP_GameClass
     $settlements = array_map(array('KingdomBuilderBoard','getCoords'), $this->getPlacedSettlements());
     $hexes = array_values(array_udiff($hexes, $settlements, array('KingdomBuilderBoard','compareCoords')));
 
-    return $hexes;
+    // Keep only those neighbouring
+    $hexesNeighbouring = array_values(array_uintersect($hexes, $this->getPlacedSettlementsNeighbouringSpaces($pId), array('KingdomBuilderBoard','compareCoords')));
+
+    return count($hexesNeighbouring) > 0 ? $hexesNeighbouring : $hexes;
   }
 }
