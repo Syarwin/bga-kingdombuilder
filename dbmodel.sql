@@ -9,6 +9,17 @@
 
 -- dbmodel.sql
 
+CREATE TABLE IF NOT EXISTS `piece` (
+   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+   `player_id` int(11),
+   `type` varchar(16) NOT NULL DEFAULT 'settlement',
+   `location` varchar(16) NOT NULL,
+   `x` int(2),
+   `y` int(2),
+   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+
 CREATE TABLE IF NOT EXISTS `terrains` (
   `card_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `card_type` varchar(16) NOT NULL,

@@ -19,7 +19,7 @@ $gameinfos = [
 	'publisher_website' => 'https://ssl.queen-games.com/',
 	'publisher_bgg_id' => 47,
 	'bgg_id' => 107529,
-	'players' => [1,2,3,4],    
+	'players' => [2,3,4],    
 
 	'suggest_player_number' => null,
 	'not_recommend_player_number' => null,

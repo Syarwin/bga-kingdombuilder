@@ -22,6 +22,7 @@ require_once('modules/constants.inc.php');
 require_once("modules/KingdomBuilderBoard.class.php");
 require_once("modules/KingdomBuilderCards.class.php");
 require_once("modules/KingdomBuilderLog.class.php");
+require_once("modules/KingdomBuilderPlayerManager.class.php");
 
 
 class kingdombuilder extends Table
@@ -43,6 +44,7 @@ class kingdombuilder extends Table
     $this->log   = new KingdomBuilderLog($this);
     $this->board = new KingdomBuilderBoard($this);
     $this->cards = new KingdomBuilderCards($this);
+    $this->playerManager = new KingdomBuilderPlayerManager($this);
   }
 
   protected function getGameName()
@@ -60,24 +62,13 @@ class kingdombuilder extends Table
    */
   protected function setupNewGame($players, $options = [])
   {
-    // Create players and assign teams
-    self::DbQuery('DELETE FROM player');
-    $gameInfos = self::getGameinfos();
-    $sql = 'INSERT INTO player (player_id, player_color, player_canal, player_name, player_avatar) VALUES ';
-    $values = [];
-    $i = 0;
-    foreach ($players as $pId => $player) {
-      $color = $gameInfos['player_colors'][$i++];
-      $values[] = "('" . $pId . "','$color','" . $player['player_canal'] . "','" . addslashes($player['player_name']) . "','" . addslashes($player['player_avatar']) . "')";
-    }
-    self::DbQuery($sql . implode($values, ','));
-    self::reloadPlayersBasicInfos();
-
-		$optionSetup = intval(self::getGameStateValue('optionSetup'));
+    // Initialize players (and settlements)
+    $this->playerManager->setupNewGame($players);
 
 		// Initialize board and cards
+    $optionSetup = intval(self::getGameStateValue('optionSetup'));
 		$this->board->setupNewGame($optionSetup);
-    $this->cards->setupNewGame($optionSetup);
+    $this->cards->setupNewGame($players, $optionSetup);
 
     // Active first player to play
     $pId = $this->activeNextPlayer();
@@ -95,6 +86,8 @@ class kingdombuilder extends Table
     return [
       'quadrants' => $this->board->getQuadrants(),
       'kbCards'   => $this->cards->getKbCards(),
+      'settlements' => $this->board->getPlacedSettlements(),
+      'fplayers' => $this->playerManager->getUiData(),
     ];
   }
 
@@ -244,7 +237,11 @@ return 0.3;
    */
   public function argPlayerBuild()
   {
+    $terrain = $this->cards->getTerrain();
     $arg = [
+      'terrain' => $terrain,
+      'terrainName' => $this->terrainNames[$terrain],
+      'hexes' => $this->board->getHexesOfType($terrain),
     ];
 
 		// TODO
@@ -269,18 +266,16 @@ return 0.3;
   /*
 	 * Build : TODO
    */
-  public function build($x, $y)
+  public function playerBuild($pos)
   {
-/*
     // Check if work is possible
-    $stateArgs = $state['args'];
-    $work = Utils::checkWork($stateArgs, $wId, $x, $y, $z, $actionArg);
-*/
+    self::checkAction('build');
+    $arg = $this->argPlayerBuild();
+    if(!in_array($pos, $arg['hexes']))
+      throw new BgaUserException(_("You cannot build here"));
 
-/*
-    $state = $this->powerManager->$nameNextState() ?: 'done';
-    $this->gamestate->nextState($state);
-*/
+    $this->playerManager->getPlayer()->build($pos);
+    $this->gamestate->nextState("buildAgain");
   }
 
 

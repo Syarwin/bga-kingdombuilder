@@ -107,13 +107,13 @@ $machinestates = [
   ],
 
   ST_BUILD => [
-    'name' => 'playerSettle',
-    'description' => clienttranslate('${actplayer} must build'),
-    'descriptionmyturn' => clienttranslate('${you} must build'),
+    'name' => 'playerBuild',
+    'description' => clienttranslate('${actplayer} must build on a ${terrainName}'),
+    'descriptionmyturn' => clienttranslate('${you} must build on a ${terrainName}'),
     'type' => 'activeplayer',
     'args' => 'argPlayerBuild',
     'action' => 'stBeforeBuild',
-    'possibleactions' => ['playerBuild', 'skip', 'endgame'],
+    'possibleactions' => ['build', 'skip', 'endgame'],
     'transitions' => [
       'zombiePass' => ST_END_OF_TURN,
       'endturn'    => ST_END_OF_TURN,

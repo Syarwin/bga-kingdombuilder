@@ -19,6 +19,14 @@
  *
  */
 
+ $this->terrainNames = [
+   clienttranslate('Grass'),
+   clienttranslate('Canyon'),
+   clienttranslate('Desert'),
+   clienttranslate('Flower Field'),
+   clienttranslate('Forest'),
+];
+
 $this->kbcards = [
   [
     'name' => 'Fishermen',

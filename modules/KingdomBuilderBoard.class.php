@@ -121,9 +121,62 @@ class KingdomBuilderBoard extends APP_GameClass
     $this->game->log->initBoard($quadrants);
   }
 
+  public static function getCoords($piece)
+  {
+    return ['x' => (int) $piece['x'], 'y' => (int) $piece['y']];
+  }
+
+  public static function compareCoords($a, $b)
+  {
+    $dx = (int) $b['x'] - (int) $a['x'];
+    $dy = (int) $b['y'] - (int) $a['y'];
+    if($dx != 0) return $dx;
+    return $dy;
+  }
 
   public function getQuadrants()
   {
     return $this->game->log->getQuadrants();
+  }
+
+
+  public function getPlacedSettlements()
+  {
+    return self::getObjectListFromDB("SELECT * FROM piece WHERE type = 'settlement' AND location = 'board'");
+  }
+
+  public function getSettlements($pId)
+  {
+    return self::getObjectListFromDB("SELECT * FROM piece WHERE type = 'settlement' AND player_id = $pId");
+  }
+
+
+
+  public function getHexesOfType($type)
+  {
+    $hexes = [];
+    $quadrants = $this->getQuadrants();
+    for($k = 0; $k < 4; $k++){
+    for($i = 0; $i < 10; $i++){
+    for($j = 0; $j < 10; $j++){
+      $flipped = $quadrants[$k] >= count(self::$boards);
+      if($flipped)
+        $quadrants[$k] -= 8;
+
+      $x = $flipped? (9 - $i) : $i;
+      $y = $flipped? (9 - $j) : $j;
+      if(self::$boards[$quadrants[$k]][$x][$y] != $type)
+        continue;
+
+      if($k == 1 || $k == 3) $y += 10;
+      if($k == 2 || $k == 3) $x += 10;
+      $hexes[] = ['x' => $x, 'y' => $y];
+    }}}
+
+    // Keep only free hexes
+    $settlements = array_map(array('KingdomBuilderBoard','getCoords'), $this->getPlacedSettlements());
+    $hexes = array_values(array_udiff($hexes, $settlements, array('KingdomBuilderBoard','compareCoords')));
+
+    return $hexes;
   }
 }

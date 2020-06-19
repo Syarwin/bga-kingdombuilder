@@ -22,4 +22,11 @@
   <!-- END kbcard -->
 </div>
 
+<script type="text/javascript">
+var jstpl_player_panel = `<div class="player-panel player-\${no}">
+  <div class='tokens-container' id='tokens-container-\${id}'>
+    <div class='token token-settlements'>\${settlements}</div>
+  </div>
+</div>`;
+</script>
 {OVERALL_GAME_FOOTER}

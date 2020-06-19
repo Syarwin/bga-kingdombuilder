@@ -25,18 +25,26 @@
 class action_kingdombuilder extends APP_GameAction
 {
   // Constructor: please do not modify
- 	public function __default()
-	{
-	    if( self::isArg( 'notifwindow') )
-	    {
-          $this->view = "common_notifwindow";
-	        $this->viewArgs['table'] = self::getArg( "table", AT_posint, true );
-	    }
-	    else
-	    {
-          $this->view = "kingdombuilder_kingdombuilder";
-          self::trace( "Complete reinitialization of board game" );
+  public function __default()
+  {
+    if( self::isArg( 'notifwindow') )
+    {
+      $this->view = "common_notifwindow";
+      $this->viewArgs['table'] = self::getArg( "table", AT_posint, true );
     }
-	}
+    else
+    {
+      $this->view = "kingdombuilder_kingdombuilder";
+      self::trace( "Complete reinitialization of board game" );
+    }
+  }
 
+  public function build()
+  {
+    self::setAjaxMode();
+    $x = (int) self::getArg('x', AT_posint, true);
+    $y = (int) self::getArg('y', AT_posint, true);
+    $this->game->playerBuild(['x' => $x, 'y' => $y]);
+    self::ajaxResponse();
+  }
 }
