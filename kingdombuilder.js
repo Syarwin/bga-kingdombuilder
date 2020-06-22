@@ -72,11 +72,12 @@ setup: function (gamedatas) {
   // Setup player's board
   gamedatas.fplayers.forEach(function(player){
     dojo.place( _this.format_block( 'jstpl_player_panel', player) , 'overall_player_board_' + player.id );
+    player.tiles.forEach(_this.addTile.bind(_this));
   });
 
 
-  // Setup settlements
-  gamedatas.settlements.forEach(this.addSettlement.bind(this));
+  // Setup stuff on board
+  this.setupBoard(gamedatas.board);
 
   // Handle for cancelled notification messages
   dojo.subscribe('addMoveToLog', this, 'kingdombuilder_addMoveToLog');
@@ -85,6 +86,20 @@ setup: function (gamedatas) {
   this.setupNotifications();
 },
 
+
+/*
+ * setupBoard : setup settlements and tiles on the board
+ */
+setupBoard: function(board){
+  var _this = this;
+  debug("Setting up the board", board);
+  board.settlements.forEach(this.addSettlement.bind(this));
+
+  board.locations.forEach(function(location){
+    var cell = 'cell-' + location.x + '-' + location.y;
+    $(cell).innerHTML = location.n;
+  });
+},
 
 
 /*
@@ -150,17 +165,17 @@ onUpdateActionButtons: function (stateName, args, suppressTimers) {
     return;
 
   if ((stateName == "playerBuild" || stateName == "playerUsePower")) {
-    if (args.cancelable) {
+    if (args.tiles && args.tiles.length > 0)
+      this.addActionButton('buttonUsePower', _('Use a location tile'), 'onClickUseTile', null, false, 'blue');
+    if (args.cancelable)
       this.addActionButton('buttonCancel', _('Restart turn'), 'onClickCancel', null, false, 'gray');
-    }
   }
 
   if (stateName == "confirmTurn") {
     this.addActionButton('buttonConfirm', _('Confirm'), 'onClickConfirm', null, false, 'blue');
     this.addActionButton('buttonCancel', _('Restart turn'), 'onClickCancel', null, false, 'gray');
-    if (!suppressTimers) {
+    if (!suppressTimers)
       this.startActionTimer('buttonConfirm');
-    }
   }
 },
 
@@ -201,8 +216,8 @@ notif_cancel: function (n) {
     dojo.query("#tokens-container-" + player.id + " .token-settlements")[0].innerHTML = player.settlements;
   });
 
-  // Setup settlements
-  n.args.settlements.forEach(this.addSettlement.bind(this));
+  // Reset board
+  this.setupBoard(n.args.board);
 
   this.cancelNotifications(n.args.moveIds);
 },
@@ -337,6 +352,50 @@ notif_build: function (n) {
 
 
 
+notif_obtainTile: function (n) {
+  var _this = this;
+  debug('Notif: obtaining a tile', n.args);
+
+  var container = "tiles-container-" + n.args.player_id,
+      cell  = "cell-" + n.args.x + "-" + n.args.y;
+
+  this.slideTemporary('jstpl_tile', n.args, container, cell, container, 1000, 0)
+    .then(function(){ _this.addTile(n.args);  }),
+  $(cell).innerHTML = parseInt($(cell).innerHTML) - 1;
+
+},
+
+
+
+/////////////////////////////////
+/////////////////////////////////
+////////   Use power    /////////
+/////////////////////////////////
+/////////////////////////////////
+onClickUseTile: function(){
+  var _this = this;
+  var dial = new ebg.popindialog();
+  dial.create('chooseTile');
+  dial.setTitle(_("Choose the location tile"));
+
+  this.gamedatas.gamestate.args.tiles.forEach(function (tile) {
+    var div = dojo.place(_this.format_block('jstpl_tilePrompt', _this.getLocation(tile)), $('popin_chooseTile_contents'));
+
+    dojo.connect(div, 'onclick', function (e) {
+      dial.destroy();
+      _this.onClickSelectTile(tile);
+    });
+  });
+  dial.show();
+},
+
+onClickSelectTile: function(tile){
+  if(!this.isCurrentPlayerActive())
+    return;
+
+  this.takeAction('useTile', { tileId: tile.id });
+},
+
 
 ////////////////////////////////
 ////////////////////////////////
@@ -349,6 +408,11 @@ addSettlement: function(settlement){
   dojo.place( this.format_block( 'jstpl_settlement', { no: no}),  cell);
   dojo.addClass(cell, 'cell-player-'+no);
 },
+
+addTile: function(tile){
+  dojo.place( this.format_block( 'jstpl_tile', tile), "tiles-container-" + tile.player_id);
+},
+
 
 
 getPlayerNo: function(playerId){
@@ -367,6 +431,14 @@ slideTemporary: function (template, data, container, sourceId, targetId, duratio
 },
 
 
+getLocation: function(tile){
+  var location = this.gamedatas.locations[tile.location];
+  location.location = tile.location;
+  location.description = location.desc.join("");
+  return location;
+},
+
+
 ///////////////////////////////////////////////////
 //////   Reaction to cometD notifications   ///////
 ///////////////////////////////////////////////////
@@ -380,16 +452,8 @@ setupNotifications: function () {
   var notifs = [
     ['build', 1000],
     ['cancel', 200],
+    ['obtainTile', 1000],
   ];
-/*
-    ['automatic', 1000],
-    ['addOffer', 500],
-    ['removeOffer', 500],
-    ['powerAdded', 1200],
-    ['workerPlaced', 1000],
-    ['workerMoved', 1600],
-  ];
-*/
 
   var _this = this;
   notifs.forEach(function (notif) {

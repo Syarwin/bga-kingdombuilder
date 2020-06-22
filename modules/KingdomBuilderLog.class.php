@@ -139,6 +139,25 @@ class KingdomBuilderLog extends APP_GameClass
     $this->insert(-1, $piece['id'], 'build', $this->game->board->getCoords($space));
   }
 
+
+  /*
+   * addObtainTile: add a new build entry to log
+   */
+  public function addObtainTile($tile)
+  {
+    $this->insert(-1, $tile['id'], 'obtainTile',[]);
+  }
+
+  /*
+   * addObtainTile: add a new build entry to log
+   */
+  public function addUseTile($tile)
+  {
+    $this->insert(-1, $tile['id'], 'useTile',[]);
+  }
+
+
+
   /*
    * addAction: add a new action to log
    */

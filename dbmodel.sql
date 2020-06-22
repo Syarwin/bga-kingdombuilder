@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS `piece` (
    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
    `player_id` int(11),
    `type` varchar(16) NOT NULL DEFAULT 'settlement',
+   `type_arg` varchar(16),
    `location` varchar(16) NOT NULL,
    `x` int(2),
    `y` int(2),

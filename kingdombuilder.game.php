@@ -86,9 +86,10 @@ class kingdombuilder extends Table
     return [
       'quadrants' => $this->board->getQuadrants(),
       'kbCards'   => $this->cards->getKbCards(),
-      'settlements' => $this->board->getPlacedSettlements(),
+      'board' => $this->board->getUiData(),
       'fplayers' => $this->playerManager->getUiData(),
       'cancelMoveIds' => $this->log->getCancelMoveIds(),
+      'locations' => $this->locations,
     ];
   }
 
@@ -131,10 +132,8 @@ return 0.3;
   public function stStartOfTurn()
   {
     $this->log->startTurn();
-
-		// TODO power
-		$state = "build";
-    $this->gamestate->nextState($state);
+    $this->playerManager->getPlayer()->startOfTurn();
+    $this->gamestate->nextState("build");
   }
 
 
@@ -194,7 +193,7 @@ return 0.3;
     self::notifyAllPlayers('cancel', clienttranslate('${player_name} restarts their turn'), [
       'player_name' => self::getActivePlayerName(),
       'moveIds' => $moveIds,
-      'settlements' => $this->board->getPlacedSettlements(),
+      'board' => $this->board->getUiData(),
       'fplayers' => $this->playerManager->getUiData(),
     ]);
 
@@ -211,34 +210,18 @@ return 0.3;
   }
 
 
-  /////////////////////////////////////////
-  /////////////////////////////////////////
-  ///////////    UsePower    //////////////
-  /////////////////////////////////////////
-  /////////////////////////////////////////
-
+  ////////////////////////////////////////
+  ////////////////////////////////////////
+  ///////////    UseTile    //////////////
+  ////////////////////////////////////////
+  ////////////////////////////////////////
   /*
-   * argUsePower: give the list of possible action
+   * useTile: called when a player decide to a tile location
    */
-  public function argUsePower()
+  public function useTile($tileId)
   {
-    $arg = [
-			'skippable' => true
-		];
-//    $this->powerManager->argUsePower($arg);
-    return $arg;
+    $this->gamestate->nextState($this->playerManager->getPlayer()->useTile($tileId));
   }
-
-  /* TODO
-   * usePower: called when a player decide to use its (non-basic) power
-   *
-  public function usePower($powerId, $action)
-  {
-    self::checkAction('use');
-
-    $state = $this->powerManager->stateAfterUsePower() ?: 'move';
-    $this->gamestate->nextState($state);
-  }*/
 
 
   /*
@@ -273,11 +256,14 @@ return 0.3;
   public function argPlayerBuild()
   {
     $terrain = $this->cards->getTerrain();
+    $tiles = $this->playerManager->getPlayer()->getTilesInHand();
+    $builds = $this->log->getLastBuilds();
     $arg = [
       'terrain' => $terrain,
       'terrainName' => $this->terrainNames[$terrain],
       'hexes' => $this->board->getAvailableHexes($terrain),
       'cancelable' => $this->log->getLastActions() != null,
+      'tiles' => count($builds) == 0? $tiles : [],
     ];
 
     return $arg;
@@ -310,7 +296,7 @@ return 0.3;
 
     $this->playerManager->getPlayer()->build($pos);
 
-    $nextState = count($this->log->getLastBuilds()) == 3? "done" : "buildAgain";
+    $nextState = count($this->log->getLastBuilds()) == 3? "done" : "build";
     $this->gamestate->nextState($nextState);
   }
 

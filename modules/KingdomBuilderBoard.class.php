@@ -11,6 +11,17 @@ class KingdomBuilderBoard extends APP_GameClass
     $this->game = $game;
   }
 
+  public function getUiData()
+  {
+    return [
+      'settlements' => $this->getPlacedSettlements(),
+      'locations' => $this->getLocations(),
+    ];
+  }
+
+
+
+  // 0 - 4 : building, 5 : castle, 6 water, 7 mine, >= 8 location
   public static $boards = [
     [
       [1, 2, 2, 2, 2, 2, 2, 2, 2, 2],
@@ -113,30 +124,59 @@ class KingdomBuilderBoard extends APP_GameClass
 
   public function setupNewGame($optionSetup)
   {
+    // Create board
     $quadrants = [];
     if ($optionSetup == BASIC) {
       $quadrants = [7, 6, 5, 1];
     }
 
     $this->game->log->initBoard($quadrants);
+
+    // Create location token
+    $board = $this->getBoard();
+    for($x = 0; $x < 20; $x++){
+    for($y = 0; $y < 20; $y++){
+      if($board[$x][$y] >= HEX_ORACLE){
+        self::DbQuery("INSERT INTO piece (type, type_arg, location, x, y) VALUES ('tile', '{$board[$x][$y]}', 'board', $x, $y)");
+        self::DbQuery("INSERT INTO piece (type, type_arg, location, x, y) VALUES ('tile', '{$board[$x][$y]}', 'board', $x, $y)");
+      }
+    }}
   }
 
-  public static function getCoords($piece)
-  {
-    return ['x' => (int) $piece['x'], 'y' => (int) $piece['y']];
-  }
 
-  public static function compareCoords($a, $b)
-  {
-    $dx = (int) $b['x'] - (int) $a['x'];
-    $dy = (int) $b['y'] - (int) $a['y'];
-    if($dx != 0) return $dx;
-    return $dy;
-  }
-
+/*##################
+#### DB Getters ####
+##################*/
   public function getQuadrants()
   {
     return $this->game->log->getQuadrants();
+  }
+
+
+  public function getTilesOnBoard()
+  {
+    return self::getObjectListFromDB("SELECT id, type_arg AS location, x, y FROM piece WHERE type = 'tile' AND location = 'board'");
+  }
+
+  public function getLocations()
+  {
+    $locations = [];
+    $board = $this->getBoard();
+    for($x = 0; $x < 20; $x++){
+    for($y = 0; $y < 20; $y++){
+      if($board[$x][$y] >= HEX_ORACLE){
+        array_push($locations, ['x' => $x, 'y' => $y, 'n' => 0, 'type' => $board[$x][$y] ]);
+      }
+    }}
+
+    $tiles = $this->getTilesOnBoard();
+    foreach($tiles as $tile){
+    foreach($locations as &$location){
+      if($tile['x'] == $location['x'] && $tile['y'] == $location['y'])
+        $location['n']++;
+    }}
+
+    return $locations;
   }
 
 
@@ -149,6 +189,26 @@ class KingdomBuilderBoard extends APP_GameClass
   public function getSettlements($pId)
   {
     return self::getObjectListFromDB("SELECT * FROM piece WHERE type = 'settlement' AND player_id = $pId");
+  }
+
+
+
+
+/*##################
+#### Grid utils ####
+##################*/
+
+  public static function getCoords($piece)
+  {
+    return ['x' => (int) $piece['x'], 'y' => (int) $piece['y']];
+  }
+
+  public static function compareCoords($a, $b)
+  {
+    $dx = (int) $b['x'] - (int) $a['x'];
+    $dy = (int) $b['y'] - (int) $a['y'];
+    if($dx != 0) return $dx;
+    return $dy;
   }
 
 
@@ -168,19 +228,12 @@ class KingdomBuilderBoard extends APP_GameClass
     }));
   }
 
-  public function getPlacedSettlementsNeighbouringSpaces($pId)
+  public function getBoard()
   {
-    $settlements = $this->getPlacedSettlements($pId);
-    $hexes = [];
-    foreach($settlements as $settlement){
-      $hexes = array_merge($hexes, $this->getNeighbours($settlement));
-    }
-    return $hexes;
-  }
+    $board = [];
+    for($i = 0; $i < 20; $i++)
+      $board[$i] = [];
 
-  public function getHexesOfType($type)
-  {
-    $hexes = [];
     $quadrants = $this->getQuadrants();
     for($k = 0; $k < 4; $k++){
     for($i = 0; $i < 10; $i++){
@@ -191,13 +244,30 @@ class KingdomBuilderBoard extends APP_GameClass
 
       $x = $flipped? (9 - $i) : $i;
       $y = $flipped? (9 - $j) : $j;
-      if(self::$boards[$quadrants[$k]][$x][$y] != $type)
-        continue;
+      $type = self::$boards[$quadrants[$k]][$x][$y];
 
       if($k == 1 || $k == 3) $y += 10;
       if($k == 2 || $k == 3) $x += 10;
-      $hexes[] = ['x' => $x, 'y' => $y];
+      $board[$x][$y] = $type;
     }}}
+
+    return $board;
+  }
+
+
+
+/*#################################
+#### Computing available hexes ####
+#################################*/
+  public function getHexesOfType($type)
+  {
+    $hexes = [];
+    $board = $this->getBoard();
+    for($x = 0; $x < 20; $x++){
+    for($y = 0; $y < 20; $y++){
+      if($type == $board[$x][$y])
+        $hexes[] = ['x' => $x, 'y' => $y];
+    }}
 
     return $hexes;
   }
@@ -210,6 +280,18 @@ class KingdomBuilderBoard extends APP_GameClass
     $hexes = array_values(array_udiff($hexes, $settlements, array('KingdomBuilderBoard','compareCoords')));
     return $hexes;
   }
+
+
+  public function getPlacedSettlementsNeighbouringSpaces($pId)
+  {
+    $settlements = $this->getPlacedSettlements($pId);
+    $hexes = [];
+    foreach($settlements as $settlement){
+      $hexes = array_merge($hexes, $this->getNeighbours($settlement));
+    }
+    return $hexes;
+  }
+
 
 
   public function getAvailableHexes($type, $pId = null)

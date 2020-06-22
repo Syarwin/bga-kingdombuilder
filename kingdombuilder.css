@@ -138,12 +138,12 @@ div#kb-cards div.kb-card div.kb-card-desc p:nth-of-type(2){
   display: flex;
   flex-flow: row;
   padding:5px;
-  height:35px;
+  min-height:35px;
 }
 
 
 .player-panel .tokens-container {
-  flex:1;
+  width:90px;
   display:flex;
   flex-flow:row;
   justify-content: flex-start;
@@ -152,7 +152,7 @@ div#kb-cards div.kb-card div.kb-card-desc p:nth-of-type(2){
 
 .player-panel .tokens-container .token {
   position:relative;
-  width:40%;
+  width:100%;
   height:100%;
   display:flex;
   justify-content: flex-end;
@@ -222,6 +222,87 @@ div#board li .hex-grid-content.cell-player-2 { background-color:rgba(37,74,19,0.
 div#board li .hex-grid-content.cell-player-3 { background-color:rgba(33,51,76,0.5); }
 div#board li .hex-grid-content.cell-player-4 { background-color:rgba(99,66,21,0.5); }
 
+
+
+.hex-grid-content {
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.3em;
+  text-shadow: -2px -2px 2px black, 2px 2px 2px black, -1px -1px 2px black, 1px 1px 2px black;
+}
+
+
+.player-panel .tiles-container {
+  flex:1;
+  display:flex;
+  flex-flow:row;
+  justify-content: flex-start;
+  align-items: center;
+  position:relative;
+}
+
+.tile {
+  flex-shrink: 0;
+  width: 70px;
+  height: 70px;
+  background-image: url('img/tiles.png');
+  background-size: 200%;
+  background-repeat: no-repeat;
+  z-index:10;
+}
+
+.tile.location-8 { background-position:100% calc(0 * 100% / 7); }
+.tile.location-9 { background-position:100% calc(1 * 100% / 7); }
+.tile.location-10 { background-position:100% calc(2 * 100% / 7); }
+.tile.location-11 { background-position:100% calc(3 * 100% / 7); }
+.tile.location-12 { background-position:100% calc(4 * 100% / 7); }
+.tile.location-13 { background-position:100% calc(5 * 100% / 7); }
+.tile.location-14 { background-position:100% calc(6 * 100% / 7); }
+.tile.location-15 { background-position:100% calc(7 * 100% / 7); }
+
+
+/**********************************
+*** Choose tile dialog
+**********************************/
+#popin_chooseTile {
+  background:none;
+  background-color:#fddc79;
+  padding:0;
+  border-color:black;
+}
+
+#popin_chooseTile h2 {
+  padding: 10px 15px;
+  margin: 0;
+}
+
+#popin_chooseTile_contents {
+  display:flex;
+  flex-direction: column;
+}
+
+#popin_chooseTile_contents .tile-prompt {
+  width:100%;
+  background-color:#fee9b0;
+  border-top: 1px solid black;
+  display:flex;
+  flex-direction: row;
+  cursor:pointer;
+}
+#popin_chooseTile_contents .tile-prompt:hover {
+  background-color:#f9ce5a;
+}
+
+.tile-prompt .tile {
+  width:100px;
+  height:100px;
+}
+
+.tile-prompt .tile-name {
+  font-weight: bold;
+}
 
 /**********************************
 *** Grid stuff generated from sass

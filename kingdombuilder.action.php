@@ -49,6 +49,15 @@ class action_kingdombuilder extends APP_GameAction
   }
 
 
+  public function useTile()
+  {
+    self::setAjaxMode();
+    $tileId = (int) self::getArg('tileId', AT_posint, true);
+    $this->game->useTile($tileId);
+    self::ajaxResponse();
+  }
+
+
 
   public function cancelPreviousWorks()
   {

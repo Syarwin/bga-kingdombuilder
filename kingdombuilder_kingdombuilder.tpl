@@ -27,9 +27,14 @@ var jstpl_player_panel = `<div class="player-panel player-\${no}">
   <div class='tokens-container' id='tokens-container-\${id}'>
     <div class='token token-settlements'>\${settlements}</div>
   </div>
+  <div class='tiles-container' id='tiles-container-\${id}'></div>
 </div>`;
 
 var jstpl_settlement = `<div class="hex-settlement player-\${no}"></div>`;
 
+var jstpl_tile = `<div id="tile-\${id}" class="tile location-\${location}"></div>`;
+
+
+var jstpl_tilePrompt= `<div class='tile-prompt'><div class="tile location-\${location}"></div><p class="tile-desc"><span class='tile-name'>\${name}</span><br />\${description}</p><div class="tile-picto location-\${location}"></div></div>`;
 </script>
 {OVERALL_GAME_FOOTER}

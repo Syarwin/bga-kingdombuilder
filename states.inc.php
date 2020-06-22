@@ -86,23 +86,36 @@ $machinestates = [
     'action' => 'stStartOfTurn',
     'transitions' => [
       'build'  => ST_BUILD,
-      'power'   => ST_USE_POWER,
       'endgame' => ST_GAME_END,
     ],
   ],
 
-  ST_USE_POWER => [
-    'name' => 'playerUsePower',
-    'description' => clienttranslate('${actplayer} may use a power'),
-    'descriptionmyturn' => clienttranslate('${you} may use a power'),
-    'i18n' => array('power_name'),
+  ST_USE_TILE => [
+    'name' => 'playerUseTile',
+    'description' => clienttranslate('${actplayer} may use a location tile'),
+    'descriptionmyturn' => clienttranslate('${you} may use a location tile'),
     'type' => 'activeplayer',
-    'args' => 'argUsePower',
+    'args' => 'argUseTile',
     'possibleactions' => [ 'use', 'skip' ],
     'transitions' => [
       'next' => ST_NEXT_PLAYER,
       'build' => ST_BUILD,
       'endgame' => ST_GAME_END,
+    ],
+  ],
+
+
+  ST_MOVE => [
+    'name' => 'playerMove',
+    'description' => clienttranslate('${actplayer} must move an existing settlement'),
+    'descriptionmyturn' => clienttranslate('${you} must move an existing settlement'),
+    'type' => 'activeplayer',
+    'args' => 'argMove',
+    'possibleactions' => [ 'move', 'cancel' ],
+    'transitions' => [
+      'next' => ST_NEXT_PLAYER,
+      'build' => ST_BUILD,
+      'cancel' => ST_START_OF_TURN,
     ],
   ],
 
@@ -118,8 +131,8 @@ $machinestates = [
       'zombiePass' => ST_END_OF_TURN,
       'endturn'    => ST_PRE_END_OF_TURN,
       'endgame'    => ST_GAME_END,
-      'buildAgain' => ST_BUILD,
-      'power'      => ST_USE_POWER,
+      'build'      => ST_BUILD,
+      'move'       => ST_MOVE,
       'done'       => ST_PRE_END_OF_TURN,
       'cancel'     => ST_START_OF_TURN,
     ],
