@@ -43,8 +43,11 @@ CREATE TABLE IF NOT EXISTS `log` (
   `log_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `round` int(11) NOT NULL,
   `player_id` int(11) NOT NULL,
+  `move_id` int(11) NOT NULL,
   `action` varchar(16) NOT NULL,
   `piece_id` int(11),
   `action_arg` json,
   PRIMARY KEY (`log_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+ALTER TABLE `gamelog` ADD `cancel` TINYINT(1) NOT NULL DEFAULT 0;

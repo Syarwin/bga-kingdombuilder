@@ -88,6 +88,7 @@ class kingdombuilder extends Table
       'kbCards'   => $this->cards->getKbCards(),
       'settlements' => $this->board->getPlacedSettlements(),
       'fplayers' => $this->playerManager->getUiData(),
+      'cancelMoveIds' => $this->log->getCancelMoveIds(),
     ];
   }
 
@@ -176,6 +177,40 @@ return 0.3;
   }
 */
 
+
+  /*
+   * cancelPreviousWorks: called when a player decide to go back at the beggining of the turn
+   */
+  public function cancelPreviousWorks()
+  {
+    self::checkAction('cancel');
+
+    if ($this->log->getLastActions() == null) {
+      throw new BgaUserException(_("You have nothing to cancel"));
+    }
+
+    // Undo the turn
+    $moveIds = $this->log->cancelTurn();
+    self::notifyAllPlayers('cancel', clienttranslate('${player_name} restarts their turn'), [
+      'player_name' => self::getActivePlayerName(),
+      'moveIds' => $moveIds,
+      'settlements' => $this->board->getPlacedSettlements(),
+      'fplayers' => $this->playerManager->getUiData(),
+    ]);
+
+    // Apply power
+    $this->gamestate->nextState('cancel');
+  }
+
+  /*
+   * confirmTurn: called whenever a player confirm their turn
+   */
+  public function confirmTurn()
+  {
+    $this->gamestate->nextState('confirm');
+  }
+
+
   /////////////////////////////////////////
   /////////////////////////////////////////
   ///////////    UsePower    //////////////
@@ -241,10 +276,9 @@ return 0.3;
     $arg = [
       'terrain' => $terrain,
       'terrainName' => $this->terrainNames[$terrain],
-      'hexes' => $this->board->getHexesOfType($terrain, $this->getActivePlayerId()),
+      'hexes' => $this->board->getAvailableHexes($terrain),
+      'cancelable' => $this->log->getLastActions() != null,
     ];
-
-		// TODO
 
     return $arg;
   }
@@ -275,7 +309,9 @@ return 0.3;
       throw new BgaUserException(_("You cannot build here"));
 
     $this->playerManager->getPlayer()->build($pos);
-    $this->gamestate->nextState("buildAgain");
+
+    $nextState = count($this->log->getLastBuilds()) == 3? "done" : "buildAgain";
+    $this->gamestate->nextState($nextState);
   }
 
 
@@ -303,8 +339,6 @@ return 0.3;
     ]);
   }
 */
-
-
 
   ////////////////////////////////////
   ////////////   Zombie   ////////////

@@ -10,6 +10,7 @@ define('ST_START_OF_TURN', 4);
 define('ST_BUILD', 5);
 define('ST_USE_POWER', 6);
 define('ST_END_OF_TURN', 7);
+define('ST_PRE_END_OF_TURN', 8);
 
 define('ST_GAME_END', 99);
 

@@ -47,4 +47,21 @@ class action_kingdombuilder extends APP_GameAction
     $this->game->playerBuild(['x' => $x, 'y' => $y]);
     self::ajaxResponse();
   }
+
+
+
+  public function cancelPreviousWorks()
+  {
+    self::setAjaxMode();
+    $this->game->cancelPreviousWorks();
+    self::ajaxResponse();
+  }
+
+
+  public function confirmTurn()
+  {
+    self::setAjaxMode();
+    $this->game->confirmTurn();
+    self::ajaxResponse();
+  }
 }

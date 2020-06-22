@@ -113,16 +113,32 @@ $machinestates = [
     'type' => 'activeplayer',
     'args' => 'argPlayerBuild',
     'action' => 'stBeforeBuild',
-    'possibleactions' => ['build', 'skip', 'endgame'],
+    'possibleactions' => ['build', 'cancel', 'skip', 'endgame'],
     'transitions' => [
       'zombiePass' => ST_END_OF_TURN,
-      'endturn'    => ST_END_OF_TURN,
+      'endturn'    => ST_PRE_END_OF_TURN,
       'endgame'    => ST_GAME_END,
       'buildAgain' => ST_BUILD,
       'power'      => ST_USE_POWER,
-      'done'       => ST_END_OF_TURN,
+      'done'       => ST_PRE_END_OF_TURN,
+      'cancel'     => ST_START_OF_TURN,
     ],
   ],
+
+  ST_PRE_END_OF_TURN => [
+    'name' => 'confirmTurn',
+    'description' => clienttranslate('${actplayer} must confirm or restart their turn'),
+    'descriptionmyturn' => clienttranslate('${you} must confirm or restart your turn'),
+    'type' => 'activeplayer',
+    'possibleactions' => ['confirm','cancel'],
+    'transitions' => [
+      'zombiePass' => ST_END_OF_TURN,
+      'endturn'    => ST_END_OF_TURN,
+      'confirm'    => ST_END_OF_TURN,
+      'cancel'     => ST_START_OF_TURN,
+    ],
+  ],
+
 
   ST_END_OF_TURN => [
     'name' => 'endOfTurn',

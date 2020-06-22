@@ -32,6 +32,17 @@ div#board li .hex-grid-content.selectable:hover {
 }
 
 
+/* Cancelled notification messages */
+.log.cancel {
+  color: #c62828 !important;
+  text-decoration: line-through;
+}
+
+.log.cancel .roundedbox {
+  background-color: rgba(255, 205, 210, 0.6);
+}
+
+
 
 /*****************
 **** KB Cards ****
@@ -168,10 +179,10 @@ div#kb-cards div.kb-card div.kb-card-desc p:nth-of-type(2){
   z-index:10;
 }
 /* TODO media query sizing */
-.player-panel.player-1 .tokens-container .token.token-settlements::after { background-position:33.33% center; }
-.player-panel.player-2 .tokens-container .token.token-settlements::after { background-position:100% center; }
+.player-panel.player-1 .tokens-container .token.token-settlements::after { background-position:0% center; }
+.player-panel.player-2 .tokens-container .token.token-settlements::after { background-position:33.33% center; }
 .player-panel.player-3 .tokens-container .token.token-settlements::after { background-position:66.66% center; }
-.player-panel.player-4 .tokens-container .token.token-settlements::after { background-position:0% center; }
+.player-panel.player-4 .tokens-container .token.token-settlements::after { background-position:100% center; }
 
 
 .player-panel .tokens-container .hex-settlement {
@@ -182,10 +193,10 @@ div#kb-cards div.kb-card div.kb-card-desc p:nth-of-type(2){
   background-repeat: no-repeat;
   z-index:10;
 }
-.player-panel.player-1 .tokens-container .hex-settlement { background-position:33.33% center; }
-.player-panel.player-2 .tokens-container .hex-settlement { background-position:100% center; }
+.player-panel.player-1 .tokens-container .hex-settlement { background-position:0% center; }
+.player-panel.player-2 .tokens-container .hex-settlement { background-position:33.33% center; }
 .player-panel.player-3 .tokens-container .hex-settlement { background-position:66.66% center; }
-.player-panel.player-4 .tokens-container .hex-settlement { background-position:0% center; }
+.player-panel.player-4 .tokens-container .hex-settlement { background-position:100% center; }
 
 
 .hex-grid-container .hex-settlement {
@@ -200,10 +211,17 @@ div#kb-cards div.kb-card div.kb-card-desc p:nth-of-type(2){
   background-repeat: no-repeat;
   z-index:10;
 }
-.hex-grid-container .hex-settlement.player-1 { background-position:33.33% center; }
-.hex-grid-container .hex-settlement.player-2 { background-position:100% center; }
+.hex-grid-container .hex-settlement.player-1 { background-position:0% center; }
+.hex-grid-container .hex-settlement.player-2 { background-position:33.33% center; }
 .hex-grid-container .hex-settlement.player-3 { background-position:66.66% center; }
-.hex-grid-container .hex-settlement.player-4 { background-position:0% center; }
+.hex-grid-container .hex-settlement.player-4 { background-position:100% center; }
+
+
+div#board li .hex-grid-content.cell-player-1 { background-color:rgba(87,16,16,0.5); }
+div#board li .hex-grid-content.cell-player-2 { background-color:rgba(37,74,19,0.5); }
+div#board li .hex-grid-content.cell-player-3 { background-color:rgba(33,51,76,0.5); }
+div#board li .hex-grid-content.cell-player-4 { background-color:rgba(99,66,21,0.5); }
+
 
 /**********************************
 *** Grid stuff generated from sass

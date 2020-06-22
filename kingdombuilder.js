@@ -78,16 +78,11 @@ setup: function (gamedatas) {
   // Setup settlements
   gamedatas.settlements.forEach(this.addSettlement.bind(this));
 
+  // Handle for cancelled notification messages
+  dojo.subscribe('addMoveToLog', this, 'kingdombuilder_addMoveToLog');
+
   // Setup game notifications
   this.setupNotifications();
-
-
-  var data = { args: {
-    player_id:2322020,
-    x:1,
-    y:15,
-  }};
-  setTimeout(() => this.notif_build(data), 2000);
 },
 
 
@@ -103,7 +98,7 @@ onEnteringState: function (stateName, args) {
   debug('Entering state: ' + stateName, args);
 
   // Stop here if it's not the current player's turn for some states
-  if (["playerSettle"].includes(stateName)) {
+  if (["playerBuild"].includes(stateName)) {
     //this.focusContainer('board');
     if (!this.isCurrentPlayerActive()) return;
   }
@@ -148,11 +143,25 @@ clearPossible: function clearPossible() {
  * 	called by BGA framework before onEnteringState
  *  in this method you can manage "action buttons" that are displayed in the action status bar (ie: the HTML links in the status bar).
  */
-onUpdateActionButtons: function (stateName, args) {
+onUpdateActionButtons: function (stateName, args, suppressTimers) {
   debug('Update action buttons: ' + stateName, args); // Make sure it the player's turn
 
   if (!this.isCurrentPlayerActive())
     return;
+
+  if ((stateName == "playerBuild" || stateName == "playerUsePower")) {
+    if (args.cancelable) {
+      this.addActionButton('buttonCancel', _('Restart turn'), 'onClickCancel', null, false, 'gray');
+    }
+  }
+
+  if (stateName == "confirmTurn") {
+    this.addActionButton('buttonConfirm', _('Confirm'), 'onClickConfirm', null, false, 'blue');
+    this.addActionButton('buttonCancel', _('Restart turn'), 'onClickCancel', null, false, 'gray');
+    if (!suppressTimers) {
+      this.startActionTimer('buttonConfirm');
+    }
+  }
 },
 
 
@@ -166,6 +175,118 @@ takeAction: function (action, data, callback) {
   this.ajaxcall("/kingdombuilder/kingdombuilder/" + action + ".html", data, this, callback);
 },
 
+
+
+
+/////////////////////////////////
+/////////////////////////////////
+//////    Cancel turn    ////////
+/////////////////////////////////
+/////////////////////////////////
+/*
+ * notif_cancel:
+ *   called whenever a player restart their turn
+ */
+notif_cancel: function (n) {
+  debug('Notif: cancel turn', n.args);
+
+  // Clear existing settlements
+  dojo.query(".hex-settlement").forEach(function(settlement){
+    settlement.parentNode.className = "hex-grid-content";
+    dojo.destroy(settlement);
+  });
+
+  // Reset settlements counter
+  n.args.fplayers.forEach(function(player){
+    dojo.query("#tokens-container-" + player.id + " .token-settlements")[0].innerHTML = player.settlements;
+  });
+
+  // Setup settlements
+  n.args.settlements.forEach(this.addSettlement.bind(this));
+
+  this.cancelNotifications(n.args.moveIds);
+},
+
+/*
+ * cancelNotifications: cancel past notification log messages the given move IDs
+ */
+cancelNotifications: function(moveIds) {
+  for (var logId in this.log_to_move_id) {
+    var moveId = +this.log_to_move_id[logId];
+    if (moveIds.includes(moveId)) {
+      debug('Cancel notification message for move ID ' + moveId + ', log ID ' + logId);
+      dojo.addClass('log_' + logId, 'cancel');
+    }
+  }
+},
+
+/*
+ * addMoveToLog: called by BGA framework when a new notification message is logged.
+ * cancel it immediately if needed.
+ */
+kingdombuilder_addMoveToLog: function (logId, moveId) {
+  if (this.gamedatas.cancelMoveIds && this.gamedatas.cancelMoveIds.includes(+moveId)) {
+    debug('Cancel notification message for move ID ' + moveId + ', log ID ' + logId);
+    dojo.addClass('log_' + logId, 'cancel');
+  }
+},
+
+
+/*
+ * Add a timer to an action and trigger action when timer is done
+ */
+startActionTimer: function (buttonId) {
+  var _this = this;
+  this.actionTimerLabel = $(buttonId).innerHTML;
+  this.actionTimerSeconds = 10;
+  this.actionTimerFunction = function () {
+    var button = $(buttonId);
+    if (button == null) {
+      _this.stopActionTimer();
+    } else if (_this.actionTimerSeconds-- > 1) {
+      debug('Timer ' + buttonId + ' has ' + _this.actionTimerSeconds + ' seconds left');
+      button.innerHTML = _this.actionTimerLabel + ' (' + _this.actionTimerSeconds + ')';
+    } else {
+      debug('Timer ' + buttonId + ' execute');
+      button.click();
+    }
+  };
+  this.actionTimerFunction();
+  this.actionTimerId = window.setInterval(this.actionTimerFunction, 1000);
+  debug('Timer #' + this.actionTimerId + ' ' + buttonId + ' start');
+},
+
+stopActionTimer: function () {
+  if (this.actionTimerId != null) {
+    debug('Timer #' + this.actionTimerId + ' stop');
+    window.clearInterval(this.actionTimerId);
+    delete this.actionTimerId;
+  }
+},
+
+
+
+/*
+ * onClickCancel: is called when the active player decide to cancel previous works
+ */
+onClickCancel: function () {
+  if (!this.checkAction('cancel')) {
+    return;
+  }
+  this.takeAction("cancelPreviousWorks");
+  this.clearPossible();
+},
+
+
+/*
+ * onClickConfirm: is called when the active player decide to confirm their turn
+ */
+onClickConfirm: function () {
+  if (!this.checkAction('confirm')) {
+    return;
+  }
+  this.takeAction("confirmTurn");
+},
 
 
 /////////////////////////////////
@@ -223,7 +344,10 @@ notif_build: function (n) {
 ////////////////////////////////
 ////////////////////////////////
 addSettlement: function(settlement){
-  dojo.place( this.format_block( 'jstpl_settlement', { no:this.getPlayerNo(settlement.player_id) }), 'cell-' + settlement.x + '-' + settlement.y );
+  var no = this.getPlayerNo(settlement.player_id),
+      cell = 'cell-' + settlement.x + '-' + settlement.y;
+  dojo.place( this.format_block( 'jstpl_settlement', { no: no}),  cell);
+  dojo.addClass(cell, 'cell-player-'+no);
 },
 
 
@@ -254,10 +378,10 @@ slideTemporary: function (template, data, container, sourceId, targetId, duratio
  */
 setupNotifications: function () {
   var notifs = [
-    ['build', 1000]
+    ['build', 1000],
+    ['cancel', 200],
   ];
 /*
-    ['cancel', 1000],
     ['automatic', 1000],
     ['addOffer', 500],
     ['removeOffer', 500],

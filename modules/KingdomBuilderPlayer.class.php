@@ -70,6 +70,7 @@ class KingdomBuilderPlayer extends APP_GameClass
       throw new BgaUserException(_("You have no more settlements left in your hand"));
 
     self::DbQuery("UPDATE piece SET x = {$pos['x']}, y = {$pos['y']}, location = 'board' WHERE id = {$settlement['id']}");
+    $this->game->log->addBuild($settlement, $pos);
     $this->game->notifyAllPlayers('build', clienttranslate('${player_name} build a settlement'), [
       'player_name' => $this->getName(),
       'player_id' => $this->getId(),

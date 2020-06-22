@@ -140,9 +140,10 @@ class KingdomBuilderBoard extends APP_GameClass
   }
 
 
-  public function getPlacedSettlements()
+  public function getPlacedSettlements($pId = null)
   {
-    return self::getObjectListFromDB("SELECT * FROM piece WHERE type = 'settlement' AND location = 'board'");
+    $where = is_null($pId)? '' : " AND player_id = $pId";
+    return self::getObjectListFromDB("SELECT * FROM piece WHERE type = 'settlement' AND location = 'board'" . $where);
   }
 
   public function getSettlements($pId)
@@ -161,7 +162,7 @@ class KingdomBuilderBoard extends APP_GameClass
     $hexes[] = ['x' => $x - 1, 'y' => $y];
     $hexes[] = ['x' => $x - 1, 'y' => $y + ($x % 2 == 0? -1 : 1)];
     $hexes[] = ['x' => $x + 1, 'y' => $y];
-    $hexes[] = ['x' => $x + 1, 'y' => $y + ($x % 2 == 0? 1 : -1)];
+    $hexes[] = ['x' => $x + 1, 'y' => $y + ($x % 2 == 0? -1 : 1)];
     return array_values(array_filter($hexes, function($hex){
       return $hex['x'] >= 0 && $hex['y'] >= 0 && $hex['x'] < 20 && $hex['y'] < 20;
     }));
@@ -177,7 +178,7 @@ class KingdomBuilderBoard extends APP_GameClass
     return $hexes;
   }
 
-  public function getHexesOfType($type, $pId)
+  public function getHexesOfType($type)
   {
     $hexes = [];
     $quadrants = $this->getQuadrants();
@@ -198,13 +199,25 @@ class KingdomBuilderBoard extends APP_GameClass
       $hexes[] = ['x' => $x, 'y' => $y];
     }}}
 
-    // Keep only free hexes
+    return $hexes;
+  }
+
+
+  public function getFreeHexesOfType($type)
+  {
+    $hexes = $this->getHexesOfType($type);
     $settlements = array_map(array('KingdomBuilderBoard','getCoords'), $this->getPlacedSettlements());
     $hexes = array_values(array_udiff($hexes, $settlements, array('KingdomBuilderBoard','compareCoords')));
+    return $hexes;
+  }
 
-    // Keep only those neighbouring
+
+  public function getAvailableHexes($type, $pId = null)
+  {
+    $pId = $pId ?: $this->game->getActivePlayerId();
+
+    $hexes = $this->getFreeHexesOfType($type);
     $hexesNeighbouring = array_values(array_uintersect($hexes, $this->getPlacedSettlementsNeighbouringSpaces($pId), array('KingdomBuilderBoard','compareCoords')));
-
     return count($hexesNeighbouring) > 0 ? $hexesNeighbouring : $hexes;
   }
 }
