@@ -33,6 +33,8 @@ class KingdomBuilderPlayer extends APP_GameClass
       $values[] = "('" . $this->id . "','hand')";
     }
     self::DbQuery($sqlSettlements . implode($values, ','));
+
+    $this->drawTerrain();
   }
 
 
@@ -54,7 +56,7 @@ class KingdomBuilderPlayer extends APP_GameClass
     return self::getObjectListFromDB("SELECT id, type_arg AS location, x, y, player_id FROM piece WHERE player_id = {$this->id} AND type = 'tile' AND location = 'hand'");
   }
 
-  public function getUiData()
+  public function getUiData($currentPlayerId = null)
   {
     return [
       'id'        => $this->id,
@@ -63,13 +65,54 @@ class KingdomBuilderPlayer extends APP_GameClass
       'color'     => $this->color,
       'settlements' => $this->getSettlementsInHand(),
       'tiles' => $this->getTilesInHand(),
+      'terrain' => ($this->id == $currentPlayerId)? $this->getTerrain() : 'back',
     ];
   }
 
 
   public function startOfTurn()
   {
+    // Make tiles obtained before available
     self::DbQuery("UPDATE piece SET location = 'hand' WHERE player_id = {$this->id} AND type = 'tile' AND location = 'pending'");
+
+    // Show terrain card to everyone
+    $this->game->notifyAllPlayers('showTerrain', '', ['pId' => $this->id, 'terrain' =>  $this->getTerrain() ]);
+  }
+
+
+  public function endOfTurn()
+  {
+    $this->game->notifyAllPlayers('showTerrain', '', ['pId' => $this->id, 'terrain' =>  'back']); // hide terrain
+    $this->drawTerrain();
+  }
+
+
+
+  public function drawTerrain()
+  {
+    // Discard already owned card
+    $terrain = $this->getTerrainCard();
+    if($terrain !== false)
+      $this->game->cards->terrains->playCard($terrain['id']);
+
+    // Draw a terrain card
+    $card = $this->game->cards->terrains->pickCard('deck', $this->id);
+    $this->game->notifyPlayer($this->id, 'showTerrain', clienttranslate('At your next turn, you will be building on a ${terrainName}'), [
+      'pId' => $this->id,
+      'terrain' => $card['type'],
+      'terrainName' => $this->game->terrainNames[$card['type']],
+    ]);
+  }
+
+  public function getTerrainCard()
+  {
+    $cards = $this->game->cards->terrains->getPlayerHand($this->id);
+    return reset($cards);
+  }
+
+  public function getTerrain()
+  {
+    return $this->getTerrainCard()['type'];
   }
 
 

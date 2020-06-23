@@ -153,6 +153,12 @@ class KingdomBuilderBoard extends APP_GameClass
   }
 
 
+  public function getTile($id)
+  {
+    return self::getObjectFromDB("SELECT id, type_arg AS location, x, y, player_id FROM piece WHERE id = $id LIMIT 1");
+  }
+
+
   public function getTilesOnBoard()
   {
     return self::getObjectListFromDB("SELECT id, type_arg AS location, x, y FROM piece WHERE type = 'tile' AND location = 'board'");

@@ -103,6 +103,16 @@ setupBoard: function(board){
 
 
 /*
+ * notif_showTerrain:
+ *   called whenever a player show its terrain card (during its turn)
+ */
+notif_showTerrain: function (n) {
+  debug('Notif: update player terrain card', n.args);
+  $('player-terrain-' + n.args.pId).className = "player-terrain terrain-" + n.args.terrain;
+},
+
+
+/*
  * onEnteringState:
  * 	this method is called each time we are entering into a new game state.
  * params:
@@ -114,7 +124,6 @@ onEnteringState: function (stateName, args) {
 
   // Stop here if it's not the current player's turn for some states
   if (["playerBuild"].includes(stateName)) {
-    //this.focusContainer('board');
     if (!this.isCurrentPlayerActive()) return;
   }
 
@@ -213,7 +222,7 @@ notif_cancel: function (n) {
 
   // Reset settlements counter
   n.args.fplayers.forEach(function(player){
-    dojo.query("#tokens-container-" + player.id + " .token-settlements")[0].innerHTML = player.settlements;
+    $("player-settlements-" + player.id).firstChild.innerHTML = player.settlements;
   });
 
   // Reset board
@@ -341,9 +350,9 @@ notif_build: function (n) {
   var _this = this;
   debug('Notif: building a settlement', n.args);
 
-  var container = "tokens-container-" + n.args.player_id,
+  var container = "player-settlements-" + n.args.player_id,
       target  = "cell-" + n.args.x + "-" + n.args.y,
-      number = dojo.query("#" + container + " .token-settlements")[0];
+      number = $(container).firstChild;
 
   this.slideTemporary('jstpl_settlement', { no:this.getPlayerNo(n.args.player_id) }, container, container, target, 1000, 0)
     .then(function(){ _this.addSettlement(n.args);  }),
@@ -356,7 +365,7 @@ notif_obtainTile: function (n) {
   var _this = this;
   debug('Notif: obtaining a tile', n.args);
 
-  var container = "tiles-container-" + n.args.player_id,
+  var container = "player-tiles-" + n.args.player_id,
       cell  = "cell-" + n.args.x + "-" + n.args.y;
 
   this.slideTemporary('jstpl_tile', n.args, container, cell, container, 1000, 0)
@@ -410,7 +419,7 @@ addSettlement: function(settlement){
 },
 
 addTile: function(tile){
-  dojo.place( this.format_block( 'jstpl_tile', tile), "tiles-container-" + tile.player_id);
+  dojo.place( this.format_block( 'jstpl_tile', tile), "player-tiles-" + tile.player_id);
 },
 
 
@@ -453,6 +462,7 @@ setupNotifications: function () {
     ['build', 1000],
     ['cancel', 200],
     ['obtainTile', 1000],
+    ['showTerrain', 1],
   ];
 
   var _this = this;

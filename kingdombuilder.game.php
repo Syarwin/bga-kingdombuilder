@@ -62,13 +62,13 @@ class kingdombuilder extends Table
    */
   protected function setupNewGame($players, $options = [])
   {
-    // Initialize players (and settlements)
-    $this->playerManager->setupNewGame($players);
-
 		// Initialize board and cards
     $optionSetup = intval(self::getGameStateValue('optionSetup'));
 		$this->board->setupNewGame($optionSetup);
     $this->cards->setupNewGame($players, $optionSetup);
+
+    // Initialize players (and settlements)
+    $this->playerManager->setupNewGame($players);
 
     // Active first player to play
     $pId = $this->activeNextPlayer();
@@ -83,11 +83,12 @@ class kingdombuilder extends Table
    */
   protected function getAllDatas()
   {
+    $currentPlayerId = self::getCurrentPlayerId();
     return [
       'quadrants' => $this->board->getQuadrants(),
       'kbCards'   => $this->cards->getKbCards(),
       'board' => $this->board->getUiData(),
-      'fplayers' => $this->playerManager->getUiData(),
+      'fplayers' => $this->playerManager->getUiData($currentPlayerId),
       'cancelMoveIds' => $this->log->getCancelMoveIds(),
       'locations' => $this->locations,
     ];
@@ -142,6 +143,7 @@ return 0.3;
    */
   public function stEndOfTurn()
   {
+    $this->playerManager->getPlayer()->endOfTurn();
     $this->stCheckEndOfGame();
     $this->gamestate->nextState('next');
   }
@@ -255,8 +257,14 @@ return 0.3;
    */
   public function argPlayerBuild()
   {
-    $terrain = $this->cards->getTerrain();
-    $tiles = $this->playerManager->getPlayer()->getTilesInHand();
+    $tile = $this->log->getCurrentTile();
+    if(!is_null($tile)){
+
+    }
+
+    $player = $this->playerManager->getPlayer();
+    $terrain = $player->getTerrain();
+    $tiles = $player->getTilesInHand();
     $builds = $this->log->getLastBuilds();
     $arg = [
       'terrain' => $terrain,

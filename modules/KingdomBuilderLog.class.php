@@ -214,6 +214,20 @@ class KingdomBuilderLog extends APP_GameClass
   }
 
 
+
+  /*
+   * getCurrentTile : get the current used tile if it exists
+   */
+  public function getCurrentTile()
+  {
+    $action = self::getObjectFromDb("SELECT * FROM log ORDER BY log_id DESC LIMIT 1");
+    if(is_null($action) || $action['action'] != 'useTile')
+      return null;
+    else
+      return $this->game->board->getTile($action["piece_id"]);
+  }
+
+
 ////////////////////////////////
 ////////////////////////////////
 //////////   Cancel   //////////

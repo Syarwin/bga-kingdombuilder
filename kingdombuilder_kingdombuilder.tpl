@@ -24,10 +24,9 @@
 
 <script type="text/javascript">
 var jstpl_player_panel = `<div class="player-panel player-\${no}">
-  <div class='tokens-container' id='tokens-container-\${id}'>
-    <div class='token token-settlements'>\${settlements}</div>
-  </div>
-  <div class='tiles-container' id='tiles-container-\${id}'></div>
+  <div class="player-terrain terrain-\${terrain}" id="player-terrain-\${id}"></div>
+  <div class='player-settlements' id='player-settlements-\${id}'><div class='player-settlements-counter'>\${settlements}</div></div>
+  <div class='player-tiles' id='player-tiles-\${id}'></div>
 </div>`;
 
 var jstpl_settlement = `<div class="hex-settlement player-\${no}"></div>`;

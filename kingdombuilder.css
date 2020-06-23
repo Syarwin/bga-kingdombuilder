@@ -135,68 +135,104 @@ div#kb-cards div.kb-card div.kb-card-desc p:nth-of-type(2){
 **** Player's panel ****
 ***********************/
 .player-panel {
-  display: flex;
-  flex-flow: row;
+  display:grid;
+  grid-template-columns: 80px 1fr;
+  grid-column-gap: 10px;
+  grid-template-rows: 40px 70px;
+  grid-row-gap: 10px;
+
   padding:5px;
-  min-height:35px;
 }
 
 
-.player-panel .tokens-container {
-  width:90px;
-  display:flex;
-  flex-flow:row;
-  justify-content: flex-start;
-  align-items: center;
+.player-panel .player-terrain {
+  grid-row:1 / 3;
+  grid-column:1;
+  background-image:url("img/terrains.png");
+  background-size:600%;
+  background-repeat:no-repeat;
 }
+.player-panel .player-terrain.terrain-back { background-position:0% center; }
+.player-panel .player-terrain.terrain-0 { background-position:20% center; }
+.player-panel .player-terrain.terrain-1 { background-position:40% center; }
+.player-panel .player-terrain.terrain-2 { background-position:60% center; }
+.player-panel .player-terrain.terrain-3 { background-position:80% center; }
+.player-panel .player-terrain.terrain-4 { background-position:100% center; }
 
-.player-panel .tokens-container .token {
+
+.player-panel .player-settlements {
   position:relative;
-  width:100%;
-  height:100%;
+  grid-row:1;
+  grid-column:2;
   display:flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   align-items: center;
   font-family: Arial;
   font-size: 1.5em;
   color: black;
 }
+.player-panel .player-settlements .player-settlements-counter {
+  margin-left:60px;
+}
 
-.player-panel .tokens-container .token.token-settlements::before {
+.player-panel .player-settlements .player-settlements-counter::before {
   content:'x';
 }
-.player-panel .tokens-container .token.token-settlements::after {
+.player-panel .player-settlements .player-settlements-counter::after,
+.player-panel .player-settlements .hex-settlement {
   content: '';
   display: block;
   position: absolute;
   left: 0.2em;
   top: 0;
-  width: 38%;
-  height: 100%;
+  width: 40px;
+  height: 40px;
   background-image: url('img/settlements.png');
   background-size: 400%;
   background-repeat: no-repeat;
   z-index:10;
 }
-/* TODO media query sizing */
-.player-panel.player-1 .tokens-container .token.token-settlements::after { background-position:0% center; }
-.player-panel.player-2 .tokens-container .token.token-settlements::after { background-position:33.33% center; }
-.player-panel.player-3 .tokens-container .token.token-settlements::after { background-position:66.66% center; }
-.player-panel.player-4 .tokens-container .token.token-settlements::after { background-position:100% center; }
+
+.player-panel.player-1 .player-settlements .player-settlements-counter::after,
+.player-panel.player-1 .player-settlements .hex-settlement { background-position:0% center; }
+.player-panel.player-2 .player-settlements .player-settlements-counter::after,
+.player-panel.player-2 .player-settlements .hex-settlement { background-position:33.33% center; }
+.player-panel.player-3 .player-settlements .player-settlements-counter::after,
+.player-panel.player-3 .player-settlements .hex-settlement { background-position:66.66% center; }
+.player-panel.player-4 .player-settlements .player-settlements-counter::after,
+.player-panel.player-4 .player-settlements .hex-settlement { background-position:100% center; }
+
+.player-panel .player-tiles {
+  grid-row:2;
+  grid-column:2;
+  display:flex;
+  flex-flow:row;
+  justify-content: flex-start;
+  align-items: center;
+  position:relative;
+}
 
 
-.player-panel .tokens-container .hex-settlement {
-  width:15%;
-  padding-bottom:15%;
-  background-image: url('img/settlements.png');
-  background-size: 400%;
+.tile {
+  flex-shrink: 0;
+  width: 70px;
+  height: 70px;
+  background-image: url('img/tiles.png');
+  background-size: 200%;
   background-repeat: no-repeat;
   z-index:10;
 }
-.player-panel.player-1 .tokens-container .hex-settlement { background-position:0% center; }
-.player-panel.player-2 .tokens-container .hex-settlement { background-position:33.33% center; }
-.player-panel.player-3 .tokens-container .hex-settlement { background-position:66.66% center; }
-.player-panel.player-4 .tokens-container .hex-settlement { background-position:100% center; }
+
+.tile.location-8 { background-position:100% calc(0 * 100% / 7); }
+.tile.location-9 { background-position:100% calc(1 * 100% / 7); }
+.tile.location-10 { background-position:100% calc(2 * 100% / 7); }
+.tile.location-11 { background-position:100% calc(3 * 100% / 7); }
+.tile.location-12 { background-position:100% calc(4 * 100% / 7); }
+.tile.location-13 { background-position:100% calc(5 * 100% / 7); }
+.tile.location-14 { background-position:100% calc(6 * 100% / 7); }
+.tile.location-15 { background-position:100% calc(7 * 100% / 7); }
+
+
 
 
 .hex-grid-container .hex-settlement {
@@ -232,35 +268,6 @@ div#board li .hex-grid-content.cell-player-4 { background-color:rgba(99,66,21,0.
   font-size: 1.3em;
   text-shadow: -2px -2px 2px black, 2px 2px 2px black, -1px -1px 2px black, 1px 1px 2px black;
 }
-
-
-.player-panel .tiles-container {
-  flex:1;
-  display:flex;
-  flex-flow:row;
-  justify-content: flex-start;
-  align-items: center;
-  position:relative;
-}
-
-.tile {
-  flex-shrink: 0;
-  width: 70px;
-  height: 70px;
-  background-image: url('img/tiles.png');
-  background-size: 200%;
-  background-repeat: no-repeat;
-  z-index:10;
-}
-
-.tile.location-8 { background-position:100% calc(0 * 100% / 7); }
-.tile.location-9 { background-position:100% calc(1 * 100% / 7); }
-.tile.location-10 { background-position:100% calc(2 * 100% / 7); }
-.tile.location-11 { background-position:100% calc(3 * 100% / 7); }
-.tile.location-12 { background-position:100% calc(4 * 100% / 7); }
-.tile.location-13 { background-position:100% calc(5 * 100% / 7); }
-.tile.location-14 { background-position:100% calc(6 * 100% / 7); }
-.tile.location-15 { background-position:100% calc(7 * 100% / 7); }
 
 
 /**********************************

@@ -76,11 +76,11 @@ class KingdomBuilderPlayerManager extends APP_GameClass
   /*
    * getUiData : get all ui data of all players : id, no, name, team, color, powers list, farmers
    */
-  public function getUiData()
+  public function getUiData($currentPlayerId)
   {
     $ui = [];
     foreach ($this->getPlayers() as $player)
-       $ui[] = $player->getUiData();
+       $ui[] = $player->getUiData($currentPlayerId);
 
     return $ui;
   }
