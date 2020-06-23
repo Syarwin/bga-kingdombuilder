@@ -218,20 +218,25 @@ class KingdomBuilderBoard extends APP_GameClass
   }
 
 
-  public function getNeighbours($space)
+  public function getNeighboursAux($space)
   {
     $x = (int) $space['x'];
     $y = (int) $space['y'];
     $hexes = [];
     $hexes[] = ['x' => $x, 'y' => $y - 1];
+    $hexes[] = ['x' => $x - 1, 'y' => $y + ($x % 2 == 0? -1 : 0)];
+    $hexes[] = ['x' => $x - 1, 'y' => $y + ($x % 2 == 0? 0  : 1)];
     $hexes[] = ['x' => $x, 'y' => $y + 1];
-    $hexes[] = ['x' => $x - 1, 'y' => $y];
-    $hexes[] = ['x' => $x - 1, 'y' => $y + ($x % 2 == 0? -1 : 1)];
-    $hexes[] = ['x' => $x + 1, 'y' => $y];
-    $hexes[] = ['x' => $x + 1, 'y' => $y + ($x % 2 == 0? -1 : 1)];
-    return array_values(array_filter($hexes, function($hex){
+    $hexes[] = ['x' => $x + 1, 'y' => $y + ($x % 2 == 0? 0 : 1)];
+    $hexes[] = ['x' => $x + 1, 'y' => $y + ($x % 2 == 0? -1 : 0)];
+    return array_filter($hexes, function($hex){
       return $hex['x'] >= 0 && $hex['y'] >= 0 && $hex['x'] < 20 && $hex['y'] < 20;
-    }));
+    });
+  }
+
+  public function getNeighbours($space)
+  {
+    return array_values($this->getNeighboursAux($space));
   }
 
   public function getBoard()
@@ -265,13 +270,15 @@ class KingdomBuilderBoard extends APP_GameClass
 /*#################################
 #### Computing available hexes ####
 #################################*/
-  public function getHexesOfType($type)
+  public function getHexesOfType($types)
   {
     $hexes = [];
     $board = $this->getBoard();
+    if(!is_array($types)) $types = [$types];
+
     for($x = 0; $x < 20; $x++){
     for($y = 0; $y < 20; $y++){
-      if($type == $board[$x][$y])
+      if(in_array($board[$x][$y], $types))
         $hexes[] = ['x' => $x, 'y' => $y];
     }}
 
@@ -307,5 +314,32 @@ class KingdomBuilderBoard extends APP_GameClass
     $hexes = $this->getFreeHexesOfType($type);
     $hexesNeighbouring = array_values(array_uintersect($hexes, $this->getPlacedSettlementsNeighbouringSpaces($pId), array('KingdomBuilderBoard','compareCoords')));
     return count($hexesNeighbouring) > 0 ? $hexesNeighbouring : $hexes;
+  }
+
+
+  public function getTavernAvailableHexes($pId = null)
+  {
+    $pId = $pId ?: $this->game->getActivePlayerId();
+    $settlements = array_map(array('KingdomBuilderBoard','getCoords'), $this->getPlacedSettlements($pId));
+    $hexes = [];
+    foreach($settlements as $settlement){
+    for($i = 0; $i < 6; $i++){
+      $n1 = $this->getNeighboursAux($settlement);
+      if(!array_key_exists($i, $n1) || !in_array($n1[$i], $settlements))
+        continue;
+      $n2 = $this->getNeighboursAux($n1[$i]);
+      if(!array_key_exists($i, $n2) || !in_array($n2[$i], $settlements))
+        continue;
+
+      $n3 = $this->getNeighboursAux($n2[$i]);
+      if(!array_key_exists($i, $n3))
+        continue;
+      array_push($hexes, $n3[$i]);
+    }}
+
+    // Keep only the
+    $freeHexes = $this->getFreeHexesOfType([HEX_GRASS, HEX_CANYON, HEX_DESERT, HEX_FLOWER, HEX_FOREST]);
+    $hexes = array_values(array_uintersect($hexes, $freeHexes, array('KingdomBuilderBoard','compareCoords')));
+    return $hexes;
   }
 }

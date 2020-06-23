@@ -122,6 +122,12 @@ notif_showTerrain: function (n) {
 onEnteringState: function (stateName, args) {
   debug('Entering state: ' + stateName, args);
 
+  if (args && args.args && args.args.tileName != "" && this.gamedatas.gamestate.descriptiontile) {
+    this.gamedatas.gamestate.description = this.gamedatas.gamestate.descriptiontile;
+    this.gamedatas.gamestate.descriptionmyturn = this.gamedatas.gamestate.descriptiontilemyturn;
+    this.updatePageTitle();
+  }
+
   // Stop here if it's not the current player's turn for some states
   if (["playerBuild"].includes(stateName)) {
     if (!this.isCurrentPlayerActive()) return;
@@ -173,9 +179,13 @@ onUpdateActionButtons: function (stateName, args, suppressTimers) {
   if (!this.isCurrentPlayerActive())
     return;
 
+  if (args && args.tiles && args.tiles.length > 0)
+    this.addActionButton('buttonUsePower', _('Use a location tile'), 'onClickUseTile', null, false, 'blue');
+
+  if (args && args.skippable)
+    this.addActionButton('buttonSkip', _('Skip'), 'onClickSkip', null, false, 'gray');
+
   if ((stateName == "playerBuild" || stateName == "playerUsePower")) {
-    if (args.tiles && args.tiles.length > 0)
-      this.addActionButton('buttonUsePower', _('Use a location tile'), 'onClickUseTile', null, false, 'blue');
     if (args.cancelable)
       this.addActionButton('buttonCancel', _('Restart turn'), 'onClickCancel', null, false, 'gray');
   }
@@ -406,6 +416,19 @@ onClickSelectTile: function(tile){
 },
 
 
+notif_useTile: function(n){
+  debug('Notif: using a tile', n.args);
+  this.slideToObjectAndDestroy("tile-" + n.args.id, "topbar", 1000, 0);
+},
+
+
+onClickSkip: function(){
+  if(!this.isCurrentPlayerActive())
+    return;
+
+  this.takeAction('skip', {});
+},
+
 ////////////////////////////////
 ////////////////////////////////
 /////////    Utils    //////////
@@ -462,6 +485,7 @@ setupNotifications: function () {
     ['build', 1000],
     ['cancel', 200],
     ['obtainTile', 1000],
+    ['useTile', 1000],
     ['showTerrain', 1],
   ];
 

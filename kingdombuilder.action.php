@@ -57,6 +57,13 @@ class action_kingdombuilder extends APP_GameAction
     self::ajaxResponse();
   }
 
+  public function skip()
+  {
+    self::setAjaxMode();
+    $this->game->skip();
+    self::ajaxResponse();
+  }
+
 
 
   public function cancelPreviousWorks()

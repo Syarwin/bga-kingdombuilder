@@ -136,7 +136,10 @@ class KingdomBuilderLog extends APP_GameClass
    */
   public function addBuild($piece, $space)
   {
-    $this->insert(-1, $piece['id'], 'build', $this->game->board->getCoords($space));
+    if(is_null($this->getCurrentTile()))
+      $this->insert(-1, $piece['id'], 'build', $this->game->board->getCoords($space));
+    else
+      $this->insert(-1, $piece['id'], 'tileBuild', $this->game->board->getCoords($space));
   }
 
 
@@ -247,7 +250,7 @@ class KingdomBuilderLog extends APP_GameClass
       $args = json_decode($log['action_arg'], true);
 
       // Build : remove piece from board
-      if ($log['action'] == 'build') {
+      if (($log['action'] == 'build') || ($log['action'] == 'tileBuild')) {
         self::DbQuery("UPDATE piece SET x = NULL, y = NULL, location = 'hand' WHERE id = {$log['piece_id']}");
       }
 

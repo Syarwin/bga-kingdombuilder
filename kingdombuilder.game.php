@@ -217,6 +217,19 @@ return 0.3;
   ///////////    UseTile    //////////////
   ////////////////////////////////////////
   ////////////////////////////////////////
+  public function argUseTile()
+  {
+    return [
+      'tiles' => $this->playerManager->getPlayer()->getTilesInHand(),
+      'skippable' => true,
+    ];
+  }
+
+  public function skip()
+  {
+    $this->gamestate->nextState('skip');
+  }
+
   /*
    * useTile: called when a player decide to a tile location
    */
@@ -252,29 +265,47 @@ return 0.3;
   /////////////////////////////////////////
   /////////////////////////////////////////
 
+  public function argPlayerBuildAux($terrain, $tile = null)
+  {
+    $tiles = $this->playerManager->getPlayer()->getTilesInHand();
+    return [
+      'terrain' => $terrain,
+      'terrainName' => $this->terrainNames[$terrain],
+      'hexes' => $this->board->getAvailableHexes($terrain),
+      'cancelable' => $this->log->getLastActions() != null,
+      'tiles' => (count($this->log->getLastBuilds()) == 0 && is_null($this->log->getCurrentTile()))? $tiles : [],
+      'tileName' => is_null($tile)? '' : $this->locations[$tile['location']]['name'],
+    ];
+  }
+
   /*
    * argPlayerBuild: give the list of accessible unnocupied spaces for builds
    */
   public function argPlayerBuild()
   {
-    $tile = $this->log->getCurrentTile();
-    if(!is_null($tile)){
-
-    }
-
     $player = $this->playerManager->getPlayer();
-    $terrain = $player->getTerrain();
-    $tiles = $player->getTilesInHand();
-    $builds = $this->log->getLastBuilds();
-    $arg = [
-      'terrain' => $terrain,
-      'terrainName' => $this->terrainNames[$terrain],
-      'hexes' => $this->board->getAvailableHexes($terrain),
-      'cancelable' => $this->log->getLastActions() != null,
-      'tiles' => count($builds) == 0? $tiles : [],
-    ];
+    $tile = $this->log->getCurrentTile();
 
-    return $arg;
+    // Not using a tile => classic build
+    if(is_null($tile))
+      return $this->argPlayerBuildAux($player->getTerrain());
+
+    switch($tile['location']){
+      case HEX_FARM:
+        return $this->argPlayerBuildAux(HEX_GRASS, $tile);
+
+      case HEX_OASIS:
+        return $this->argPlayerBuildAux(HEX_DESERT, $tile);
+
+      case HEX_ORACLE:
+        return $this->argPlayerBuildAux($player->getTerrain(), $tile);
+
+      case HEX_TAVERN:
+        $arg = $this->argPlayerBuildAux(0, $tile);
+        $arg['terrainName'] = clienttranslate("end of a line");
+        $arg['hexes'] = $this->board->getTavernAvailableHexes();
+        return $arg;
+    }
   }
 
 
@@ -305,6 +336,8 @@ return 0.3;
     $this->playerManager->getPlayer()->build($pos);
 
     $nextState = count($this->log->getLastBuilds()) == 3? "done" : "build";
+    if($nextState == "done" && count($this->playerManager->getPlayer()->getTilesInHand()) > 0)
+      $nextState = "useTile";
     $this->gamestate->nextState($nextState);
   }
 
