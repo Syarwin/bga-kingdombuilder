@@ -135,4 +135,25 @@ class KingdomBuilderPlayer extends APP_GameClass
     // Obtain a new tile ?
     $this->game->locationManager->obtainTile($pos, $this->id);
   }
+
+  public function move($from, $to)
+  {
+    $settlement = self::getObjectFromDB("SELECT * FROM piece WHERE player_id = {$this->id} AND location = 'board' AND type = 'settlement' AND x = {$from['x']} AND y = {$from['y']} LIMIT 1");
+    if(is_null($settlement))
+      throw new BgaUserException(_("You have no settlement to move at that position"));
+
+    self::DbQuery("UPDATE piece SET x = {$to['x']}, y = {$to['y']} WHERE id = {$settlement['id']}");
+    $this->game->log->addMove($settlement, $to);
+    $this->game->notifyAllPlayers('move', clienttranslate('${player_name} move a settlement'), [
+      'player_name' => $this->getName(),
+      'player_id' => $this->getId(),
+      'from' => $from,
+      'x' => $to['x'],
+      'y' => $to['y'],
+    ]);
+
+    // TODO : Obtain a new tile ?
+    // $this->game->locationManager->obtainTile($pos, $this->id);
+  }
+
 }

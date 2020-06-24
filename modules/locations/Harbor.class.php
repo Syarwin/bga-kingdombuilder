@@ -15,4 +15,18 @@ class Harbor extends KingdomBuilderLocation
   }
 
   public function stateTile() { return 'move'; }
+
+  public function argPlayerMoveTarget($settlement)
+  {
+    return $this->game->board->getAvailableHexes(HEX_WATER);
+  }
+
+  public function argPlayerMove()
+  {
+    return [
+      'cancelable' => $this->game->log->getLastActions() != null,
+      'hexes' => $this->game->board->getPlacedSettlementsCoords($this->playerId),
+      'tileName' => $this->getName(),
+    ];
+  }
 }

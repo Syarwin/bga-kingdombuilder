@@ -49,4 +49,5 @@ abstract class KingdomBuilderLocation extends APP_GameClass
 
   public function stateTile() { return null; }
   public function argPlayerBuild() { return []; }
+  public function argPlayerMove() { return []; }
 }

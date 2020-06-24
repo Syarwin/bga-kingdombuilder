@@ -15,4 +15,43 @@ class Paddock extends KingdomBuilderLocation
   }
 
   public function stateTile() { return 'move'; }
+
+  public function argPlayerMoveTarget($settlement){
+    $settlements = $this->game->board->getPlacedSettlementsCoords();
+    $board = $this->game->board->getBoard();
+
+    $hexes = [];
+    for($i = 0; $i < 6; $i++){
+      $n1 = $this->game->board->getNeighbours($settlement, false);
+      if(!array_key_exists($i, $n1))
+        continue;
+      $n2 = $this->game->board->getNeighbours($n1[$i], false);
+      if(!array_key_exists($i, $n2))
+        continue;
+
+      $hex = $n2[$i];
+      if(in_array($hex, $settlements) || !in_array($board[$hex['x']][$hex['y']], [HEX_GRASS, HEX_CANYON, HEX_DESERT, HEX_FLOWER, HEX_FOREST]) )
+        continue;
+
+      array_push($hexes, $hex);
+    }
+
+    return $hexes;
+  }
+
+  public function argPlayerMove()
+  {
+    $settlements = $this->game->board->getPlacedSettlementsCoords($this->playerId);
+    $hexes = [];
+    foreach($settlements as $settlement){
+      if(count($this->argPlayerMoveTarget($settlement)) > 0)
+        array_push($hexes, $settlement);
+    }
+
+    return [
+      'cancelable' => $this->game->log->getLastActions() != null,
+      'hexes' => $hexes,
+      'tileName' => $this->getName(),
+    ];
+  }
 }

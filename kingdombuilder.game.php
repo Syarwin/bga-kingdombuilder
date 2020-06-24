@@ -254,10 +254,41 @@ return 0.3;
     $this->log->addAction("skippedPower");
 
     // Apply power
-    $state = $this->powerManager->stateAfterSkipPower() ?: 'move';
+    $state = $this->powerManager->stateAfterSkipPower() ?? 'move';
     $this->gamestate->nextState($state);
   }
 
+
+  /*
+   * argPlayerMove: give the list of settlements that can move
+   */
+  public function argPlayerMove()
+  {
+    return $this->locationManager->argPlayerMove();
+  }
+
+  /*
+	 * Build : TODO
+   */
+  public function playerMove($from, $to)
+  {
+    // Check if work is possible
+    self::checkAction('move');
+    $arg = $this->argPlayerMove();
+    if(!in_array($from, $arg['hexes']))
+      throw new BgaUserException(_("You cannot move this settlement"));
+
+    $arg2 = $this->locationManager->argPlayerMoveTarget($from);
+    if(!in_array($to, $arg2['hexes']))
+      throw new BgaUserException(_("You cannot move this settlement here"));
+
+    $this->playerManager->getPlayer()->move($from, $to);
+
+    $nextState = count($this->log->getLastBuilds()) == 3? "done" : "build";
+    if($nextState == "done" && $this->playerManager->hasTile())
+      $nextState = "useTile";
+    $this->gamestate->nextState($nextState);
+  }
 
 
   /////////////////////////////////////////
@@ -269,16 +300,18 @@ return 0.3;
   public function argPlayerBuildAux($terrain = null)
   {
     $player = $this->playerManager->getPlayer();
-    $terrain = $terrain ?: $player->getTerrain();
+    $terrain = $terrain ?? $player->getTerrain();
     $tiles = $player->getTilesInHand();
     $location = $this->locationManager->getActiveLocation();
+    $nbr = count($this->log->getLastBuilds());
 
     return [
       'terrain' => $terrain,
       'terrainName' => $this->terrainNames[$terrain],
       'hexes' => $this->board->getAvailableHexes($terrain),
       'cancelable' => $this->log->getLastActions() != null,
-      'tiles' => (count($this->log->getLastBuilds()) == 0 && is_null($location))? $tiles : [],
+      'nbr' => "(". ($nbr + 1)."/3)",
+      'tiles' => ($nbr == 0 && is_null($location))? $tiles : [],
 
       'tileName' => is_null($location)? '' : $location->getName(),
     ];
@@ -294,24 +327,6 @@ return 0.3;
       return $this->argPlayerBuildAux();
     else
       return $this->locationManager->argPlayerBuild();
-/*
-    switch($tile['location']){
-      case HEX_FARM:
-        return $this->argPlayerBuildAux(HEX_GRASS, $tile);
-
-      case HEX_OASIS:
-        return $this->argPlayerBuildAux(HEX_DESERT, $tile);
-
-      case HEX_ORACLE:
-        return $this->argPlayerBuildAux($player->getTerrain(), $tile);
-
-      case HEX_TAVERN:
-        $arg = $this->argPlayerBuildAux(0, $tile);
-        $arg['terrainName'] = clienttranslate("end of a line");
-        $arg['hexes'] = $this->board->getTavernAvailableHexes();
-        return $arg;
-    }
-*/
   }
 
 
@@ -346,32 +361,6 @@ return 0.3;
       $nextState = "useTile";
     $this->gamestate->nextState($nextState);
   }
-
-
-  /*
-   * playerBuild: build a piece to a location on the board
-   *  - obj $worker : the piece id we want to use to build
-   *  - obj $space : the location and building type we want to build
-   *
-  public function playerBuild($worker, $space)
-  {
-    // Build piece
-    $pId = self::getActivePlayerId();
-    $type = 'lvl' . $space['arg'];
-    self::DbQuery("INSERT INTO piece (`player_id`, `type`, `location`, `x`, `y`, `z`) VALUES ('$pId', '$type', 'board', '{$space['x']}', '{$space['y']}', '{$space['z']}') ");
-    $this->log->addBuild($worker, $space);
-
-    // Notify
-    $piece = self::getObjectFromDB("SELECT * FROM piece ORDER BY id DESC LIMIT 1");
-    self::notifyAllPlayers('blockBuilt', clienttranslate('${player_name} builds a ${piece_name} on ${level_name}'), [
-      'i18n' => ['piece_name', 'level_name'],
-      'player_name' => self::getActivePlayerName(),
-      'piece' => $piece,
-      'piece_name' => ($space['arg'] == 3) ? clienttranslate('dome') : clienttranslate('block'),
-      'level_name' => $this->levelNames[intval($space['z'])],
-    ]);
-  }
-*/
 
   ////////////////////////////////////
   ////////////   Zombie   ////////////

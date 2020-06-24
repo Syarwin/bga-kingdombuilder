@@ -40,7 +40,7 @@ class KingdomBuilderPlayerManager extends APP_GameClass
    */
   public function getPlayer($playerId = null)
   {
-    $playerId = $playerId ?: $this->game->getActivePlayerId();
+    $playerId = $playerId ?? $this->game->getActivePlayerId();
     $players = $this->getPlayers([$playerId]);
     return $players[0];
   }

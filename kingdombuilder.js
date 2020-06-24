@@ -329,19 +329,15 @@ onClickConfirm: function () {
 
 /////////////////////////////////
 /////////////////////////////////
-/////////    Settle    //////////
+/////////    Build     //////////
 /////////////////////////////////
 /////////////////////////////////
 
 /*
- * playerSettle: TODO
+ * playerBuild: TODO
  */
 onEnteringStatePlayerBuild: function (args) {
-  var _this = this;
-
-  args.hexes.forEach(function(pos){
-    dojo.addClass('cell-' + pos.x + "-" + pos.y, "selectable");
-  });
+  this.makeCellSelectable(args.hexes);
 },
 
 
@@ -352,11 +348,11 @@ onClickCell: function(x,y){
   if(!this.isCurrentPlayerActive() || !$("cell-"+x+"-"+y).classList.contains('selectable'))
     return;
 
-  var state = this.gamedatas.gamestate.name;
+  var state = this.gamedatas.gamestate.name,
+      data = { x:x, y:y };
 
-  if(state == "playerBuild"){
-    this.takeAction('build', { x:x, y:y });
-  }
+  if(state == "playerBuild"){ this.takeAction('build', data);  }
+  if(state == "playerMove"){ this.onClickCellPlayerMove(data); }
 },
 
 
@@ -433,11 +429,81 @@ onClickSkip: function(){
   this.takeAction('skip', {});
 },
 
+
+
+
+////////////////////////////
+////////////////////////////
+////////   Move    /////////
+////////////////////////////
+////////////////////////////
+
+/*
+ * playerMove: TODO
+ */
+onEnteringStatePlayerMove: function (args) {
+  this._selectedHex = null;
+  this.makeCellSelectable(args.hexes);
+},
+
+onClickCellPlayerMove: function(pos){
+  if(this._selectedHex == null){
+    this._selectedHex = pos;
+    this.clearPossible();
+    dojo.addClass('cell-' + pos.x + "-" + pos.y, "selected");
+    this.takeAction('moveSelect', pos);
+  } else {
+    var data = {
+      fromX: this._selectedHex.x,
+      fromY: this._selectedHex.y,
+      toX: pos.x,
+      toY: pos.y,
+    };
+    this.takeAction('move', data);
+  }
+},
+
+notif_argPlayerMoveTarget: function(n){
+  debug('Notif: displaying targets for move', n.args);
+
+  this.makeCellSelectable(n.args.hexes);
+  this.addActionButton('buttonCancelMoveSelect', _('Cancel'), 'onClickCancelSelectedHex', null, false, 'gray');
+},
+
+onClickCancelSelectedHex: function(){
+  this.clearPossible();
+  this._selectedHex = null;
+  this.makeCellSelectable(this.gamedatas.gamestate.args.hexes);
+},
+
+notif_move: function (n) {
+  var _this = this;
+  debug('Notif: moving a settlement', n.args);
+
+  var container = "player-settlements-" + n.args.player_id,
+      source  = "cell-" + n.args.from.x + "-" + n.args.from.y,
+      target  = "cell-" + n.args.x + "-" + n.args.y;
+
+  this.slideTemporary('jstpl_settlement', { no:this.getPlayerNo(n.args.player_id) }, container, source, target, 1000, 0)
+    .then(function(){ _this.addSettlement(n.args);  }),
+
+  dojo.empty(source);
+  $(source).className = "hex-grid-content";
+},
+
+
+
 ////////////////////////////////
 ////////////////////////////////
 /////////    Utils    //////////
 ////////////////////////////////
 ////////////////////////////////
+makeCellSelectable: function(hexes){
+  hexes.forEach(function(pos){
+    dojo.addClass('cell-' + pos.x + "-" + pos.y, "selectable");
+  });
+},
+
 addSettlement: function(settlement){
   var no = this.getPlayerNo(settlement.player_id),
       cell = 'cell-' + settlement.x + '-' + settlement.y;
@@ -487,10 +553,12 @@ getLocation: function(tile){
 setupNotifications: function () {
   var notifs = [
     ['build', 1000],
+    ['move', 1000],
     ['cancel', 200],
     ['obtainTile', 1000],
-    ['useTile', 1000],
+    ['useTile', 500],
     ['showTerrain', 1],
+    ['argPlayerMoveTarget', 1],
   ];
 
   var _this = this;

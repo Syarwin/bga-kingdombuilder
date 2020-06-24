@@ -17,6 +17,6 @@ class Oracle extends KingdomBuilderLocation
 
   public function argPlayerBuild()
   {
-    return $this->argPlayerBuildAux($this->game->playerManager->getPlayer($this->playerId)->getTerrain());
+    return $this->game->argPlayerBuildAux($this->game->playerManager->getPlayer($this->playerId)->getTerrain());
   }
 }

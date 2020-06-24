@@ -59,7 +59,7 @@ class KingdomBuilderLocationManager extends APP_GameClass
 
   public function obtainTile($pos, $playerId = null)
   {
-    $playerId = $playerId ?: $this->game->getActivePlayerId();
+    $playerId = $playerId ?? $this->game->getActivePlayerId();
 
     $locations = $this->game->board->getNeighboursIntersect($pos, $this->game->board->getLocations());
     if(empty($locations))
@@ -97,7 +97,7 @@ class KingdomBuilderLocationManager extends APP_GameClass
 
   public function useTile($tileId, $playerId = null)
   {
-    $playerId = $playerId ?: $this->game->getActivePlayerId();
+    $playerId = $playerId ?? $this->game->getActivePlayerId();
     $tile = self::getObjectFromDB("SELECT * FROM piece WHERE player_id = {$playerId} AND type = 'tile' AND id = $tileId LIMIT 1");
     if(is_null($tile))
       throw new BgaUserException(_("This tile does not belong to you"));
@@ -129,12 +129,34 @@ class KingdomBuilderLocationManager extends APP_GameClass
     if(is_null($tile))
       return null;
 
-    $playerId = $playerId ?: $this->game->getActivePlayerId();
+    $playerId = $playerId ?? $this->game->getActivePlayerId();
     return $this->getLocation($tile['location'], $playerId);
   }
 
   public function argPlayerBuild()
   {
     return $this->getActiveLocation()->argPlayerBuild();
+  }
+
+
+  public function argPlayerMove()
+  {
+    return $this->getActiveLocation()->argPlayerMove();
+  }
+
+
+  public function argPlayerMoveTarget($space)
+  {
+    self::DbQuery("UPDATE piece SET location = 'pending' WHERE type = 'settlement' AND location = 'board' AND x = {$space['x']} AND y = {$space['y']}");
+    $arg = [
+      'hexes' => $this->getActiveLocation()->argPlayerMoveTarget($space),
+    ];
+    self::DbQuery("UPDATE piece SET location = 'board' WHERE type = 'settlement' AND location = 'pending' AND x = {$space['x']} AND y = {$space['y']}");
+    return $arg;
+  }
+
+  public function playerMoveSelect($space)
+  {
+    $this->game->notifyPlayer($this->game->getActivePlayerId(), 'argPlayerMoveTarget', '', $this->argPlayerMoveTarget($space));
   }
 }

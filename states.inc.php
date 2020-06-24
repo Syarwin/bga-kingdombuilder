@@ -98,8 +98,9 @@ $machinestates = [
     'args' => 'argUseTile',
     'possibleactions' => [ 'use', 'skip' ],
     'transitions' => [
-      'next' => ST_NEXT_PLAYER,
       'build' => ST_BUILD,
+      'move' => ST_MOVE,
+      'skip' => ST_PRE_END_OF_TURN,
       'endgame' => ST_GAME_END,
     ],
   ],
@@ -107,13 +108,14 @@ $machinestates = [
 
   ST_MOVE => [
     'name' => 'playerMove',
-    'description' => clienttranslate('${actplayer} must move an existing settlement'),
-    'descriptionmyturn' => clienttranslate('${you} must move an existing settlement'),
+    'description' => clienttranslate('${tileName} : ${actplayer} must move an existing settlement'),
+    'descriptionmyturn' => clienttranslate('${tileName} : ${you} must move an existing settlement'),
     'type' => 'activeplayer',
-    'args' => 'argMove',
+    'args' => 'argPlayerMove',
     'possibleactions' => [ 'move', 'cancel' ],
     'transitions' => [
-      'next' => ST_NEXT_PLAYER,
+      'done' => ST_PRE_END_OF_TURN,
+      'useTile' => ST_USE_TILE,
       'build' => ST_BUILD,
       'cancel' => ST_START_OF_TURN,
     ],
@@ -121,8 +123,8 @@ $machinestates = [
 
   ST_BUILD => [
     'name' => 'playerBuild',
-    'description' => clienttranslate('${actplayer} must build on a ${terrainName}'),
-    'descriptionmyturn' => clienttranslate('${you} must build on a ${terrainName}'),
+    'description' => clienttranslate('${actplayer} must build on a ${terrainName} ${nbr}'),
+    'descriptionmyturn' => clienttranslate('${you} must build on a ${terrainName} ${nbr}'),
     'descriptiontile' => clienttranslate('${tileName} : ${actplayer} must build on a ${terrainName}'),
     'descriptiontilemyturn' => clienttranslate('${tileName} : ${you} must build on a ${terrainName}'),
     'type' => 'activeplayer',

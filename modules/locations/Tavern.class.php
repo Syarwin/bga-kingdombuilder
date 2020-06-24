@@ -27,7 +27,7 @@ class Tavern extends KingdomBuilderLocation
 
   public function getAvailableHexes()
   {
-    $settlements = array_map(array('KingdomBuilderBoard','getCoords'), $this->game->board->getPlacedSettlements($this->playerId));
+    $settlements = $this->game->board->getPlacedSettlementsCoords($this->playerId);
     $hexes = [];
     foreach($settlements as $settlement){
     for($i = 0; $i < 6; $i++){

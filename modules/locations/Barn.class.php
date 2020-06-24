@@ -14,4 +14,20 @@ class Barn extends KingdomBuilderLocation
   }
 
   public function stateTile() { return 'move'; }
+
+  public function argPlayerMoveTarget($settlement)
+  {
+    $player = $this->playerManager->getPlayer();
+    $terrain = $player->getTerrain();
+    return $this->game->board->getAvailableHexes($terrain);
+  }
+
+  public function argPlayerMove()
+  {
+    return [
+      'cancelable' => $this->game->log->getLastActions() != null,
+      'hexes' => $this->game->board->getPlacedSettlementsCoords($this->playerId),
+      'tileName' => $this->getName(),
+    ];
+  }
 }

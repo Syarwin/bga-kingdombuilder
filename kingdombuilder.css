@@ -22,15 +22,6 @@ div#board {
   width:1000px;
 }
 
-div#board li .hex-grid-content.selectable {
-  cursor: pointer;
-  background-color:rgba(255,255,255,0.5);
-}
-
-div#board li .hex-grid-content.selectable:hover {
-  background-color:rgba(255,255,255,0.2);
-}
-
 
 /* Cancelled notification messages */
 .log.cancel {
@@ -257,6 +248,20 @@ div#board li .hex-grid-content.cell-player-1 { background-color:rgba(87,16,16,0.
 div#board li .hex-grid-content.cell-player-2 { background-color:rgba(37,74,19,0.5); }
 div#board li .hex-grid-content.cell-player-3 { background-color:rgba(33,51,76,0.5); }
 div#board li .hex-grid-content.cell-player-4 { background-color:rgba(99,66,21,0.5); }
+
+div#board li .hex-grid-content.selectable {
+  cursor: pointer;
+  background-color:rgba(255,255,255,0.5);
+}
+
+div#board li .hex-grid-content.selectable:hover {
+  background-color:rgba(255,255,255,0.2);
+}
+
+
+div#board li .hex-grid-content.selected {
+  background-color:rgba(255,255,255,0.1);
+}
 
 
 

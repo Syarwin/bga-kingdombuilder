@@ -128,6 +128,8 @@ class KingdomBuilderBoard extends APP_GameClass
     $quadrants = [];
     if ($optionSetup == BASIC) {
       $quadrants = [7, 6, 5, 1];
+    } else {
+      $quadrants = array_rand(self::$boards, 4);
     }
 
     $this->game->log->initBoard($quadrants);
@@ -190,6 +192,12 @@ class KingdomBuilderBoard extends APP_GameClass
   {
     $where = is_null($pId)? '' : " AND player_id = $pId";
     return self::getObjectListFromDB("SELECT * FROM piece WHERE type = 'settlement' AND location = 'board'" . $where);
+  }
+
+  public function getPlacedSettlementsCoords($pId = null)
+  {
+    $settlements = $this->getPlacedSettlements($pId);
+    return array_map(array('KingdomBuilderBoard','getCoords'), $settlements);
   }
 
   public function getSettlements($pId)
@@ -290,7 +298,7 @@ class KingdomBuilderBoard extends APP_GameClass
 
   public function keepFreeHexes(&$hexes)
   {
-    $settlements = array_map(array('KingdomBuilderBoard','getCoords'), $this->getPlacedSettlements());
+    $settlements = $this->getPlacedSettlementsCoords();
     $hexes = array_values(array_udiff($hexes, $settlements, array('KingdomBuilderBoard','compareCoords')));
   }
 
@@ -316,7 +324,7 @@ class KingdomBuilderBoard extends APP_GameClass
 
     if(!empty($types)){
       $board = $this->getBoard();
-      Utils::filter($hexes, function($hex) use ($board, $type){
+      Utils::filter($hexes, function($hex) use ($board, $types){
         return in_array($board[$hex['x']][$hex['y']], $types);
       });
     }
@@ -346,7 +354,7 @@ class KingdomBuilderBoard extends APP_GameClass
 
   public function getAvailableHexes($type, $pId = null)
   {
-    $pId = $pId ?: $this->game->getActivePlayerId();
+    $pId = $pId ?? $this->game->getActivePlayerId();
 
     $hexes = $this->getFreeHexesOfType($type);
     $this->keepAdjacentIfPossible($hexes, $pId);

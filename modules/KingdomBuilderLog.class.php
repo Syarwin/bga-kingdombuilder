@@ -142,6 +142,17 @@ class KingdomBuilderLog extends APP_GameClass
       $this->insert(-1, $piece['id'], 'tileBuild', $this->game->board->getCoords($space));
   }
 
+  /*
+   * addMove: add a new build entry to log
+   */
+  public function addMove($piece, $space)
+  {
+    $this->insert(-1, $piece['id'], 'move', [
+      'from' => $this->game->board->getCoords($piece),
+      'to' => $this->game->board->getCoords($space)
+    ]);
+  }
+
 
   /*
    * addObtainTile: add a new build entry to log
@@ -190,7 +201,7 @@ class KingdomBuilderLog extends APP_GameClass
    */
   public function getLastBuilds($pId = null, $limit = -1)
   {
-    $pId = $pId ?: $this->game->getActivePlayerId();
+    $pId = $pId ?? $this->game->getActivePlayerId();
     $limitClause = ($limit == -1) ? '' : "LIMIT $limit";
     $works = self::getObjectListFromDb("SELECT * FROM log WHERE `action` = 'build' AND `player_id` = '$pId' AND `round` = (SELECT round FROM log WHERE `player_id` = $pId AND `action` = 'startTurn' ORDER BY log_id DESC LIMIT 1) ORDER BY log_id DESC " . $limitClause);
 
@@ -209,8 +220,8 @@ class KingdomBuilderLog extends APP_GameClass
    */
   public function getLastActions($actions = ['build', 'usedPower', 'useTile'], $pId = null, $offset = null)
   {
-    $pId = $pId ?: $this->game->getActivePlayerId();
-    $offset = $offset ?: 0;
+    $pId = $pId ?? $this->game->getActivePlayerId();
+    $offset = $offset ?? 0;
     $actionsNames = "'" . implode("','", $actions) . "'";
 
     return self::getObjectListFromDb("SELECT * FROM log WHERE `action` IN ($actionsNames) AND `player_id` = '$pId' AND `round` = (SELECT round FROM log WHERE `player_id` = $pId AND `action` = 'startTurn' ORDER BY log_id DESC LIMIT 1) - $offset ORDER BY log_id DESC");
@@ -249,19 +260,27 @@ class KingdomBuilderLog extends APP_GameClass
     foreach ($logs as $log) {
       $args = json_decode($log['action_arg'], true);
 
-      // Build : remove piece from board
-      if (in_array($log['action'], ['build', 'tileBuild'])) {
-        self::DbQuery("UPDATE piece SET x = NULL, y = NULL, location = 'hand' WHERE id = {$log['piece_id']}");
-      }
+      switch($log['action']){
+        // Build : remove piece from board
+        case 'build':
+        case 'tileBuild':
+          self::DbQuery("UPDATE piece SET x = NULL, y = NULL, location = 'hand' WHERE id = {$log['piece_id']}");
+          break;
 
-      // ObtainTile : put tile back on board
-      if ($log['action'] == 'obtainTile') {
-        self::DbQuery("UPDATE piece SET location = 'board', player_id = NULL WHERE id = {$log['piece_id']}");
-      }
+        // ObtainTile : put tile back on board
+        case 'obtainTile':
+          self::DbQuery("UPDATE piece SET location = 'board', player_id = NULL WHERE id = {$log['piece_id']}");
+          break;
 
-      // UseTile : put tile back in hand
-      if ($log['action'] == 'useTile') {
-        self::DbQuery("UPDATE piece SET location = 'hand' WHERE id = {$log['piece_id']}");
+        // UseTile : put tile back in hand
+        case 'useTile':
+          self::DbQuery("UPDATE piece SET location = 'hand' WHERE id = {$log['piece_id']}");
+          break;
+
+        // move : move back
+        case 'move':
+          self::DbQuery("UPDATE piece SET x = {$args['from']['x']}, y = {$args['from']['y']} WHERE id = {$log['piece_id']}");
+          break;
       }
 
 

@@ -64,6 +64,25 @@ class action_kingdombuilder extends APP_GameAction
     self::ajaxResponse();
   }
 
+  public function moveSelect()
+  {
+    self::setAjaxMode();
+    $x = (int) self::getArg('x', AT_posint, true);
+    $y = (int) self::getArg('y', AT_posint, true);
+    $this->game->locationManager->playerMoveSelect(['x' => $x, 'y' => $y]);
+    self::ajaxResponse();
+  }
+
+  public function move()
+  {
+    self::setAjaxMode();
+    $fromX = (int) self::getArg('fromX', AT_posint, true);
+    $fromY = (int) self::getArg('fromY', AT_posint, true);
+    $toX = (int) self::getArg('toX', AT_posint, true);
+    $toY = (int) self::getArg('toY', AT_posint, true);
+    $this->game->playerMove(['x' => $fromX, 'y' => $fromY], ['x' => $toX, 'y' => $toY]);
+    self::ajaxResponse();
+  }
 
 
   public function cancelPreviousWorks()
