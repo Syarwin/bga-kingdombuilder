@@ -45,6 +45,7 @@ class kingdombuilder extends Table
     $this->board = new KingdomBuilderBoard($this);
     $this->cards = new KingdomBuilderCards($this);
     $this->playerManager = new KingdomBuilderPlayerManager($this);
+    $this->locationManager = new KingdomBuilderLocationManager($this);
   }
 
   protected function getGameName()
@@ -90,7 +91,7 @@ class kingdombuilder extends Table
       'board' => $this->board->getUiData(),
       'fplayers' => $this->playerManager->getUiData($currentPlayerId),
       'cancelMoveIds' => $this->log->getCancelMoveIds(),
-      'locations' => $this->locations,
+      'locations' => $this->locationManager->getUiData(),
     ];
   }
 
@@ -196,7 +197,7 @@ return 0.3;
       'player_name' => self::getActivePlayerName(),
       'moveIds' => $moveIds,
       'board' => $this->board->getUiData(),
-      'fplayers' => $this->playerManager->getUiData(),
+      'fplayers' => $this->playerManager->getUiData(self::getCurrentPlayerId()),
     ]);
 
     // Apply power
@@ -235,7 +236,7 @@ return 0.3;
    */
   public function useTile($tileId)
   {
-    $this->gamestate->nextState($this->playerManager->getPlayer()->useTile($tileId));
+    $this->gamestate->nextState($this->locationManager->useTile($tileId));
   }
 
 
@@ -265,16 +266,21 @@ return 0.3;
   /////////////////////////////////////////
   /////////////////////////////////////////
 
-  public function argPlayerBuildAux($terrain, $tile = null)
+  public function argPlayerBuildAux($terrain = null)
   {
-    $tiles = $this->playerManager->getPlayer()->getTilesInHand();
+    $player = $this->playerManager->getPlayer();
+    $terrain = $terrain ?: $player->getTerrain();
+    $tiles = $player->getTilesInHand();
+    $location = $this->locationManager->getActiveLocation();
+
     return [
       'terrain' => $terrain,
       'terrainName' => $this->terrainNames[$terrain],
       'hexes' => $this->board->getAvailableHexes($terrain),
       'cancelable' => $this->log->getLastActions() != null,
-      'tiles' => (count($this->log->getLastBuilds()) == 0 && is_null($this->log->getCurrentTile()))? $tiles : [],
-      'tileName' => is_null($tile)? '' : $this->locations[$tile['location']]['name'],
+      'tiles' => (count($this->log->getLastBuilds()) == 0 && is_null($location))? $tiles : [],
+
+      'tileName' => is_null($location)? '' : $location->getName(),
     ];
   }
 
@@ -283,13 +289,12 @@ return 0.3;
    */
   public function argPlayerBuild()
   {
-    $player = $this->playerManager->getPlayer();
-    $tile = $this->log->getCurrentTile();
-
     // Not using a tile => classic build
-    if(is_null($tile))
-      return $this->argPlayerBuildAux($player->getTerrain());
-
+    if(is_null($this->locationManager->getActiveLocation()))
+      return $this->argPlayerBuildAux();
+    else
+      return $this->locationManager->argPlayerBuild();
+/*
     switch($tile['location']){
       case HEX_FARM:
         return $this->argPlayerBuildAux(HEX_GRASS, $tile);
@@ -306,6 +311,7 @@ return 0.3;
         $arg['hexes'] = $this->board->getTavernAvailableHexes();
         return $arg;
     }
+*/
   }
 
 
@@ -336,7 +342,7 @@ return 0.3;
     $this->playerManager->getPlayer()->build($pos);
 
     $nextState = count($this->log->getLastBuilds()) == 3? "done" : "build";
-    if($nextState == "done" && count($this->playerManager->getPlayer()->getTilesInHand()) > 0)
+    if($nextState == "done" && $this->playerManager->hasTile())
       $nextState = "useTile";
     $this->gamestate->nextState($nextState);
   }

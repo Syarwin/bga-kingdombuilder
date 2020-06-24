@@ -1,0 +1,22 @@
+<?php
+
+class Oracle extends KingdomBuilderLocation
+{
+  public function __construct($game, $playerId)
+  {
+    parent::__construct($game, $playerId);
+    $this->id    = HEX_ORACLE;
+    $this->name  = clienttranslate('Oracle');
+    $this->text  = [
+      clienttranslate('Build one settlement on a hex of the same terrain type as your played terrain card.'),
+      clienttranslate('Build adjacent if possible.'),
+    ];
+  }
+
+  public function stateTile() { return 'build'; }
+
+  public function argPlayerBuild()
+  {
+    return $this->argPlayerBuildAux($this->game->playerManager->getPlayer($this->playerId)->getTerrain());
+  }
+}

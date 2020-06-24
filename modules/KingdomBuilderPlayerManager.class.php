@@ -84,4 +84,9 @@ class KingdomBuilderPlayerManager extends APP_GameClass
 
     return $ui;
   }
+
+  public function hasTile($playerId = null)
+  {
+    return count($this->getPlayer($playerId)->getTilesInHand()) > 0;
+  }
 }

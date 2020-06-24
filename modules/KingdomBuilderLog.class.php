@@ -207,7 +207,7 @@ class KingdomBuilderLog extends APP_GameClass
   /*
    * getLastActions : get works and actions of player (used to cancel previous action)
    */
-  public function getLastActions($actions = ['build', 'usedPower'], $pId = null, $offset = null)
+  public function getLastActions($actions = ['build', 'usedPower', 'useTile'], $pId = null, $offset = null)
   {
     $pId = $pId ?: $this->game->getActivePlayerId();
     $offset = $offset ?: 0;
@@ -250,9 +250,20 @@ class KingdomBuilderLog extends APP_GameClass
       $args = json_decode($log['action_arg'], true);
 
       // Build : remove piece from board
-      if (($log['action'] == 'build') || ($log['action'] == 'tileBuild')) {
+      if (in_array($log['action'], ['build', 'tileBuild'])) {
         self::DbQuery("UPDATE piece SET x = NULL, y = NULL, location = 'hand' WHERE id = {$log['piece_id']}");
       }
+
+      // ObtainTile : put tile back on board
+      if ($log['action'] == 'obtainTile') {
+        self::DbQuery("UPDATE piece SET location = 'board', player_id = NULL WHERE id = {$log['piece_id']}");
+      }
+
+      // UseTile : put tile back in hand
+      if ($log['action'] == 'useTile') {
+        self::DbQuery("UPDATE piece SET location = 'hand' WHERE id = {$log['piece_id']}");
+      }
+
 
       // Undo statistics
       if (array_key_exists('stats', $args)) {

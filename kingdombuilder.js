@@ -222,6 +222,7 @@ takeAction: function (action, data, callback) {
  *   called whenever a player restart their turn
  */
 notif_cancel: function (n) {
+  var _this = this;
   debug('Notif: cancel turn', n.args);
 
   // Clear existing settlements
@@ -233,6 +234,9 @@ notif_cancel: function (n) {
   // Reset settlements counter
   n.args.fplayers.forEach(function(player){
     $("player-settlements-" + player.id).firstChild.innerHTML = player.settlements;
+
+    dojo.empty("player-tiles-"+ player.id);
+    player.tiles.forEach(_this.addTile.bind(_this));
   });
 
   // Reset board
@@ -466,7 +470,7 @@ slideTemporary: function (template, data, container, sourceId, targetId, duratio
 getLocation: function(tile){
   var location = this.gamedatas.locations[tile.location];
   location.location = tile.location;
-  location.description = location.desc.join("");
+  location.description = location.text.join("");
   return location;
 },
 

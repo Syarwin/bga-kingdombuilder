@@ -19,7 +19,19 @@
  *
  */
 
- $this->terrainNames = [
+require_once("modules/Utils.class.php");
+require_once("modules/KingdomBuilderPlayer.class.php");
+require_once("modules/KingdomBuilderLog.class.php");
+require_once("modules/KingdomBuilderBoard.class.php");
+require_once("modules/KingdomBuilderCards.class.php");
+require_once("modules/KingdomBuilderPlayerManager.class.php");
+require_once("modules/KingdomBuilderLocationManager.class.php");
+require_once("modules/KingdomBuilderLocation.class.php");
+foreach (KingdomBuilderLocationManager::$classes as $className) {
+  require_once("modules/locations/$className.class.php");
+}
+
+$this->terrainNames = [
    clienttranslate('Grass'),
    clienttranslate('Canyon'),
    clienttranslate('Desert'),
@@ -27,68 +39,6 @@
    clienttranslate('Forest'),
 ];
 
-$this->locations = [
-  HEX_ORACLE => [
-    'name' => clienttranslate('Oracle'),
-    'desc' => [
-      clienttranslate('Build one settlement on a hex of the same terrain type as your played terrain card.'),
-      clienttranslate('Build adjacent if possible.'),
-    ],
-  ],
-  HEX_FARM => [
-    'name' => clienttranslate('Farm'),
-    'desc' => [
-      clienttranslate('Build one settlement on a grass hex.'),
-      clienttranslate('Build adjacent if possible.'),
-    ],
-  ],
-  HEX_TAVERN => [
-    'name' => clienttranslate('Tavern'),
-    'desc' => [
-      clienttranslate('Build one settlement at one end of a line of at least 3 of your own settlements.'),
-      clienttranslate('The orientation of the line does not matter (horizontally or diagonally).'),
-      clienttranslate('The chosen hex must be suitable for building.'),
-    ],
-  ],
-  HEX_TOWER => [
-    'name' => clienttranslate('Tower'),
-    'desc' => [
-      clienttranslate('Build one settlement at the edge of the game board.'),
-      clienttranslate('Choose any of the 5 suitable terrain type hexes.'),
-      clienttranslate('Build adjacent if possible.'),
-    ],
-  ],
-  HEX_HARBOR => [
-    'name' => clienttranslate('Harbor'),
-    'desc' => [
-      clienttranslate('Move any one of your existing settlements to a water hex.'),
-      clienttranslate('Build adjacent if possible.'),
-      clienttranslate('This is the only way to build settlements on water hexes.'),
-    ],
-  ],
-  HEX_PADDOCK => [
-    'name' => clienttranslate('Paddock'),
-    'desc' => [
-      clienttranslate('Move any one of your existing settlements two hexes in a straight line in any direction (horizontally or diagonally) to an eligible hex.'),
-      clienttranslate('You may jump across any terrain type hex, even water, mountain, castle and location, and/or your own and other players’ settlements.'),
-      clienttranslate('The target hex must not necessarily be adjacent to one of your own settlement.'),
-    ],
-  ],
-  HEX_OASIS => [
-    'name' => clienttranslate('Oasis'),
-    'desc' => [
-      clienttranslate('Build one settlement on a desert hex.'),
-      clienttranslate('Build adjacent if possible.'),
-    ],
-  ],
-  HEX_BARN => [
-    'name' => clienttranslate('Barn'),
-    'desc' => [
-      clienttranslate('Move any one of your existing settlements to a hex of the same terrain type as your played terrain card.'),
-      clienttranslate('Build adjacent if possible.'),
-    ],
-  ],
-];
 
 
 $this->kbcards = [
