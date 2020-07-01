@@ -276,6 +276,13 @@ class KingdomBuilderBoard extends APP_GameClass
     return $board;
   }
 
+  public function getQuadrant($hex){
+    if($hex['x'] < 10 && $hex['y'] < 10) return 0;
+    if($hex['x'] < 10 && $hex['y'] >= 10) return 1;
+    if($hex['x'] >= 10 && $hex['y'] < 10) return 2;
+    if($hex['x'] >= 10 && $hex['y'] >= 10) return 3;
+    return -1;
+  }
 
 
 /*#################################
@@ -359,5 +366,45 @@ class KingdomBuilderBoard extends APP_GameClass
     $hexes = $this->getFreeHexesOfType($type);
     $this->keepAdjacentIfPossible($hexes, $pId);
     return $hexes;
+  }
+
+
+
+  public function getConnectedComponents($pId, $withLocations = true)
+  {
+    $settlements = $this->getPlacedSettlements($pId);
+    if($withLocations)
+      $settlements = array_merge($settlements, $this->getHexesOfType($this->game->locationManager->getLocationTypes()));
+
+    $board = [];
+    for($i = 0; $i < 20; $i++){
+      $board[$i] = [];
+      for($j = 0; $j < 20; $j++)
+        $board[$i][$j] = 0;
+    }
+
+    $k = 1;
+    foreach($settlements as $settlement){
+      if($board[$settlement['x']][$settlement['y']] != 0)
+        continue;
+
+      $todo = [];
+      array_push($todo, $settlement);
+      $board[$settlement['x']][$settlement['y']] = $k;
+      while(!empty($todo)){
+        $cell = array_pop($todo);
+
+        foreach($this->getNeighboursIntersect($cell, $settlements) as $n){
+          if($board[$n['x']][$n['y']] == 0){
+            $board[$n['x']][$n['y']] = $k;
+            array_push($todo, $n);
+          }
+        }
+      }
+
+      $k++;
+    }
+
+    return $board;
   }
 }

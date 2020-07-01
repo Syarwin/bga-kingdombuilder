@@ -16,6 +16,10 @@ class KingdomBuilderLocationManager extends APP_GameClass
     HEX_TOWER => 'Tower',
   ];
 
+  public function getLocationTypes()
+  {
+    return array_merge([HEX_CASTLE], array_keys(self::$classes));
+  }
 
   public $game;
   public function __construct($game)

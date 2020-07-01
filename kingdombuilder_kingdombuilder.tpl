@@ -11,15 +11,15 @@
   </ul>
 </div>
 
-<div id="kb-cards">
-  <!-- BEGIN kbcard -->
-  <div class="kb-card kb-card-{ID}">
-    <div class="kb-card-background"></div>
-    <div class="kb-card-mask"></div>
-    <div class="kb-card-name">{NAME}</div>
-    <div class="kb-card-desc"><p>{SHORT}</p><p>{POINTS}</p></div>
+<div id="objectives">
+  <!-- BEGIN objective -->
+  <div class="objective objective-{ID}">
+    <div class="objective-background"></div>
+    <div class="objective-mask"></div>
+    <div class="objective-name">{NAME}</div>
+    <div class="objective-desc"><p>{DESC}</p><p>{TEXT}</p></div>
   </div>
-  <!-- END kbcard -->
+  <!-- END objective -->
 </div>
 
 <script type="text/javascript">

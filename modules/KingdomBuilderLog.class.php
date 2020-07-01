@@ -181,6 +181,15 @@ class KingdomBuilderLog extends APP_GameClass
   }
 
 
+  /*
+   * lastTurn: logged whenever a player build its last settlement
+   */
+  public function lastTurn()
+  {
+    $this->insert(-1, 0, 'lastTurn');
+  }
+
+
 /////////////////////////////////
 /////////////////////////////////
 //////////   Getters   //////////
@@ -241,6 +250,12 @@ class KingdomBuilderLog extends APP_GameClass
       return $this->game->board->getTile($action["piece_id"]);
   }
 
+
+  public function isLastTurn()
+  {
+    $action = self::getObjectFromDb("SELECT * FROM log WHERE `action` = 'lastTurn'");
+    return is_null($action)? false : true;
+  }
 
 ////////////////////////////////
 ////////////////////////////////

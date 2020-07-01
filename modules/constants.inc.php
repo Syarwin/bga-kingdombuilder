@@ -13,6 +13,7 @@ define('ST_USE_TILE', 6);
 define('ST_END_OF_TURN', 7);
 define('ST_PRE_END_OF_TURN', 8);
 
+define('ST_SCORING_END', 98);
 define('ST_GAME_END', 99);
 
 /*
@@ -56,13 +57,14 @@ define('HEX_BARN', 15);
 /*
  * KB Cards
  */
-define('FISHERMEN', 0);
-define('MERCHANTS', 1);
-define('DISCOVERERS', 2);
-define('HERMITS', 3);
-define('CITIZENS', 4);
-define('MINERS', 5);
-define('WORKERS', 6);
-define('KNIGHTS', 7);
-define('LORDS', 8);
-define('FARMERS', 9);
+define('CASTLE', 0);
+define('FISHERMEN', 1);
+define('MERCHANTS', 2);
+define('DISCOVERERS', 3);
+define('HERMITS', 4);
+define('CITIZENS', 5);
+define('MINERS', 6);
+define('WORKERS', 7);
+define('KNIGHTS', 8);
+define('LORDS', 9);
+define('FARMERS', 10);

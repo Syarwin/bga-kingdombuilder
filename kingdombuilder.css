@@ -39,20 +39,20 @@ div#board {
 **** KB Cards ****
 *****************/
 
-div#kb-cards {
+div#objectives {
   width:20%;
   display:flex;
   flex-flow:column;
 }
 
-div#kb-cards div.kb-card {
+div#objectives div.objective {
   width:100%;
   height:0;
   position:relative;
   padding-bottom:159%;
 }
 
-div#kb-cards div.kb-card div.kb-card-mask {
+div#objectives div.objective div.objective-mask {
   position:absolute;
   top:0;
   left:0;
@@ -64,7 +64,7 @@ div#kb-cards div.kb-card div.kb-card-mask {
 }
 
 
-div#kb-cards div.kb-card div.kb-card-background {
+div#objectives div.objective div.objective-background {
   position:absolute;
   top: 13.5%;
   left: 7.5%;
@@ -75,18 +75,18 @@ div#kb-cards div.kb-card div.kb-card-background {
   background-size:1000%;
 }
 
-div#kb-cards div.kb-card.kb-card-0 div.kb-card-background { background-position: 0% 0%; }
-div#kb-cards div.kb-card.kb-card-1 div.kb-card-background { background-position: 11.1% 0%; }
-div#kb-cards div.kb-card.kb-card-2 div.kb-card-background { background-position: 22.2% 0%; }
-div#kb-cards div.kb-card.kb-card-3 div.kb-card-background { background-position: 33.3% 0%; }
-div#kb-cards div.kb-card.kb-card-4 div.kb-card-background { background-position: 44.4% 0%; }
-div#kb-cards div.kb-card.kb-card-5 div.kb-card-background { background-position: 55.5% 0%; }
-div#kb-cards div.kb-card.kb-card-6 div.kb-card-background { background-position: 66.6% 0%; }
-div#kb-cards div.kb-card.kb-card-7 div.kb-card-background { background-position: 77.7% 0%; }
-div#kb-cards div.kb-card.kb-card-8 div.kb-card-background { background-position: 88.8% 0%; }
-div#kb-cards div.kb-card.kb-card-9 div.kb-card-background { background-position: 100% 0%; }
+div#objectives div.objective.objective-1 div.objective-background { background-position: 0% 0%; }
+div#objectives div.objective.objective-2 div.objective-background { background-position: 11.1% 0%; }
+div#objectives div.objective.objective-3 div.objective-background { background-position: 22.2% 0%; }
+div#objectives div.objective.objective-4 div.objective-background { background-position: 33.3% 0%; }
+div#objectives div.objective.objective-5 div.objective-background { background-position: 44.4% 0%; }
+div#objectives div.objective.objective-6 div.objective-background { background-position: 55.5% 0%; }
+div#objectives div.objective.objective-7 div.objective-background { background-position: 66.6% 0%; }
+div#objectives div.objective.objective-8 div.objective-background { background-position: 77.7% 0%; }
+div#objectives div.objective.objective-9 div.objective-background { background-position: 88.8% 0%; }
+div#objectives div.objective.objective-10 div.objective-background { background-position: 100% 0%; }
 
-div#kb-cards div.kb-card div.kb-card-name {
+div#objectives div.objective div.objective-name {
   position: absolute;
   top: 4%;
   left: 0;
@@ -100,7 +100,7 @@ div#kb-cards div.kb-card div.kb-card-name {
   align-items: center;
 }
 
-div#kb-cards div.kb-card div.kb-card-desc {
+div#objectives div.objective div.objective-desc {
   position: absolute;
   top: 63%;
   left: 12%;
@@ -110,12 +110,12 @@ div#kb-cards div.kb-card div.kb-card-desc {
   font-size: 0.9em;
 }
 
-div#kb-cards div.kb-card div.kb-card-desc p:nth-of-type(1){
+div#objectives div.objective div.objective-desc p:nth-of-type(1){
   font-weight: bold;
   margin-bottom: 5%;
 }
 
-div#kb-cards div.kb-card div.kb-card-desc p:nth-of-type(2){
+div#objectives div.objective div.objective-desc p:nth-of-type(2){
   font-style: italic;
 }
 
@@ -125,6 +125,17 @@ div#kb-cards div.kb-card div.kb-card-desc p:nth-of-type(2){
 /***********************
 **** Player's panel ****
 ***********************/
+.player-name #first-player {
+  width:40px;
+  height:38px;
+  background-image:url("img/starter.png");
+  background-size:100%;
+  background-repeat:no-repeat;
+  position:absolute;
+  top:0;
+  right:37px;
+}
+
 .player-panel {
   display:grid;
   grid-template-columns: 80px 1fr;
@@ -274,6 +285,11 @@ div#board li .hex-grid-content.selected {
   text-shadow: -2px -2px 2px black, 2px 2px 2px black, -1px -1px 2px black, 1px 1px 2px black;
 }
 
+
+.hex-grid-content .scorenumber {
+  z-index:10;
+  font-size:0.5em;
+}
 
 /**********************************
 *** Choose tile dialog

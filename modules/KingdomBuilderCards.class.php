@@ -14,8 +14,8 @@ class KingdomBuilderCards extends APP_GameClass
     $this->terrains->init("terrains");
     $this->terrains->autoreshuffle = true;
 
-    $this->kbCards = $this->game->getNew("module.common.deck");
-    $this->kbCards->init("kb_cards");
+    $this->objectives = $this->game->getNew("module.common.deck");
+    $this->objectives->init("objectives");
   }
 
   public function setupNewGame($players, $optionSetup)
@@ -29,19 +29,64 @@ class KingdomBuilderCards extends APP_GameClass
     $this->terrains->shuffle('deck');
 
     // Choose 3 KingdomBuilder cards
-    $this->kbCards->createCards([ ['type' => 0, 'type_arg' => 0, 'nbr' => 10] ], 'deck');
-    $this->kbCards->shuffle('deck');
+    $this->objectives->createCards([ ['type' => 0, 'type_arg' => 0, 'nbr' => 10] ], 'deck');
+    $this->objectives->shuffle('deck');
     if($optionSetup == BASIC){
-      $this->kbCards->moveCards([1, 2, 8], 'board'); // Fisherman, merchant and knight
+      $this->objectives->moveCards([FISHERMEN,  MERCHANTS, KNIGHTS], 'board');
     } else {
-      $this->kbCards->pickCardsForLocation(3, 'deck', 'board');
+      $this->objectives->pickCardsForLocation(3, 'deck', 'board');
     }
   }
 
 
 
-  public function getKbCards()
+  public static $objectiveClasses = [
+    CASTLE => 'Castle',
+    FISHERMEN => 'Fishermen',
+    MERCHANTS => 'Merchants',
+    DISCOVERERS => 'Discoverers',
+    HERMITS => 'Hermits',
+    CITIZENS => 'Citizens',
+    MINERS => 'Miners',
+    WORKERS => 'Workers',
+    KNIGHTS => 'Knights',
+    LORDS => 'Lords',
+    FARMERS => 'Farmers',
+  ];
+
+  /*
+   * getObjective: factory function to create a objective by ID
+   */
+  public function getObjective($objectiveId)
   {
-    return array_values(array_map(function($card){ return $card['id'] - 1; }, $this->kbCards->getCardsInLocation("board")));
+    if (!isset(self::$objectiveClasses[$objectiveId])) {
+      throw new BgaVisibleSystemException("getPower: Unknown objective $objectiveId");
+    }
+    $className = "Objective".self::$objectiveClasses[$objectiveId];
+    return new $className($this->game);
   }
+
+  /*
+   * getObjectives: return all current objectives
+   */
+  public function getObjectives()
+  {
+    $cardsIds = array_values(array_map(function($card){ return $card['id']; }, $this->objectives->getCardsInLocation("board")));
+    return array_map(function ($objectiveId) {
+      return $this->getObjective($objectiveId);
+    }, $cardsIds);
+  }
+
+  /*
+   * getUiData : get all ui data of all powers : id, name, title, text, hero
+   */
+  public function getUiData()
+  {
+    $ui = [];
+    foreach ($this->getObjectives() as $objective) {
+      $ui[$objective->getId()] = $objective->getUiData();
+    }
+    return $ui;
+  }
+
 }

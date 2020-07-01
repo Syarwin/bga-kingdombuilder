@@ -61,7 +61,7 @@ $machinestates = [
     'type' => 'manager',
     'action' => 'stGameSetup',
     'transitions' => [
-      '' => ST_NEXT_PLAYER,
+      '' => ST_START_OF_TURN,
     ],
   ],
 
@@ -74,7 +74,7 @@ $machinestates = [
     'transitions' => [
       'next' => ST_NEXT_PLAYER,
       'start' => ST_START_OF_TURN,
-      'endgame' => ST_GAME_END,
+      'endgame' => ST_SCORING_END,
     ],
     'updateGameProgression' => true,
   ],
@@ -86,7 +86,7 @@ $machinestates = [
     'action' => 'stStartOfTurn',
     'transitions' => [
       'build'  => ST_BUILD,
-      'endgame' => ST_GAME_END,
+      'endgame' => ST_SCORING_END,
     ],
   ],
 
@@ -101,7 +101,6 @@ $machinestates = [
       'build' => ST_BUILD,
       'move' => ST_MOVE,
       'skip' => ST_PRE_END_OF_TURN,
-      'endgame' => ST_GAME_END,
     ],
   ],
 
@@ -134,7 +133,6 @@ $machinestates = [
     'transitions' => [
       'zombiePass' => ST_END_OF_TURN,
       'endturn'    => ST_PRE_END_OF_TURN,
-      'endgame'    => ST_GAME_END,
       'build'      => ST_BUILD,
       'move'       => ST_MOVE,
       'done'       => ST_PRE_END_OF_TURN,
@@ -165,13 +163,23 @@ $machinestates = [
     'action' => 'stEndOfTurn',
     'transitions' => [
       'next' => ST_NEXT_PLAYER,
-      'endgame' => ST_GAME_END,
     ],
   ],
 
   /*
    * BGA framework final state. Do not modify.
    */
+   ST_SCORING_END => [
+     'name' => 'scoringEnd',
+     'description' => clienttranslate('Scoring'),
+     'type' => 'game',
+     'action' => 'stScoringEnd',
+     'transitions' => [
+       'endgame' => ST_GAME_END,
+     ]
+   ],
+
+
   ST_GAME_END => [
     'name' => 'gameEnd',
     'description' => clienttranslate('End of game'),

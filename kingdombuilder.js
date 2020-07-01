@@ -17,7 +17,7 @@
 
 //# sourceURL=santorini.js
 //@ sourceURL=santorini.js
-var isDebug = true;
+var isDebug = window.location.host == 'studio.boardgamearena.com';
 var debug = isDebug ? console.info.bind(window.console) : function () { };
 define(["dojo", "dojo/_base/declare", "ebg/core/gamegui", "ebg/counter"], function (dojo, declare) {
   return declare("bgagame.kingdombuilder", ebg.core.gamegui, {
@@ -74,6 +74,7 @@ setup: function (gamedatas) {
     dojo.place( _this.format_block( 'jstpl_player_panel', player) , 'overall_player_board_' + player.id );
     player.tiles.forEach(_this.addTile.bind(_this));
   });
+  dojo.place("<div id='first-player'></div>", "player_name_" + gamedatas.firstPlayer);
 
 
   // Setup stuff on board
@@ -84,6 +85,8 @@ setup: function (gamedatas) {
 
   // Setup game notifications
   this.setupNotifications();
+
+//  this.notif_scoringEnd(n);
 },
 
 
@@ -178,6 +181,7 @@ onUpdateActionButtons: function (stateName, args, suppressTimers) {
 
   if (!this.isCurrentPlayerActive())
     return;
+
 
   if (args && args.tiles && args.tiles.length > 0)
     this.addActionButton('buttonUsePower', _('Use a location tile'), 'onClickUseTile', null, false, 'blue');
@@ -493,6 +497,24 @@ notif_move: function (n) {
 
 
 
+////////////////////////////
+////////////////////////////
+///////   Scoring    ///////
+////////////////////////////
+////////////////////////////
+notif_scoringEnd:function(n){
+  var _this = this;
+  debug("Notif: scoring end", n);
+
+  n.args.detail.forEach(function(detail){
+    var cell = detail.hexes[0];
+    _this.displayScoring("cell-" + cell.x + "-" + cell.y, _this.gamedatas.players[n.args.playerId.color], detail.score, 1600 );
+  });
+  this.scoreCtrl[n.args.playerId].incValue(n.args.total);
+},
+
+
+
 ////////////////////////////////
 ////////////////////////////////
 /////////    Utils    //////////
@@ -559,6 +581,7 @@ setupNotifications: function () {
     ['useTile', 500],
     ['showTerrain', 1],
     ['argPlayerMoveTarget', 1],
+    ['scoringEnd', 2000],
   ];
 
   var _this = this;

@@ -48,16 +48,15 @@ class view_kingdombuilder_kingdombuilder extends game_view
       ]);
     }
 
-    // Get kbcardsr
-    $kbcards = $this->game->cards->getKbCards();
-    $this->page->begin_block( "kingdombuilder_kingdombuilder", "kbcard");
-    for($i = 0; $i < count($kbcards); $i++){
-      $card = $this->game->kbcards[$kbcards[$i]];
-      $this->page->insert_block( "kbcard", [
-        'ID' => $kbcards[$i],
-        'NAME'  => $card['name'],
-        'SHORT' => $card['short'],
-        'POINTS' => $card['points'],
+    // Get objectives
+    $objectives = $this->game->cards->getObjectives();
+    $this->page->begin_block( "kingdombuilder_kingdombuilder", "objective");
+    foreach($objectives as $obj){
+      $this->page->insert_block( "objective", [
+        'ID' => $obj->getId(),
+        'NAME'  => $obj->getName(),
+        'DESC' => $obj->getDesc(),
+        'TEXT' => implode("<br />", $obj->getText()),
       ]);
     }
 

@@ -21,6 +21,7 @@ require_once( APP_GAMEMODULE_PATH.'module/table/table.game.php' );
 require_once('modules/constants.inc.php');
 require_once("modules/KingdomBuilderBoard.class.php");
 require_once("modules/KingdomBuilderCards.class.php");
+require_once("modules/KingdomBuilderObjective.class.php");
 require_once("modules/KingdomBuilderLog.class.php");
 require_once("modules/KingdomBuilderPlayerManager.class.php");
 
@@ -87,9 +88,10 @@ class kingdombuilder extends Table
     $currentPlayerId = self::getCurrentPlayerId();
     return [
       'quadrants' => $this->board->getQuadrants(),
-      'kbCards'   => $this->cards->getKbCards(),
+      'objectives'   => $this->cards->getUiData(),
       'board' => $this->board->getUiData(),
       'fplayers' => $this->playerManager->getUiData($currentPlayerId),
+      'firstPlayer' => self::getGamestateValue("firstPlayer"),
       'cancelMoveIds' => $this->log->getCancelMoveIds(),
       'locations' => $this->locationManager->getUiData(),
     ];
@@ -102,9 +104,9 @@ class kingdombuilder extends Table
    */
   public function getGameProgression()
   {
-		// TODO
-//    return count($this->board->getPlacedPieces()) / 100;
-return 0.3;
+    $total = 40 * $this->playerManager->getPlayerCount();
+    $placed = count($this->board->getPlacedSettlements());
+    return (int) $placed * 100 / $total;
   }
 
 
@@ -123,6 +125,11 @@ return 0.3;
     if (self::getGamestateValue("firstPlayer") == $pId) {
       $n = (int) self::getGamestateValue('currentRound') + 1;
       self::setGamestateValue("currentRound", $n);
+
+      if($this->log->isLastTurn()){
+        $this->gamestate->nextState('endgame');
+        return;
+      }
     }
 
     $this->gamestate->nextState('start');
@@ -157,27 +164,16 @@ return 0.3;
 		return false;
   }
 
-
-  /*
-   * announceWin: TODO
-   *
-  public function announceWin($playerId, $win = true)
+  public function stScoringEnd()
   {
-    $players = $win ? $this->playerManager->getTeammates($playerId) : $this->playerManager->getOpponents($playerId);
-    if (count($players) == 2) {
-      self::notifyAllPlayers('message', clienttranslate('${player_name} and ${player_name2} win!'), [
-        'player_name' => $players[0]->getName(),
-        'player_name2' => $players[1]->getName(),
-      ]);
-    } else {
-      self::notifyAllPlayers('message', clienttranslate('${player_name} wins!'), [
-        'player_name' => $players[0]->getName(),
-      ]);
+    $this->cards->getObjective(CASTLE)->scoringEnd();
+    foreach($this->cards->getObjectives() as $objective){
+      $objective->scoringEnd();
     }
-    self::DbQuery("UPDATE player SET player_score = 1 WHERE player_team = {$players[0]->getTeam()}");
-    $this->gamestate->nextState('endgame');
+
+    // TODO : tie breaker
+    $this->gamestate->nextState("endgame");
   }
-*/
 
 
   /*
@@ -354,9 +350,10 @@ return 0.3;
     if(!in_array($pos, $arg['hexes']))
       throw new BgaUserException(_("You cannot build here"));
 
-    $this->playerManager->getPlayer()->build($pos);
+    $player = $this->playerManager->getPlayer();
+    $player->build($pos);
 
-    $nextState = count($this->log->getLastBuilds()) == 3? "done" : "build";
+    $nextState = (count($this->log->getLastBuilds()) == 3 || $player->getSettlementsInHand() == 0)? "done" : "build";
     if($nextState == "done" && $this->playerManager->hasTile())
       $nextState = "useTile";
     $this->gamestate->nextState($nextState);

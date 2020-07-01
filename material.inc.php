@@ -24,6 +24,10 @@ require_once("modules/KingdomBuilderPlayer.class.php");
 require_once("modules/KingdomBuilderLog.class.php");
 require_once("modules/KingdomBuilderBoard.class.php");
 require_once("modules/KingdomBuilderCards.class.php");
+require_once("modules/KingdomBuilderObjective.class.php");
+foreach (KingdomBuilderCards::$objectiveClasses as $className) {
+  require_once("modules/objectives/$className.class.php");
+}
 require_once("modules/KingdomBuilderPlayerManager.class.php");
 require_once("modules/KingdomBuilderLocationManager.class.php");
 require_once("modules/KingdomBuilderLocation.class.php");
@@ -32,64 +36,9 @@ foreach (KingdomBuilderLocationManager::$classes as $className) {
 }
 
 $this->terrainNames = [
-   clienttranslate('Grass'),
-   clienttranslate('Canyon'),
-   clienttranslate('Desert'),
-   clienttranslate('Flower Field'),
-   clienttranslate('Forest'),
-];
-
-
-
-$this->kbcards = [
-  [
-    'name' => 'Fishermen',
-    'short' => clienttranslate("Build settlements on the waterfront"),
-    'points' => clienttranslate("1 gold for each of your own settlements built adjacents to one or more water hexes")
-  ],
-  [
-    'name' => 'Merchants',
-    'short' => clienttranslate("Connect location and castle hexes"),
-    'points' => clienttranslate("4 gold for each location and/or castle hex linked contiguously by your own settlements to other locations and/or castle hexes")
-  ],
-  [
-    'name' => 'Discoverers',
-    'short' => clienttranslate("Build settlements on many horizontal lines"),
-    'points' => clienttranslate("1 gold for each horizontal line on which you have built at least one of your own settlement")
-  ],
-  [
-    'name' => 'Hermits',
-    'short' => clienttranslate("Create many settlements area"),
-    'points' => clienttranslate("1 gold for each of your own separate settlement and for each separate settlement area")
-  ],
-  [
-    'name' => 'Citizens',
-    'short' => clienttranslate("Create a large settlement area"),
-    'points' => clienttranslate("1 gold for every 2 of your own settlements in your largest own settlement area")
-  ],
-  [
-    'name' => 'Miners',
-    'short' => clienttranslate("Build settlements next to a mountain"),
-    'points' => clienttranslate("1 gold for each of your own settlements built adjacents to one or more mountain hexes")
-  ],
-  [
-    'name' => 'Workers',
-    'short' => clienttranslate("Build settlements next to location or castle hex"),
-    'points' => clienttranslate("1 gold for each of your own settlements built adjacents to a location or castle hex")
-  ],
-  [
-    'name' => 'Knights',
-    'short' => clienttranslate("Build many settlements on one horizontal line"),
-    'points' => clienttranslate("2 gold for each of your own settlements built on that horizontal line with the most of your own settlements")
-  ],
-  [
-    'name' => 'Lords',
-    'short' => clienttranslate("Build the most settlements in each sector"),
-    'points' => clienttranslate("Each sector : 12 gold for maximum number of settlements there, 6 golds for the next highest number of settlements")
-  ],
-  [
-    'name' => 'Farmers',
-    'short' => clienttranslate("Build settlements in all sectors"),
-    'points' => clienttranslate("3 gold for each of your own settlements in that sector with the fewest of your own settlements")
-  ],
+   HEX_GRASS => clienttranslate('Grass'),
+   HEX_CANYON => clienttranslate('Canyon'),
+   HEX_DESERT => clienttranslate('Desert'),
+   HEX_FLOWER => clienttranslate('Flower Field'),
+   HEX_FOREST => clienttranslate('Forest'),
 ];

@@ -29,7 +29,8 @@ class KingdomBuilderPlayer extends APP_GameClass
   {
     $sqlSettlements = 'INSERT INTO piece (player_id, location) VALUES ';
     $values = [];
-    for($i = 0; $i < 40; $i++){
+    // TODO : 40
+    for($i = 0; $i < 5; $i++){
       $values[] = "('" . $this->id . "','hand')";
     }
     self::DbQuery($sqlSettlements . implode($values, ','));
@@ -91,6 +92,9 @@ class KingdomBuilderPlayer extends APP_GameClass
 
   public function drawTerrain()
   {
+    if($this->game->log->isLastTurn())
+      return;
+
     // Discard already owned card
     $terrain = $this->getTerrainCard();
     if($terrain !== false)
@@ -134,6 +138,15 @@ class KingdomBuilderPlayer extends APP_GameClass
 
     // Obtain a new tile ?
     $this->game->locationManager->obtainTile($pos, $this->id);
+
+    // End of the game
+    if($this->getSettlementsInHand() == 0 && !$this->game->log->isLastTurn()){
+      $this->game->notifyAllPlayers('message', clienttranslate('${player_name} build its last settlement, the game will end at the end of the round'), [
+        'player_name' => $this->getName(),
+      ]);
+      $this->game->log->lastTurn();
+    }
+
   }
 
   public function move($from, $to)
@@ -152,8 +165,9 @@ class KingdomBuilderPlayer extends APP_GameClass
       'y' => $to['y'],
     ]);
 
-    // TODO : Obtain a new tile ?
-    // $this->game->locationManager->obtainTile($pos, $this->id);
+    // Obtain a new tile ?
+    $this->game->locationManager->obtainTile($to, $this->id);
+    // TODO : loose a tile ?
   }
 
 }
