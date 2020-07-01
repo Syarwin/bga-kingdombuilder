@@ -28,7 +28,7 @@ require_once("modules/constants.inc.php");
 
 $game_options = [
   OPTION_SETUP => [
-    'name' => totranslate('Assignment of Powers'),
+    'name' => totranslate('Board and objectives'),
     'values' => [
       BASIC => [
         'name' => totranslate('First game'),
