@@ -30,7 +30,7 @@ class KingdomBuilderPlayer extends APP_GameClass
     $sqlSettlements = 'INSERT INTO piece (player_id, location) VALUES ';
     $values = [];
     // TODO : 40
-    for($i = 0; $i < 5; $i++){
+    for($i = 0; $i < 40; $i++){
       $values[] = "('" . $this->id . "','hand')";
     }
     self::DbQuery($sqlSettlements . implode($values, ','));

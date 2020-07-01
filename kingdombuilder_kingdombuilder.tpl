@@ -11,18 +11,18 @@
   </ul>
 </div>
 
-<div id="objectives">
-  <!-- BEGIN objective -->
-  <div class="objective objective-{ID}">
-    <div class="objective-background"></div>
-    <div class="objective-mask"></div>
-    <div class="objective-name">{NAME}</div>
-    <div class="objective-desc"><p>{DESC}</p><p>{TEXT}</p></div>
-  </div>
-  <!-- END objective -->
-</div>
+<div id="objectives"></div>
 
 <script type="text/javascript">
+var jstpl_objective = `
+<div class="objective objective-\${id}">
+  <div class="objective-background"></div>
+  <div class="objective-mask"></div>
+  <div class="objective-name">\${name}</div>
+  <div class="objective-desc"><p>\${desc}</p><p>\${text}</p></div>
+</div>`;
+
+
 var jstpl_player_panel = `<div class="player-panel player-\${no}">
   <div class="player-terrain terrain-\${terrain}" id="player-terrain-\${id}"></div>
   <div class='player-settlements' id='player-settlements-\${id}'><div class='player-settlements-counter'>\${settlements}</div></div>

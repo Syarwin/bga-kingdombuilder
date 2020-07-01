@@ -47,18 +47,5 @@ class view_kingdombuilder_kingdombuilder extends game_view
         'J' => $j,
       ]);
     }
-
-    // Get objectives
-    $objectives = $this->game->cards->getObjectives();
-    $this->page->begin_block( "kingdombuilder_kingdombuilder", "objective");
-    foreach($objectives as $obj){
-      $this->page->insert_block( "objective", [
-        'ID' => $obj->getId(),
-        'NAME'  => $obj->getName(),
-        'DESC' => $obj->getDesc(),
-        'TEXT' => implode("<br />", $obj->getText()),
-      ]);
-    }
-
 	}
 }

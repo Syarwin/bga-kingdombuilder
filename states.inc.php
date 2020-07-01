@@ -171,7 +171,7 @@ $machinestates = [
    */
    ST_SCORING_END => [
      'name' => 'scoringEnd',
-     'description' => clienttranslate('Scoring'),
+     'description' => clienttranslate('Computing scores'),
      'type' => 'game',
      'action' => 'stScoringEnd',
      'transitions' => [

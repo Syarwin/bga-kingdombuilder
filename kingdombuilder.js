@@ -76,9 +76,17 @@ setup: function (gamedatas) {
   });
   dojo.place("<div id='first-player'></div>", "player_name_" + gamedatas.firstPlayer);
 
-
   // Setup stuff on board
   this.setupBoard(gamedatas.board);
+
+  // Setup objectives
+  gamedatas.objectives.forEach(function(objective){
+    objective.text = objective.text.join("<br />");
+    var div = dojo.place( _this.format_block( 'jstpl_objective', objective) , 'objectives' );
+    div.id = "objective-" + objective.id;
+    _this.addTooltipHtml(div.id, _this.format_block( 'jstpl_objective', objective));
+  });
+
 
   // Handle for cancelled notification messages
   dojo.subscribe('addMoveToLog', this, 'kingdombuilder_addMoveToLog');

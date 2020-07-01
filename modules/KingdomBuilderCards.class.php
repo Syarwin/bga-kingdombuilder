@@ -84,7 +84,7 @@ class KingdomBuilderCards extends APP_GameClass
   {
     $ui = [];
     foreach ($this->getObjectives() as $objective) {
-      $ui[$objective->getId()] = $objective->getUiData();
+      $ui[] = $objective->getUiData();
     }
     return $ui;
   }
