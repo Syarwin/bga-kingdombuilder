@@ -17,7 +17,7 @@ class Barn extends KingdomBuilderLocation
 
   public function argPlayerMoveTarget($settlement)
   {
-    $player = $this->playerManager->getPlayer();
+    $player = $this->game->playerManager->getPlayer($this->playerId);
     $terrain = $player->getTerrain();
     return $this->game->board->getAvailableHexes($terrain);
   }

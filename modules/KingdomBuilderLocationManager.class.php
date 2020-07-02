@@ -90,6 +90,7 @@ class KingdomBuilderLocationManager extends APP_GameClass
       'player_name' => $this->game->playerManager->getPlayer($playerId)->getName(),
       'location_name' => $location->getName(),
       'location' => $location->getId(),
+      'status' => 'pending',
       'player_id' => $playerId,
       'x' => $tile['x'],
       'y' => $tile['y'],
@@ -108,7 +109,7 @@ class KingdomBuilderLocationManager extends APP_GameClass
 
     // Update DB
     $location = $this->getLocation($tile['type_arg'], $playerId);
-    self::DbQuery("UPDATE piece SET location = 'box' WHERE id = {$tileId}");
+    self::DbQuery("UPDATE piece SET location = 'pending' WHERE id = {$tileId}");
     $this->game->log->addUseTile($tile);
     $this->game->notifyAllPlayers('useTile', clienttranslate('${player_name} uses a location tile : ${location_name}'), [
       'i18n' => ['location_name'],

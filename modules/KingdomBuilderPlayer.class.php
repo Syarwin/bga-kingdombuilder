@@ -55,7 +55,7 @@ class KingdomBuilderPlayer extends APP_GameClass
   public function getTilesInHand($alsoPending = false)
   {
     $locations = "'hand'" . ($alsoPending? ", 'pending'" : "");
-    return self::getObjectListFromDB("SELECT id, type_arg AS location, x, y, player_id FROM piece WHERE player_id = {$this->id} AND type = 'tile' AND location IN ($locations)");
+    return self::getObjectListFromDB("SELECT id, location as status, type_arg AS location, x, y, player_id FROM piece WHERE player_id = {$this->id} AND type = 'tile' AND location IN ($locations)");
   }
 
   public function getUiData($currentPlayerId = null)
@@ -76,6 +76,7 @@ class KingdomBuilderPlayer extends APP_GameClass
   {
     // Make tiles obtained before available
     self::DbQuery("UPDATE piece SET location = 'hand' WHERE player_id = {$this->id} AND type = 'tile' AND location = 'pending'");
+    $this->game->notifyAllPlayers('enableTiles', '', ['pId' => $this->id]);
 
     // Show terrain card to everyone
     $this->game->notifyAllPlayers('showTerrain', '', ['pId' => $this->id, 'terrain' =>  $this->getTerrain() ]);

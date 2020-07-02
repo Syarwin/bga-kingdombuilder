@@ -123,6 +123,13 @@ notif_showTerrain: function (n) {
 },
 
 
+
+notif_enableTiles: function (n) {
+  debug('Notif: update player tiles', n.args);
+  dojo.query("#player-tiles-" + n.args.pId + " .tile").removeClass("pending");
+},
+
+
 /*
  * onEnteringState:
  * 	this method is called each time we are entering into a new game state.
@@ -149,7 +156,6 @@ onEnteringState: function (stateName, args) {
   if (this[methodName] !== undefined)
     this[methodName](args.args);
 },
-
 
 
 /*
@@ -430,7 +436,8 @@ onClickSelectTile: function(tile){
 
 notif_useTile: function(n){
   debug('Notif: using a tile', n.args);
-  this.slideToObjectAndDestroy("tile-" + n.args.id, "topbar", 1000, 0);
+  dojo.addClass("tile-" + n.args.id, "pending");
+//  this.slideToObjectAndDestroy("tile-" + n.args.id, "topbar", 1000, 0);
 },
 
 
@@ -543,6 +550,8 @@ addSettlement: function(settlement){
 
 addTile: function(tile){
   dojo.place( this.format_block( 'jstpl_tile', tile), "player-tiles-" + tile.player_id);
+  if(tile.status == "pending")
+    dojo.addClass("tile-" + tile.id, "pending");
 },
 
 
@@ -588,6 +597,7 @@ setupNotifications: function () {
     ['obtainTile', 1000],
     ['useTile', 500],
     ['showTerrain', 1],
+    ['enableTiles', 1],
     ['argPlayerMoveTarget', 1],
     ['scoringEnd', 2000],
   ];
