@@ -87,7 +87,6 @@ class kingdombuilder extends Table
   {
     $currentPlayerId = self::getCurrentPlayerId();
     return [
-      'quadrants' => $this->board->getQuadrants(),
       'objectives' => $this->cards->getUiData(),
       'board' => $this->board->getUiData(),
       'fplayers' => $this->playerManager->getUiData($currentPlayerId),

@@ -5,8 +5,8 @@
   box-sizing: border-box;
 }
 
-#container, .grid-container {
-  width:1200px;
+#container {
+  width:70vw;
 }
 
 
@@ -20,13 +20,17 @@
   <div id="container">
 <script type="text/javascript">
   document.write('<div class="grid-container"><ul class="hex-grid-container grid-top-left-1 grid-top-right-3 grid-bottom-left-2 grid-bottom-right-5">');
+  document.write('<li class="quadrant quadrant-1" id="quadrant-top-left"></li>');
+  document.write('<li class="quadrant flipped quadrant-3" id="quadrant-top-right"></li>');
+  document.write('<li class="quadrant quadrant-2" id="quadrant-bottom-left"></li>');
+  document.write('<li class="quadrant quadrant-7" id="quadrant-bottom-right"></li>');
+
 
   for(var i = 0; i < 20; i++){
     for(var j = 0; j < 20; j++){
-      document.write('<li class="hex-grid-item"><div class="hex-grid-content"></div><div class="hex-grid-content-background" id="cell-' + i + '-' + j +'"></div></li>');
+      document.write('<li class="hex-grid-item" id="cell-container-' + i + '-' + j +'"><div class="hex-grid-content"></div><div class="hex-grid-content-background" id="cell-' + i + '-' + j +'"></div></li>');
     }
   }
-
   document.write("</ul></div>");
 
 var quadrants = [0,3,2,5];
@@ -39,17 +43,51 @@ for(var k = 0; k < 4; k++){
       if(k == 1 || k == 3) _j += 10;
       if(k == 2 || k == 3) _i += 10;
 
-      var cell = document.getElementById('cell-' + _i + "-" + _j);
-      console.log(cell)
+      var cellC = document.getElementById('cell-container-' + _i + "-" + _j);
+      cellC.style.gridRow = (3*_i + 1) + " / span 4";
+      cellC.style.gridColumn = 2*_j + (_i % 2 == 0? 1 : 2) + " / span 2";
 
+      var cell = document.getElementById('cell-' + _i + "-" + _j);
       var backgroundLeft = 10.53*j + (i % 2 == 1? 5.25 : 0);
       var backgroundTop = quadrants[k]*12.7 + 1.235*i;
       cell.style.backgroundPosition = backgroundLeft + "% " + backgroundTop + "%";
-      if(flipped[k])
-        cell.style.transform = "skewY(-30deg) rotate(240deg)";
+//      if(flipped[k])
+//        cell.style.transform = "skewY(-30deg) rotate(240deg)";
     }
   }
 }
+
+/*
+var text = "clip-path:polygon(";
+var y = 100/31, x = 100/21;
+for(var i = 0; i < 21; i++){
+  var tmp = (x * i);
+  text += tmp.toFixed(2) + "% " + ((i % 2 == 0)? y.toFixed(2) : 0) + "%,";
+}
+var t = y, u = 100 - x;
+for(var i = 0; i < 21; i++){
+  text += u.toFixed(2) + "% " + t.toFixed(2) + "%,";
+  t += (i % 2 == 0)? (2*y) : y;
+  if(i % 2 == 1)
+    u = (u == 100)? (100 - x) : 100;
+}
+
+for(var i = 20; i > 0; i--){
+  var tmp = (x * i);
+  var u = 100 - y;
+  text += tmp.toFixed(2) + "% " + ((i % 2 == 1)? u.toFixed(2) : 100) + "%,";
+}
+var t = 100 - y, u = x;
+for(var i = 0; i < 21; i++){
+  text += u.toFixed(2) + "% " + t.toFixed(2) + "%,";
+  t -= (i % 2 == 0)? (2*y) : y;
+  if(i % 2 == 1)
+    u = (u == 0)? x : 0;
+}
+
+text += ")";
+console.log(text);
+*/
 </script>
 </div>
 </body>

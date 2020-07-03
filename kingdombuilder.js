@@ -46,28 +46,15 @@ setup: function (gamedatas) {
       _this.onClickCell(x,y);
     }
   };
-  var quadrants = gamedatas.quadrants;
-  for(var k = 0; k < 4; k++)
-  for(var i = 0; i < 10; i++)
-  for(var j = 0; j < 10; j++){
-    var flipped = quadrants[k] >= 8;
-    if(flipped)
-      quadrants[k] -= 8;
 
-    var _i = flipped? (9 - i) : i;
-    var _j = flipped? (9 - j) : j;
-    if(k == 1 || k == 3) _j += 10;
-    if(k == 2 || k == 3) _i += 10;
+  for(var i = 0; i < 20; i++){
+  for(var j = 0; j < 20; j++){
+    var cellC = $('cell-container-' + i + "-" + j);
+    cellC.style.gridRow = (3*i + 1) + " / span 4";
+    cellC.style.gridColumn = 2*j + (i % 2 == 0? 1 : 2) + " / span 2";
 
-    var cell = $('cell-background-' + _i + "-" + _j);
-    var backgroundLeft = 10.53*j + (i % 2 == 1? 5.25 : 0);
-    var backgroundTop = quadrants[k]*12.7 + 1.235*i;
-    cell.style.backgroundPosition = backgroundLeft + "% " + backgroundTop + "%";
-    if(flipped)
-      cell.style.transform = "skewY(-30deg) rotate(240deg)";
-
-    dojo.connect($('cell-' + _i + "-" + _j), 'onclick', callback(_i,_j));
-  }
+    dojo.connect($('cell-' + i + "-" + j), 'onclick', callback(i,j));
+  }}
 
   // Setup player's board
   gamedatas.fplayers.forEach(function(player){
@@ -93,8 +80,6 @@ setup: function (gamedatas) {
 
   // Setup game notifications
   this.setupNotifications();
-
-//  this.notif_scoringEnd(n);
 },
 
 
@@ -107,8 +92,9 @@ setupBoard: function(board){
   board.settlements.forEach(this.addSettlement.bind(this));
 
   board.locations.forEach(function(location){
-    var cell = 'cell-' + location.x + '-' + location.y;
-    $(cell).innerHTML = location.n;
+    if($("hex-counter-" + location.x + "-" + location.y) == null)
+      dojo.place( _this.format_block( 'jstpl_location_counter', location) , 'cell-container-' + location.x + '-' + location.y);
+    $("hex-counter-" + location.x + "-" + location.y).innerHTML = location.n;
   });
 },
 
@@ -394,11 +380,12 @@ notif_obtainTile: function (n) {
   debug('Notif: obtaining a tile', n.args);
 
   var container = "player-tiles-" + n.args.player_id,
-      cell  = "cell-" + n.args.x + "-" + n.args.y;
+      cell  = "cell-" + n.args.x + "-" + n.args.y,
+      counter = "hex-counter-" + n.args.x + "-" + n.args.y;
 
   this.slideTemporary('jstpl_tile', n.args, container, cell, container, 1000, 0)
     .then(function(){ _this.addTile(n.args);  }),
-  $(cell).innerHTML = parseInt($(cell).innerHTML) - 1;
+  $(counter).innerHTML = parseInt($(counter).innerHTML) - 1;
 
 },
 

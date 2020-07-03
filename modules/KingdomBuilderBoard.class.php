@@ -130,6 +130,10 @@ class KingdomBuilderBoard extends APP_GameClass
       $quadrants = [7, 6, 5, 1];
     } else {
       $quadrants = array_rand(self::$boards, 4);
+      for($i = 0; $i < 4; $i++){
+        if(rand(0,1) == 1)
+          $quadrants[$i] += count(self::$boards);
+      }
     }
 
     $this->game->log->initBoard($quadrants);
@@ -258,20 +262,22 @@ class KingdomBuilderBoard extends APP_GameClass
 
     $quadrants = $this->getQuadrants();
     for($k = 0; $k < 4; $k++){
-    for($i = 0; $i < 10; $i++){
-    for($j = 0; $j < 10; $j++){
-      $flipped = $quadrants[$k] >= count(self::$boards);
+      $nBoard = (int) $quadrants[$k];
+      $flipped = $nBoard >= count(self::$boards);
       if($flipped)
-        $quadrants[$k] -= 8;
+        $nBoard -= count(self::$boards);
 
-      $x = $flipped? (9 - $i) : $i;
-      $y = $flipped? (9 - $j) : $j;
-      $type = self::$boards[$quadrants[$k]][$x][$y];
+      for($i = 0; $i < 10; $i++){
+      for($j = 0; $j < 10; $j++){
+        $x = $flipped? (9 - $i) : $i;
+        $y = $flipped? (9 - $j) : $j;
+        $type = self::$boards[$nBoard][$i][$j];
 
-      if($k == 1 || $k == 3) $y += 10;
-      if($k == 2 || $k == 3) $x += 10;
-      $board[$x][$y] = $type;
-    }}}
+        if($k == 1 || $k == 3) $y += 10;
+        if($k == 2 || $k == 3) $x += 10;
+        $board[$x][$y] = $type;
+      }}
+    }
 
     return $board;
   }

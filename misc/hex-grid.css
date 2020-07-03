@@ -1,3 +1,122 @@
+html {
+  background-color:white;
+}
+
+.grid-container {
+  width:100%;
+  position:relative;
+}
+.grid-container::before {
+  content:"";
+  padding-top:86%;
+  display:block;
+}
+
+
+.hex-grid-container {
+  position:absolute;
+  top:0;
+  left:0;
+  display:grid;
+  grid-template-columns: repeat(41, 1fr);
+  grid-template-rows: repeat(61, 1fr);
+  width:100%;
+  height:100%;
+  list-style-type: none;
+  padding:0;
+  margin:0;
+}
+
+.quadrant {
+  grid-column-end:span 21;
+  grid-row-end:span 31;
+  z-index:1;
+  overflow: hidden;
+  background-image: url("../img/border.png"), url("../img/board.jpg") ;
+  background-size: 100%, 100%;
+  background-position:center, center;
+  background-color:black;
+clip-path:polygon(0.00% 3.23%,4.76% 0%,9.52% 3.23%,14.29% 0%,19.05% 3.23%,23.81% 0%,28.57% 3.23%,33.33% 0%,38.10% 3.23%,42.86% 0%,47.62% 3.23%,52.38% 0%,57.14% 3.23%,61.90% 0%,66.67% 3.23%,71.43% 0%,76.19% 3.23%,80.95% 0%,85.71% 3.23%,90.48% 0%,95.24% 3.23%,95.24% 3.23%,95.24% 9.68%,100.00% 12.90%,100.00% 19.35%,95.24% 22.58%,95.24% 29.03%,100.00% 32.26%,100.00% 38.71%,95.24% 41.94%,95.24% 48.39%,100.00% 51.61%,100.00% 58.06%,95.24% 61.29%,95.24% 67.74%,100.00% 70.97%,100.00% 77.42%,95.24% 80.65%,95.24% 87.10%,100.00% 90.32%,100.00% 96.77%,95.24% 100.00%,95.24% 100%,90.48% 96.77%,85.71% 100%,80.95% 96.77%,76.19% 100%,71.43% 96.77%,66.67% 100%,61.90% 96.77%,57.14% 100%,52.38% 96.77%,47.62% 100%,42.86% 96.77%,38.10% 100%,33.33% 96.77%,28.57% 100%,23.81% 96.77%,19.05% 100%,14.29% 96.77%,9.52% 100%,4.76% 96.77%,4.76% 90.32%,0.00% 87.10%,0.00% 80.65%,4.76% 77.42%,4.76% 70.97%,0.00% 67.74%,0.00% 61.29%,4.76% 58.06%,4.76% 51.61%,0.00% 48.39%,0.00% 41.94%,4.76% 38.71%,4.76% 32.26%,0.00% 29.03%,0.00% 22.58%,4.76% 19.35%,4.76% 12.90%,0.00% 9.68%,0.00% 3.23%,4.76% 0.00%);
+}
+
+.quadrant.flipped {
+  transform:rotate(180deg);
+}
+.quadrant.quadrant-0 { background-position:0% 0%; }
+.quadrant.quadrant-1 { background-position:0% 14.2857%; }
+.quadrant.quadrant-2 { background-position:0% 28.5714%; }
+.quadrant.quadrant-3 { background-position:0% 42.8571%; }
+.quadrant.quadrant-4 { background-position:0% 57.1428%; }
+.quadrant.quadrant-4 { background-position:0% 71.42857%; }
+.quadrant.quadrant-4 { background-position:0% 85.71428%; }
+.quadrant.quadrant-7 { background-position:0% 100%; }
+
+
+#quadrant-top-left {
+  grid-column-start: 1;
+  grid-row-start:1;
+}
+
+#quadrant-top-right {
+  grid-column-start: 21;
+  grid-row-start:1;
+}
+
+#quadrant-bottom-left {
+  grid-column-start: 1;
+  grid-row-start:31;
+}
+
+#quadrant-bottom-right {
+  grid-column-start: 21;
+  grid-row-start:31;
+}
+
+
+
+
+.hex-grid-item {
+  background-color:red;
+  position:relative;
+  overflow: hidden;
+  visibility: hidden;
+  height:0;
+  padding-bottom:115.7%;
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  z-index:5;
+}
+
+.hex-grid-item * {
+  visibility: visible;
+}
+
+
+
+.hex-grid-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  background-color: transparent;
+}
+
+.hex-grid-content-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+/*  transform: rotate(30deg) skew(-30deg);*/
+/*  background-image: url("../img/board.jpg");
+  background-size: 1035%;
+  background-color: gray;*/
+  background-color: rgba(0,0,0,0.2);
+}
+
+/*
 .hex-grid-container:after {
   content: "";
   display: block;
@@ -114,3 +233,4 @@
   background-image: url("../img/board.jpg");
   background-size: 1035%;
   background-color: gray; }
+*/

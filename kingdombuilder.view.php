@@ -38,6 +38,19 @@ class view_kingdombuilder_kingdombuilder extends game_view
     $players = $this->game->loadPlayersBasicInfos();
     $players_nbr = count( $players );
 
+    $quadrants = $this->game->board->getQuadrants();
+    $n = count(KingdomBuilderBoard::$boards);
+    for($i = 0; $i < 4; $i++){
+      $flipped = false;
+      $k = $quadrants[$i];
+      if($k >= $n){
+        $flipped = true;
+        $k -= $n;
+      }
+
+      $this->tpl["QUAD".$i] = $k. ($flipped? " flipped" : "");
+    }
+
     // Create the board
     $this->page->begin_block( "kingdombuilder_kingdombuilder", "cell");
     for($i = 0; $i < 20; $i++)
