@@ -48,6 +48,7 @@ class KingdomBuilderLocationManager extends APP_GameClass
     }, array_keys(self::$classes));
   }
 
+
   /*
    * getUiData : get all ui data of all locations : id, name, text
    */

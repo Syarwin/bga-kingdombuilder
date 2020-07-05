@@ -64,7 +64,7 @@ setup: function (gamedatas) {
   dojo.place("<div id='first-player'></div>", "player_name_" + gamedatas.firstPlayer);
 
   // Setup stuff on board
-  this.setupBoard(gamedatas.board);
+  this.setupBoard(gamedatas.board, true);
 
   // Setup objectives
   gamedatas.objectives.forEach(function(objective){
@@ -86,17 +86,23 @@ setup: function (gamedatas) {
 /*
  * setupBoard : setup settlements and tiles on the board
  */
-setupBoard: function(board){
+setupBoard: function(board, firstInit){
   var _this = this;
   debug("Setting up the board", board);
   board.settlements.forEach(this.addSettlement.bind(this));
 
   board.locations.forEach(function(location){
-    if($("hex-counter-" + location.x + "-" + location.y) == null)
-      dojo.place( _this.format_block( 'jstpl_location_counter', location) , 'cell-container-' + location.x + '-' + location.y);
-    $("hex-counter-" + location.x + "-" + location.y).innerHTML = location.n;
+    if(firstInit){
+      dojo.place(_this.format_block('jstpl_tile_container', location) , 'cell-container-' + location.x + '-' + location.y);
+    } else {
+      dojo.query('#tile-container-' + location.x + '-' + location.y + ' .tile').destroy();
+    }
 
     _this.addTooltipHtml('cell-container-' + location.x + '-' + location.y, _this.format_block( 'jstpl_tilePrompt',  _this.getLocation(location)));
+  });
+
+  board.tiles.forEach(function(tile){
+    dojo.place(_this.format_block( 'jstpl_tile', tile), 'tile-container-' + tile.x + '-' + tile.y);
   });
 },
 
@@ -199,8 +205,6 @@ onUpdateActionButtons: function (stateName, args, suppressTimers) {
   if (stateName == "confirmTurn") {
     this.addActionButton('buttonConfirm', _('Confirm'), 'onClickConfirm', null, false, 'blue');
     this.addActionButton('buttonCancel', _('Restart turn'), 'onClickCancel', null, false, 'gray');
-    if (!suppressTimers)
-      this.startActionTimer('buttonConfirm');
   }
 },
 
@@ -275,6 +279,10 @@ kingdombuilder_addMoveToLog: function (logId, moveId) {
   }
 },
 
+onEnteringStateConfirmTurn: function(args){
+  this.startActionTimer('buttonConfirm');
+},
+
 
 /*
  * Add a timer to an action and trigger action when timer is done
@@ -282,7 +290,7 @@ kingdombuilder_addMoveToLog: function (logId, moveId) {
 startActionTimer: function (buttonId) {
   var _this = this;
   this.actionTimerLabel = $(buttonId).innerHTML;
-  this.actionTimerSeconds = 10;
+  this.actionTimerSeconds = 15;
   this.actionTimerFunction = function () {
     var button = $(buttonId);
     if (button == null) {
@@ -382,13 +390,10 @@ notif_obtainTile: function (n) {
   debug('Notif: obtaining a tile', n.args);
 
   var container = "player-tiles-" + n.args.player_id,
-      cell  = "cell-" + n.args.x + "-" + n.args.y,
-      counter = "hex-counter-" + n.args.x + "-" + n.args.y;
+      tile  = dojo.query("#tile-container-" + n.args.x + "-" + n.args.y + " .tile")[0];
 
-  this.slideTemporary('jstpl_tile', n.args, container, cell, container, 1000, 0)
-    .then(function(){ _this.addTile(n.args);  }),
-  $(counter).innerHTML = parseInt($(counter).innerHTML) - 1;
-
+  this.slideDestroy(tile, container, 1000, 0)
+    .then(function(){ _this.addTile(n.args);  });
 },
 
 
@@ -547,6 +552,17 @@ addTile: function(tile){
 
 getPlayerNo: function(playerId){
   return this.gamedatas.fplayers.reduce(function(carry, player){ return player.id == playerId? player.no : carry}, 0);
+},
+
+
+slideDestroy: function (node, to, duration, delay) {
+  var _this = this;
+  return new Promise(function (resolve, reject) {
+    var animation = _this.slideToObjectAndDestroy(node, to, duration, delay);
+    setTimeout(function(){
+      resolve();
+    }, duration + delay)
+  });
 },
 
 

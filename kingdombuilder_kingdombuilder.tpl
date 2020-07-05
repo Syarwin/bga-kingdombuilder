@@ -34,7 +34,8 @@ var jstpl_player_panel = `<div class="player-panel player-\${no}">
   <div class='player-tiles' id='player-tiles-\${id}'></div>
 </div>`;
 
-var jstpl_location_counter = `<div class="hex-counter" id="hex-counter-\${x}-\${y}">\${n}</div>`;
+var jstpl_tile_container = `<div class='tile-container' id ='tile-container-\${x}-\${y}'><div class="tile-counter"></div></div>`;
+//var jstpl_location_counter = `<div class="hex-counter" id="hex-counter-\${x}-\${y}">\${n}</div>`;
 
 var jstpl_settlement = `<div class="hex-settlement player-\${no}"></div>`;
 

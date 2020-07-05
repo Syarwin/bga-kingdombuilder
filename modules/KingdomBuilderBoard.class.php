@@ -16,6 +16,7 @@ class KingdomBuilderBoard extends APP_GameClass
     return [
       'settlements' => $this->getPlacedSettlements(),
       'locations' => $this->getLocations(),
+      'tiles' => $this->getTilesOnBoard(),
     ];
   }
 
