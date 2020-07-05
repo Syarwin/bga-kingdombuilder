@@ -334,6 +334,16 @@ div#board li .hex-grid-content.selected {
   background-color:#f9ce5a;
 }
 
+
+.dijitTooltip .tile-prompt {
+  width:100%;
+  background-color:#fee9b0;
+  border: 1px solid black;
+  border-radius:5px;
+  display:flex;
+  flex-direction: row;
+}
+
 .tile-prompt .tile {
   width:100px;
   height:100px;
@@ -342,6 +352,25 @@ div#board li .hex-grid-content.selected {
 .tile-prompt .tile-name {
   font-weight: bold;
 }
+
+.tile-prompt .tile-picto {
+  width:200px;
+  height:100px;
+  flex-shrink:0;
+  background-size:100%;
+  background-repeat:no-repeat;
+  background-image:url("img/pictograms.png");
+}
+.tile-prompt .tile-picto.location-8 { background-position:0% calc(0 * 100% / 7); }
+.tile-prompt .tile-picto.location-9 { background-position:0% calc(1 * 100% / 7); }
+.tile-prompt .tile-picto.location-10 { background-position:0% calc(2 * 100% / 7); }
+.tile-prompt .tile-picto.location-11 { background-position:0% calc(3 * 100% / 7); }
+.tile-prompt .tile-picto.location-12 { background-position:0% calc(4 * 100% / 7); }
+.tile-prompt .tile-picto.location-13 { background-position:0% calc(5 * 100% / 7); }
+.tile-prompt .tile-picto.location-14 { background-position:0% calc(6 * 100% / 7); }
+.tile-prompt .tile-picto.location-15 { background-position:0% calc(7 * 100% / 7); }
+
+
 
 /**********************************
 *** Grid stuff generated from sass

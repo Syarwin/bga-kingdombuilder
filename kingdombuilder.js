@@ -95,6 +95,8 @@ setupBoard: function(board){
     if($("hex-counter-" + location.x + "-" + location.y) == null)
       dojo.place( _this.format_block( 'jstpl_location_counter', location) , 'cell-container-' + location.x + '-' + location.y);
     $("hex-counter-" + location.x + "-" + location.y).innerHTML = location.n;
+
+    _this.addTooltipHtml('cell-container-' + location.x + '-' + location.y, _this.format_block( 'jstpl_tilePrompt',  _this.getLocation(location)));
   });
 },
 

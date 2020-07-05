@@ -177,7 +177,7 @@ class KingdomBuilderBoard extends APP_GameClass
     for($x = 0; $x < 20; $x++){
     for($y = 0; $y < 20; $y++){
       if($board[$x][$y] >= HEX_ORACLE){
-        array_push($locations, ['x' => $x, 'y' => $y, 'n' => 0, 'type' => $board[$x][$y] ]);
+        array_push($locations, ['x' => $x, 'y' => $y, 'n' => 0, 'location' => $board[$x][$y] ]);
       }
     }}
 
