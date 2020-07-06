@@ -95,7 +95,7 @@ setupBoard: function(board, firstInit){
     if(firstInit){
       dojo.place(_this.format_block('jstpl_tile_container', location) , 'cell-container-' + location.x + '-' + location.y);
     } else {
-      dojo.query('#tile-container-' + location.x + '-' + location.y + ' .tile').destroy();
+      dojo.query('#tile-container-' + location.x + '-' + location.y + ' .tile').forEach(dojo.destroy);
     }
 
     _this.addTooltipHtml('cell-container-' + location.x + '-' + location.y, _this.format_block( 'jstpl_tilePrompt',  _this.getLocation(location)));
@@ -141,7 +141,7 @@ onEnteringState: function (stateName, args) {
   }
 
   // Stop here if it's not the current player's turn for some states
-  if (["playerBuild"].includes(stateName)) {
+  if (["playerBuild", "confirmTurn"].includes(stateName)) {
     if (!this.isCurrentPlayerActive()) return;
   }
 
@@ -289,6 +289,8 @@ onEnteringStateConfirmTurn: function(args){
  */
 startActionTimer: function (buttonId) {
   var _this = this;
+  if(!$(buttonId))
+    return;
   this.actionTimerLabel = $(buttonId).innerHTML;
   this.actionTimerSeconds = 15;
   this.actionTimerFunction = function () {
@@ -515,9 +517,13 @@ notif_scoringEnd:function(n){
   var _this = this;
   debug("Notif: scoring end", n);
 
+  dojo.query('#objectives .objective').removeClass('selected');
+  if($("objective-" + n.args.objectiveId))
+    dojo.addClass("objective-" + n.args.objectiveId, 'selected');
+
   n.args.detail.forEach(function(detail){
     var cell = detail.hexes[0];
-    _this.displayScoring("cell-" + cell.x + "-" + cell.y, _this.gamedatas.players[n.args.playerId.color], detail.score, 1600 );
+    _this.displayScoring("cell-" + cell.x + "-" + cell.y, _this.gamedatas.players[n.args.playerId.color], detail.score, 2000 );
   });
   this.scoreCtrl[n.args.playerId].incValue(n.args.total);
 },
@@ -604,7 +610,7 @@ setupNotifications: function () {
     ['showTerrain', 1],
     ['enableTiles', 1],
     ['argPlayerMoveTarget', 1],
-    ['scoringEnd', 2000],
+    ['scoringEnd', 3000],
   ];
 
   var _this = this;

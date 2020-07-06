@@ -277,9 +277,10 @@ class kingdombuilder extends Table
     if(!in_array($to, $arg2['hexes']))
       throw new BgaUserException(_("You cannot move this settlement here"));
 
-    $this->playerManager->getPlayer()->move($from, $to);
+    $player = $this->playerManager->getPlayer();
+    $player->move($from, $to);
 
-    $nextState = count($this->log->getLastBuilds()) == 3? "done" : "build";
+    $nextState =  (count($this->log->getLastBuilds()) == 3 || $player->getSettlementsInHand() == 0)? "done" : "build";
     if($nextState == "done" && $this->playerManager->hasTile())
       $nextState = "useTile";
     $this->gamestate->nextState($nextState);

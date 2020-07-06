@@ -56,6 +56,10 @@ div#objectives div.objective {
   position:relative;
   padding-bottom:318px;
 }
+div#objectives div.objective.selected {
+  border: 2px solid blue;
+  border-radius: 20px;
+}
 
 div#objectives div.objective div.objective-mask {
   position:absolute;
@@ -217,13 +221,14 @@ div#objectives div.objective div.objective-desc p:nth-of-type(2){
   justify-content: flex-start;
   align-items: center;
   position:relative;
+  flex-wrap: wrap;
 }
 
 
 .tile {
   flex-shrink: 0;
-  width: 70px;
-  height: 70px;
+  width: 50px;
+  height: 57px;
   background-image: url('img/tiles.png');
   background-size: 100%;
   background-repeat: no-repeat;
@@ -320,7 +325,7 @@ div#board li .hex-grid-content.selected {
 
 .hex-grid-content .scorenumber {
   z-index:10;
-  font-size:0.5em;
+  font-size:0.7em;
 }
 
 /**********************************

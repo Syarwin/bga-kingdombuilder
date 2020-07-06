@@ -21,7 +21,7 @@ class ObjectiveHermits extends KingdomBuilderObjective
     for($i = 0; $i < 20; $i++){
     for($j = 0; $j < 20; $j++){
       $val = $components[$i][$j];
-      if($val == 0 || in_array($val, $granted))
+      if(($val == 0) || in_array($val, $granted))
         continue;
 
       array_push($granted, $val);
