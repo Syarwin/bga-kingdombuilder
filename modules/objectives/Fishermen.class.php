@@ -16,9 +16,9 @@ class ObjectiveFishermen extends KingdomBuilderObjective
   public function scoringEndPlayer($playerId){
     parent::scoringEndPlayer($playerId);
     $water = $this->game->board->getHexesOfType(HEX_WATER);
-    $settlements = $this->game->board->getPlacedSettlementsCoords($playerId); // TODO : remove settlements built on water
+    $settlements = $this->game->board->getPlacedSettlementsCoords($playerId);
     foreach($settlements as $settlement){
-      if(count($this->game->board->getNeighboursIntersect($settlement, $water)) == 0)
+      if(in_array($settlements, $water) || (count($this->game->board->getNeighboursIntersect($settlement, $water)) == 0))
         continue;
 
       $this->addScoring($settlement, 1);
