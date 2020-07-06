@@ -18,7 +18,7 @@ class ObjectiveFishermen extends KingdomBuilderObjective
     $water = $this->game->board->getHexesOfType(HEX_WATER);
     $settlements = $this->game->board->getPlacedSettlementsCoords($playerId);
     foreach($settlements as $settlement){
-      if(in_array($settlements, $water) || (count($this->game->board->getNeighboursIntersect($settlement, $water)) == 0))
+      if(in_array($settlement, $water) || (count($this->game->board->getNeighboursIntersect($settlement, $water)) == 0))
         continue;
 
       $this->addScoring($settlement, 1);

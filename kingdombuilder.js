@@ -552,6 +552,8 @@ addTile: function(tile){
   dojo.place( this.format_block( 'jstpl_tile', tile), "player-tiles-" + tile.player_id);
   if(tile.status == "pending")
     dojo.addClass("tile-" + tile.id, "pending");
+
+  this.addTooltipHtml('tile-' + tile.id, this.format_block( 'jstpl_tilePrompt',  this.getLocation(tile)));  
 },
 
 
