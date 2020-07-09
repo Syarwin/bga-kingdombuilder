@@ -15,6 +15,7 @@ class Tavern extends KingdomBuilderLocation
   }
 
   public function stateTile() { return 'build'; }
+  public function isPlayable(){ return $this->canBuild() && !empty($this->getAvailableHexes()); }
 
   public function argPlayerBuild()
   {

@@ -29,7 +29,6 @@ class KingdomBuilderPlayer extends APP_GameClass
   {
     $sqlSettlements = 'INSERT INTO piece (player_id, location) VALUES ';
     $values = [];
-    // TODO : 40
     for($i = 0; $i < 40; $i++){
       $values[] = "('" . $this->id . "','hand')";
     }
@@ -57,6 +56,15 @@ class KingdomBuilderPlayer extends APP_GameClass
     $locations = "'hand'" . ($alsoPending? ", 'pending'" : "");
     return self::getObjectListFromDB("SELECT id, location as status, type_arg AS location, x, y, player_id FROM piece WHERE player_id = {$this->id} AND type = 'tile' AND location IN ($locations)");
   }
+  public function getPlayableTilesInHand()
+  {
+    $tiles = $this->getTilesInHand();
+    $tiles = array_values(array_filter($tiles, function($tile){
+      return $this->game->locationManager->getLocation($tile['location'], $this->id)->isPlayable();
+    }));
+    return $tiles;
+  }
+
 
   public function getUiData($currentPlayerId = null)
   {

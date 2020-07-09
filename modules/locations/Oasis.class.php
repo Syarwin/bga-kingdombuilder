@@ -14,6 +14,7 @@ class Oasis extends KingdomBuilderLocation
   }
 
   public function stateTile() { return 'build'; }
+  public function isPlayable(){ return $this->canBuild() && !empty($this->game->board->getAvailableHexes(HEX_DESERT)); }
 
   public function argPlayerBuild()
   {

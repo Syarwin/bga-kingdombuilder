@@ -14,6 +14,7 @@ class Barn extends KingdomBuilderLocation
   }
 
   public function stateTile() { return 'move'; }
+  public function isPlayable(){ return true; }
 
   public function argPlayerMoveTarget($settlement)
   {

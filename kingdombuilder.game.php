@@ -176,11 +176,11 @@ class kingdombuilder extends Table
 
 
   /*
-   * cancelPreviousWorks: called when a player decide to go back at the beggining of the turn
+   * restartTurn: called when a player decide to go back at the beggining of the turn
    */
-  public function cancelPreviousWorks()
+  public function restartTurn()
   {
-    self::checkAction('cancel');
+    self::checkAction('restartTurn');
 
     if ($this->log->getLastActions() == null) {
       throw new BgaUserException(_("You have nothing to cancel"));
@@ -196,7 +196,7 @@ class kingdombuilder extends Table
     ]);
 
     // Apply power
-    $this->gamestate->nextState('cancel');
+    $this->gamestate->nextState('restartTurn');
   }
 
   /*
@@ -207,6 +207,37 @@ class kingdombuilder extends Table
     $this->gamestate->nextState('confirm');
   }
 
+  /*
+   * undo: called when a player decide to go back at the beggining of the turn
+   */
+  public function cancel()
+  {
+    self::checkAction('cancel');
+
+    if ($this->log->getLastActions() == null) {
+      throw new BgaUserException(_("You have nothing to cancel"));
+    }
+
+    // Undo the turn
+    $moveIds = $this->log->cancelTurn(1);
+    self::notifyAllPlayers('cancel', '', [
+      'player_name' => self::getActivePlayerName(),
+      'moveIds' => $moveIds,
+      'board' => $this->board->getUiData(),
+      'fplayers' => $this->playerManager->getUiData(self::getCurrentPlayerId()),
+    ]);
+
+    $this->stateAfterWork();
+  }
+
+
+  public function stateAfterWork(){
+    $player = $this->playerManager->getPlayer();
+    $nextState =  (count($this->log->getLastBuilds()) == 3 || $player->getSettlementsInHand() == 0)? "done" : "build";
+    if($nextState == "done" && (count($player->getPlayableTilesInHand()) > 0))
+      $nextState = "useTile";
+    $this->gamestate->nextState($nextState);
+  }
 
   ////////////////////////////////////////
   ////////////////////////////////////////
@@ -216,8 +247,9 @@ class kingdombuilder extends Table
   public function argUseTile()
   {
     return [
-      'tiles' => $this->playerManager->getPlayer()->getTilesInHand(),
+      'tiles' => $this->playerManager->getPlayer()->getPlayableTilesInHand(),
       'skippable' => true,
+      'cancelable' => true,
     ];
   }
 
@@ -259,7 +291,9 @@ class kingdombuilder extends Table
    */
   public function argPlayerMove()
   {
-    return $this->locationManager->argPlayerMove();
+    $arg = $this->locationManager->argPlayerMove();
+    $arg['undoable'] = true;
+    return $arg;
   }
 
   /*
@@ -279,11 +313,7 @@ class kingdombuilder extends Table
 
     $player = $this->playerManager->getPlayer();
     $player->move($from, $to);
-
-    $nextState =  (count($this->log->getLastBuilds()) == 3 || $player->getSettlementsInHand() == 0)? "done" : "build";
-    if($nextState == "done" && $this->playerManager->hasTile())
-      $nextState = "useTile";
-    $this->gamestate->nextState($nextState);
+    $this->stateAfterWork();
   }
 
 
@@ -297,7 +327,7 @@ class kingdombuilder extends Table
   {
     $player = $this->playerManager->getPlayer();
     $terrain = $terrain ?? $player->getTerrain();
-    $tiles = $player->getTilesInHand();
+    $tiles = $player->getPlayableTilesInHand();
     $location = $this->locationManager->getActiveLocation();
     $nbr = count($this->log->getLastBuilds());
 
@@ -305,6 +335,7 @@ class kingdombuilder extends Table
       'terrain' => $terrain,
       'terrainName' => $this->terrainNames[$terrain],
       'hexes' => $this->board->getAvailableHexes($terrain),
+      'undoable' => !is_null($location),
       'cancelable' => $this->log->getLastActions() != null,
       'nbr' => "(". ($nbr + 1)."/3)",
       'tiles' => ($nbr == 0 && is_null($location))? $tiles : [],
@@ -352,11 +383,7 @@ class kingdombuilder extends Table
 
     $player = $this->playerManager->getPlayer();
     $player->build($pos);
-
-    $nextState = (count($this->log->getLastBuilds()) == 3 || $player->getSettlementsInHand() == 0)? "done" : "build";
-    if($nextState == "done" && $this->playerManager->hasTile())
-      $nextState = "useTile";
-    $this->gamestate->nextState($nextState);
+    $this->stateAfterWork();
   }
 
   ////////////////////////////////////

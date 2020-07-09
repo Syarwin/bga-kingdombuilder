@@ -90,17 +90,19 @@ $machinestates = [
     ],
   ],
 
+
   ST_USE_TILE => [
     'name' => 'playerUseTile',
     'description' => clienttranslate('${actplayer} may use a location tile'),
     'descriptionmyturn' => clienttranslate('${you} may use a location tile'),
     'type' => 'activeplayer',
     'args' => 'argUseTile',
-    'possibleactions' => [ 'use', 'skip' ],
+    'possibleactions' => [ 'use', 'skip', 'restartTurn'],
     'transitions' => [
       'build' => ST_BUILD,
       'move' => ST_MOVE,
       'skip' => ST_PRE_END_OF_TURN,
+      'restartTurn' => ST_START_OF_TURN,
     ],
   ],
 
@@ -111,12 +113,12 @@ $machinestates = [
     'descriptionmyturn' => clienttranslate('${tileName} : ${you} must move an existing settlement'),
     'type' => 'activeplayer',
     'args' => 'argPlayerMove',
-    'possibleactions' => [ 'move', 'cancel' ],
+    'possibleactions' => [ 'move', 'restartTurn', 'cancel' ],
     'transitions' => [
       'done' => ST_PRE_END_OF_TURN,
       'useTile' => ST_USE_TILE,
       'build' => ST_BUILD,
-      'cancel' => ST_START_OF_TURN,
+      'restartTurn' => ST_START_OF_TURN,
     ],
   ],
 
@@ -129,7 +131,7 @@ $machinestates = [
     'type' => 'activeplayer',
     'args' => 'argPlayerBuild',
     'action' => 'stBeforeBuild',
-    'possibleactions' => ['build', 'cancel', 'skip', 'endgame'],
+    'possibleactions' => ['build', 'restartTurn', 'skip', 'endgame', 'cancel'],
     'transitions' => [
       'zombiePass' => ST_END_OF_TURN,
       'endturn'    => ST_PRE_END_OF_TURN,
@@ -137,7 +139,7 @@ $machinestates = [
       'move'       => ST_MOVE,
       'done'       => ST_PRE_END_OF_TURN,
       'useTile'    => ST_USE_TILE,
-      'cancel'     => ST_START_OF_TURN,
+      'restartTurn'=> ST_START_OF_TURN,
     ],
   ],
 
@@ -146,12 +148,12 @@ $machinestates = [
     'description' => clienttranslate('${actplayer} must confirm or restart their turn'),
     'descriptionmyturn' => clienttranslate('${you} must confirm or restart your turn'),
     'type' => 'activeplayer',
-    'possibleactions' => ['confirm','cancel'],
+    'possibleactions' => ['confirm','restartTurn'],
     'transitions' => [
       'zombiePass' => ST_END_OF_TURN,
       'endturn'    => ST_END_OF_TURN,
       'confirm'    => ST_END_OF_TURN,
-      'cancel'     => ST_START_OF_TURN,
+      'restartTurn'=> ST_START_OF_TURN,
     ],
   ],
 

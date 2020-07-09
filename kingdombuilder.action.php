@@ -85,10 +85,10 @@ class action_kingdombuilder extends APP_GameAction
   }
 
 
-  public function cancelPreviousWorks()
+  public function restartTurn()
   {
     self::setAjaxMode();
-    $this->game->cancelPreviousWorks();
+    $this->game->restartTurn();
     self::ajaxResponse();
   }
 
@@ -97,6 +97,14 @@ class action_kingdombuilder extends APP_GameAction
   {
     self::setAjaxMode();
     $this->game->confirmTurn();
+    self::ajaxResponse();
+  }
+
+
+  public function cancel()
+  {
+    self::setAjaxMode();
+    $this->game->cancel();
     self::ajaxResponse();
   }
 }

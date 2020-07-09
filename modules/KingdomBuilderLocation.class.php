@@ -47,6 +47,12 @@ abstract class KingdomBuilderLocation extends APP_GameClass
     return $this->game->playerManager->getPlayer($this->playerId);
   }
 
+  public function canBuild(){
+    return $this->game->playerManager->getPlayer($this->playerId)->getSettlementsInHand() > 0;
+  }
+  public function isPlayable() { return false; }
+
+
   public function stateTile() { return null; }
   public function argPlayerBuild() { return []; }
   public function argPlayerMove() { return []; }

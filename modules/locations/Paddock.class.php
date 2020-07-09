@@ -15,6 +15,7 @@ class Paddock extends KingdomBuilderLocation
   }
 
   public function stateTile() { return 'move'; }
+  public function isPlayable(){ return true; }
 
   public function argPlayerMoveTarget($settlement){
     $settlements = $this->game->board->getPlacedSettlementsCoords();

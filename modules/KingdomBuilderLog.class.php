@@ -265,10 +265,11 @@ class KingdomBuilderLog extends APP_GameClass
   /*
    * cancelTurn: cancel the last actions of active player of current turn
    */
-  public function cancelTurn()
+  public function cancelTurn($limit = null)
   {
+    $limitClause = is_null($limit)? "" : (" LIMIT ".$limit);
     $pId = $this->game->getActivePlayerId();
-    $logs = self::getObjectListFromDb("SELECT * FROM log WHERE `player_id` = '$pId' AND `round` = (SELECT round FROM log WHERE `player_id` = $pId AND `action` = 'startTurn' ORDER BY log_id DESC LIMIT 1) ORDER BY log_id DESC");
+    $logs = self::getObjectListFromDb("SELECT * FROM log WHERE `player_id` = '$pId' AND `round` = (SELECT round FROM log WHERE `player_id` = $pId AND `action` = 'startTurn' ORDER BY log_id DESC LIMIT 1) ORDER BY log_id DESC".$limitClause);
 
     $ids = [];
     $moveIds = [];

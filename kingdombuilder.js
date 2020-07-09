@@ -186,6 +186,7 @@ clearPossible: function clearPossible() {
  */
 onUpdateActionButtons: function (stateName, args, suppressTimers) {
   debug('Update action buttons: ' + stateName, args); // Make sure it the player's turn
+  this.stopActionTimer();
 
   if (!this.isCurrentPlayerActive())
     return;
@@ -197,14 +198,18 @@ onUpdateActionButtons: function (stateName, args, suppressTimers) {
   if (args && args.skippable)
     this.addActionButton('buttonSkip', _('Skip'), 'onClickSkip', null, false, 'gray');
 
-  if ((stateName == "playerBuild" || stateName == "playerUsePower")) {
+  if ((stateName == "playerBuild" || stateName == "playerUsePower" || stateName == "playerUseTile")) {
     if (args.cancelable)
-      this.addActionButton('buttonCancel', _('Restart turn'), 'onClickCancel', null, false, 'gray');
+      this.addActionButton('buttonRestart', _('Restart turn'), 'onClickRestart', null, false, 'gray');
   }
+
+  if (args && args.undoable)
+    this.addActionButton('buttonCancel', _('Cancel'), 'onClickCancel', null, false, 'gray');
+
 
   if (stateName == "confirmTurn") {
     this.addActionButton('buttonConfirm', _('Confirm'), 'onClickConfirm', null, false, 'blue');
-    this.addActionButton('buttonCancel', _('Restart turn'), 'onClickCancel', null, false, 'gray');
+    this.addActionButton('buttonRestart', _('Restart turn'), 'onClickRestart', null, false, 'gray');
   }
 },
 
@@ -291,6 +296,13 @@ startActionTimer: function (buttonId) {
   var _this = this;
   if(!$(buttonId))
     return;
+
+  var isReadOnly = this.isReadOnly();
+  if (isDebug || isReadOnly || !this.bRealtime) {
+    debug('Ignoring startActionTimer(' + buttonId + ')', 'debug=' + isDebug, 'readOnly=' + isReadOnly, 'realtime=' + this.bRealtime);
+    return;
+  }
+
   this.actionTimerLabel = $(buttonId).innerHTML;
   this.actionTimerSeconds = 15;
   this.actionTimerFunction = function () {
@@ -319,15 +331,26 @@ stopActionTimer: function () {
 },
 
 
-
 /*
- * onClickCancel: is called when the active player decide to cancel previous works
+ * onClickCancel: is called when the active player decide to deselect tile
  */
 onClickCancel: function () {
   if (!this.checkAction('cancel')) {
     return;
   }
-  this.takeAction("cancelPreviousWorks");
+  this.takeAction("cancel");
+  this.clearPossible();
+},
+
+
+/*
+ * onClickRestart: is called when the active player decide to cancel previous works
+ */
+onClickRestart: function () {
+  if (!this.checkAction('restartTurn')) {
+    return;
+  }
+  this.takeAction("restartTurn");
   this.clearPossible();
 },
 
@@ -426,7 +449,9 @@ onClickSelectTile: function(tile){
   if(!this.isCurrentPlayerActive())
     return;
 
-  this.takeAction('useTile', { tileId: tile.id });
+  var test = this.gamedatas.gamestate.args.tiles.find(function(t){ return t.id == tile.id });
+  if(test)
+    this.takeAction('useTile', { tileId: tile.id });
 },
 
 
@@ -549,11 +574,13 @@ addSettlement: function(settlement){
 },
 
 addTile: function(tile){
+  var _this = this;
   dojo.place( this.format_block( 'jstpl_tile', tile), "player-tiles-" + tile.player_id);
   if(tile.status == "pending")
     dojo.addClass("tile-" + tile.id, "pending");
 
-  this.addTooltipHtml('tile-' + tile.id, this.format_block( 'jstpl_tilePrompt',  this.getLocation(tile)));  
+  this.addTooltipHtml('tile-' + tile.id, this.format_block( 'jstpl_tilePrompt',  this.getLocation(tile)));
+  dojo.connect($('tile-' + tile.id), 'onclick', function(){ _this.onClickSelectTile(tile) });
 },
 
 

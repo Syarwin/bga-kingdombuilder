@@ -17,7 +17,7 @@
 </div>
 
 <div id="objectives"></div>
-
+<script src="https://rawgit.com/FremyCompany/css-grid-polyfill/master/bin/css-polyfills.min.js"></script>
 <script type="text/javascript">
 var jstpl_objective = `
 <div class="objective objective-\${id}">
@@ -25,6 +25,7 @@ var jstpl_objective = `
   <div class="objective-mask"></div>
   <div class="objective-name">\${name}</div>
   <div class="objective-desc"><p>\${desc}</p><p>\${text}</p></div>
+  <div class="objective-picto"></div>
 </div>`;
 
 

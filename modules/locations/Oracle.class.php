@@ -14,6 +14,7 @@ class Oracle extends KingdomBuilderLocation
   }
 
   public function stateTile() { return 'build'; }
+  public function isPlayable(){ return $this->canBuild() && !empty($this->game->board->getAvailableHexes($this->game->playerManager->getPlayer($this->playerId)->getTerrain())); }
 
   public function argPlayerBuild()
   {
