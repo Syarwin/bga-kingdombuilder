@@ -574,13 +574,15 @@ addSettlement: function(settlement){
 },
 
 addTile: function(tile){
+  console.log(tile);
   var _this = this;
-  dojo.place( this.format_block( 'jstpl_tile', tile), "player-tiles-" + tile.player_id);
-  if(tile.status == "pending")
-    dojo.addClass("tile-" + tile.id, "pending");
+  var div = dojo.place( this.format_block( 'jstpl_tile', tile), "player-tiles-" + tile.player_id);
+  if(tile.status == "pending"){
+    dojo.addClass(div, "pending");
+  }
 
-  this.addTooltipHtml('tile-' + tile.id, this.format_block( 'jstpl_tilePrompt',  this.getLocation(tile)));
-  dojo.connect($('tile-' + tile.id), 'onclick', function(){ _this.onClickSelectTile(tile) });
+  this.addTooltipHtml(div, this.format_block( 'jstpl_tilePrompt',  this.getLocation(tile)));
+  dojo.connect(div, 'onclick', function(){ _this.onClickSelectTile(tile) });
 },
 
 
@@ -596,7 +598,7 @@ slideDestroy: function (node, to, duration, delay) {
     var animation = _this.slideToObjectAndDestroy(node, to, duration, delay);
     setTimeout(function(){
       resolve();
-    }, duration + delay)
+    }, duration + delay + 2)
   });
 },
 
@@ -607,7 +609,7 @@ slideTemporary: function (template, data, container, sourceId, targetId, duratio
     var animation = _this.slideTemporaryObject(_this.format_block(template, data), container, sourceId, targetId, duration, delay);
     setTimeout(function(){
       resolve();
-    }, duration + delay)
+    }, duration + delay + 1)
   });
 },
 
@@ -617,6 +619,11 @@ getLocation: function(tile){
   location.location = tile.location;
   location.description = location.text.join("");
   return location;
+},
+
+
+isReadOnly: function () {
+  return this.isSpectator || typeof g_replayFrom != "undefined" || g_archive_mode;
 },
 
 
