@@ -170,6 +170,14 @@ class KingdomBuilderLog extends APP_GameClass
     $this->insert(-1, $tile['id'], 'useTile',[]);
   }
 
+  /*
+   * addLoseTile: add a new build entry to log
+   */
+  public function addLoseTile($tile)
+  {
+    $this->insert(-1, $tile['id'], 'loseTile', ['location' => $tile['location'] ]);
+  }
+
 
 
   /*
@@ -287,6 +295,12 @@ class KingdomBuilderLog extends APP_GameClass
         case 'obtainTile':
           self::DbQuery("UPDATE piece SET location = 'board', player_id = NULL WHERE id = {$log['piece_id']}");
           break;
+
+        // LoseTile : put tile back on board
+        case 'loseTile':
+          self::DbQuery("UPDATE piece SET location = '{$args["location"]}' WHERE id = {$log['piece_id']}");
+          break;
+
 
         // UseTile : put tile back in hand
         case 'useTile':

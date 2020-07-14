@@ -20,7 +20,21 @@
 var isDebug = window.location.host == 'studio.boardgamearena.com';
 var debug = isDebug ? console.info.bind(window.console) : function () { };
 define(["dojo", "dojo/_base/declare", "ebg/core/gamegui", "ebg/counter"], function (dojo, declare) {
+  function override_addMoveToLog(logId, moveId) {
+    // [Undocumented] Called by BGA framework on new log notification message
+    // Handle cancelled notifications
+    this.inherited(override_addMoveToLog, arguments);
+    if (this.gamedatas.cancelMoveIds && this.gamedatas.cancelMoveIds.includes(+moveId)) {
+      debug('Cancel notification message for move ID ' + moveId + ', log ID ' + logId);
+      dojo.addClass('log_' + logId, 'cancel');
+    }
+  }
+
   return declare("bgagame.kingdombuilder", ebg.core.gamegui, {
+/*
+ * [Undocumented] Override BGA framework functions
+ */
+addMoveToLog: override_addMoveToLog,
 
 /*
  * Constructor
@@ -74,9 +88,6 @@ setup: function (gamedatas) {
     _this.addTooltipHtml(div.id, _this.format_block( 'jstpl_objective', objective));
   });
 
-
-  // Handle for cancelled notification messages
-  dojo.subscribe('addMoveToLog', this, 'kingdombuilder_addMoveToLog');
 
   // Setup game notifications
   this.setupNotifications();
@@ -273,17 +284,6 @@ cancelNotifications: function(moveIds) {
   }
 },
 
-/*
- * addMoveToLog: called by BGA framework when a new notification message is logged.
- * cancel it immediately if needed.
- */
-kingdombuilder_addMoveToLog: function (logId, moveId) {
-  if (this.gamedatas.cancelMoveIds && this.gamedatas.cancelMoveIds.includes(+moveId)) {
-    debug('Cancel notification message for move ID ' + moveId + ', log ID ' + logId);
-    dojo.addClass('log_' + logId, 'cancel');
-  }
-},
-
 onEnteringStateConfirmTurn: function(args){
   this.startActionTimer('buttonConfirm');
 },
@@ -422,6 +422,11 @@ notif_obtainTile: function (n) {
 },
 
 
+notif_loseTile: function(n){
+  debug('Notif: losing a tile', n.args);
+  this.slideToObjectAndDestroy("tile-" + n.args.id, "topbar", 1000, 0);
+},
+
 
 /////////////////////////////////
 /////////////////////////////////
@@ -458,7 +463,6 @@ onClickSelectTile: function(tile){
 notif_useTile: function(n){
   debug('Notif: using a tile', n.args);
   dojo.addClass("tile-" + n.args.id, "pending");
-//  this.slideToObjectAndDestroy("tile-" + n.args.id, "topbar", 1000, 0);
 },
 
 
@@ -548,7 +552,7 @@ notif_scoringEnd:function(n){
 
   n.args.detail.forEach(function(detail){
     var cell = detail.hexes[0];
-    _this.displayScoring("cell-" + cell.x + "-" + cell.y, _this.gamedatas.players[n.args.playerId.color], detail.score, 2000 );
+    _this.displayScoring("cell-" + cell.x + "-" + cell.y, _this.gamedatas.players[n.args.playerId].color, detail.score, 2000 );
   });
   this.scoreCtrl[n.args.playerId].incValue(n.args.total);
 },
@@ -581,7 +585,7 @@ addTile: function(tile){
     dojo.addClass(div, "pending");
   }
 
-  this.addTooltipHtml(div, this.format_block( 'jstpl_tilePrompt',  this.getLocation(tile)));
+  this.addTooltipHtml(div.id, this.format_block( 'jstpl_tilePrompt',  this.getLocation(tile)));
   dojo.connect(div, 'onclick', function(){ _this.onClickSelectTile(tile) });
 },
 
@@ -642,6 +646,7 @@ setupNotifications: function () {
     ['move', 1000],
     ['cancel', 200],
     ['obtainTile', 1000],
+    ['loseTile', 1000],
     ['useTile', 500],
     ['showTerrain', 1],
     ['enableTiles', 1],

@@ -99,6 +99,39 @@ class KingdomBuilderLocationManager extends APP_GameClass
     ]);
   }
 
+  public function looseTile($pos, $playerId = null)
+  {
+    $playerId = $playerId ?? $this->game->getActivePlayerId();
+
+    $locations = $this->game->board->getNeighboursIntersect($pos, $this->game->board->getLocations());
+    if(empty($locations))
+      return;
+
+      // Still next to the locations ?
+    $location = $locations[0];
+    $settlements = $this->game->board->getNeighboursIntersect($location, $this->game->board->getPlacedSettlementsCoords($this->game->getActivePlayerId()));
+    if(!empty($settlements))
+      return;
+
+    // Already obtained a tile from this location (or a similar type) before ?
+    $tile = self::getObjectFromDB("SELECT * FROM piece WHERE player_id = {$playerId} AND type = 'tile' AND location != 'box' AND type_arg = (SELECT type_arg FROM piece WHERE x = {$location['x']} AND y = {$location['y']} LIMIT 1) ORDER BY location DESC LIMIT 1");
+    if(is_null($tile))
+      return;
+
+    // Put this to the box
+    self::DbQuery("UPDATE piece SET location = 'box' WHERE id = {$tile['id']}");
+    $this->game->log->addLoseTile($tile);
+
+    $location = $this->getLocation($tile['type_arg'], $playerId);
+    $this->game->notifyAllPlayers('loseTile', clienttranslate('${player_name} loses a location tile : ${location_name}'), [
+      'i18n' => ['location_name'],
+      'player_name' => $this->game->playerManager->getPlayer($playerId)->getName(),
+      'location_name' => $location->getName(),
+      'player_id' => $playerId,
+      'id' => $tile['id'],
+    ]);
+  }
+
 
 
   public function useTile($tileId, $playerId = null)

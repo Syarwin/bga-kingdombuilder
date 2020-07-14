@@ -174,9 +174,10 @@ class KingdomBuilderPlayer extends APP_GameClass
       'y' => $to['y'],
     ]);
 
+    // Loose a tile ?
+    $this->game->locationManager->looseTile($from, $this->id);
     // Obtain a new tile ?
     $this->game->locationManager->obtainTile($to, $this->id);
-    // TODO : loose a tile ?
   }
 
 }
