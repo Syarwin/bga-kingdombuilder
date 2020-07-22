@@ -76,6 +76,8 @@ setup: function (gamedatas) {
     player.tiles.forEach(_this.addTile.bind(_this));
   });
   dojo.place("<div id='first-player'></div>", "player_name_" + gamedatas.firstPlayer);
+  this.addTooltip('first-player', _('First player'));
+
 
   // Setup stuff on board
   this.setupBoard(gamedatas.board, true);
@@ -511,6 +513,7 @@ notif_argPlayerMoveTarget: function(n){
   debug('Notif: displaying targets for move', n.args);
 
   this.makeCellSelectable(n.args.hexes);
+  this.removeActionButtons();
   this.addActionButton('buttonCancelMoveSelect', _('Cancel'), 'onClickCancelSelectedHex', null, false, 'gray');
 },
 

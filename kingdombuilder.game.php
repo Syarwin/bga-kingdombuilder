@@ -165,10 +165,37 @@ class kingdombuilder extends Table
 
   public function stScoringEnd()
   {
-    $this->cards->getObjective(CASTLE)->scoringEnd();
+    // Header line
+  	$headers = [''];
+  	foreach($this->playerManager->getPlayers() as $player){
+  		$headers[] = [
+  				'str' => '${player_name}',
+  				'args' => ['player_name' => $player->getName()],
+  				'type' => 'header'
+      ];
+  	}
+  	$table = [$headers];
+
+    // Objectives
+    $table[] = $this->cards->getObjective(CASTLE)->scoringEnd();
     foreach($this->cards->getObjectives() as $objective){
-      $objective->scoringEnd();
+      $table[] = $objective->scoringEnd();
     }
+
+    // Total
+  	$totals = [ ['str' => clienttranslate('Total'), 'args' => [] ] ];
+  	foreach($this->playerManager->getPlayers() as $player){
+  		$totals[] = $player->getScore();
+  	}
+  	$table[] = $totals;
+
+
+  	$this->notifyAllPlayers( "tableWindow", '', array(
+  		"id" => 'finalScoring',
+  		"title" =>  clienttranslate('Final scores'),
+  		"table" => $table,
+  		"closing" => clienttranslate("End of game")
+  	));
 
     // TODO : tie breaker
     $this->gamestate->nextState("endgame");

@@ -48,8 +48,10 @@ abstract class KingdomBuilderObjective extends APP_GameClass
 
   public function scoringEnd()
   {
+    $row = [ ['str' => '${objective_name}', 'args' => ['objective_name' => $this->getName()] ] ];
     foreach($this->game->playerManager->getPlayers() as $player){
       $this->scoringEndPlayer($player->getId());
+      $row[] = $this->result['total'];
 
       self::DbQuery("UPDATE player SET player_score = player_score + {$this->result['total']} WHERE player_id='{$player->getId()}'" );
       $msg = clienttranslate('${objective_name}: ${player_name} obtains ${total} gold');
@@ -65,5 +67,7 @@ abstract class KingdomBuilderObjective extends APP_GameClass
         'detail' => $this->result['detail'],
       ]);
     }
+
+    return $row;
   }
 }

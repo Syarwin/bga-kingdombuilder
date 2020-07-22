@@ -288,10 +288,10 @@ div.objective.objective-10 div.objective-picto { background-position: 0% 100%%; 
 .hex-grid-container .hex-settlement {
   display: block;
   position: absolute;
-  width:70%;
-  height:70%;
-  left: 15%;
-  top: 15%;
+  width:60%;
+  height:60%;
+  left: 20%;
+  top: 20%;
   background-image: url('img/settlements.png');
   background-size: 400%;
   background-repeat: no-repeat;
@@ -303,23 +303,36 @@ div.objective.objective-10 div.objective-picto { background-position: 0% 100%%; 
 .hex-grid-container .hex-settlement.player-4 { background-position:100% center; }
 
 
-div#board li .hex-grid-content.cell-player-1 { background-color:rgba(87,16,16,0.5); }
-div#board li .hex-grid-content.cell-player-2 { background-color:rgba(37,74,19,0.5); }
-div#board li .hex-grid-content.cell-player-3 { background-color:rgba(33,51,76,0.5); }
-div#board li .hex-grid-content.cell-player-4 { background-color:rgba(99,66,21,0.5); }
+div#board li .hex-grid-content.cell-player-1 { background-color:rgba(87,16,16,0.3);  background-position:25% center; }
+div#board li .hex-grid-content.cell-player-2 { background-color:rgba(37,74,19,0.3);  background-position:50% center; }
+div#board li .hex-grid-content.cell-player-3 { background-color:rgba(33,51,76,0.3);  background-position:75% center; }
+div#board li .hex-grid-content.cell-player-4 { background-color:rgba(99,66,21,0.3);  background-position:100% center;}
+
+div#board li .hex-grid-content {
+  background-repeat:no-repeat;
+  background-size:500%;
+}
+div#board li .hex-grid-content.cell-player-1,
+div#board li .hex-grid-content.cell-player-2,
+div#board li .hex-grid-content.cell-player-3,
+div#board li .hex-grid-content.cell-player-4,
+div#board li .hex-grid-content.selectable {
+  background-image:url("img/border.svg");
+}
 
 div#board li .hex-grid-content.selectable {
   cursor: pointer;
   background-color:rgba(255,255,255,0.5);
+  background-position:0% center;
 }
 
 div#board li .hex-grid-content.selectable:hover {
-  background-color:rgba(255,255,255,0.2);
+  background-color:rgba(255,255,255,0.7);
 }
 
 
 div#board li .hex-grid-content.selected {
-  background-color:rgba(255,255,255,0.1);
+  background-color:rgba(255,255,255,0.8);
 }
 
 

@@ -10,6 +10,7 @@ class KingdomBuilderPlayer extends APP_GameClass
   private $no; // natural order
   private $name;
   private $color;
+  private $score;
   private $eliminated = false;
   private $zombie = false;
 
@@ -20,6 +21,7 @@ class KingdomBuilderPlayer extends APP_GameClass
     $this->no = (int) $row['no'];
     $this->name = $row['name'];
     $this->color = $row['color'];
+    $this->score = $row['score'];
     $this->eliminated = $row['eliminated'] == 1;
     $this->zombie = $row['zombie'] == 1;
   }
@@ -42,6 +44,7 @@ class KingdomBuilderPlayer extends APP_GameClass
   public function getNo(){ return $this->no; }
   public function getName(){ return $this->name; }
   public function getColor(){ return $this->color; }
+  public function getScore(){ return $this->score; }
   public function isEliminated(){ return $this->eliminated; }
   public function isZombie(){ return $this->zombie; }
   public function getSettlements(){ return $this->game->board->getSettlements($this->id); }
