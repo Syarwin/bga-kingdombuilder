@@ -8,6 +8,7 @@ class ObjectiveCastle extends KingdomBuilderObjective
     $this->id    = CASTLE;
     $this->name  = clienttranslate('Castle');
     $this->desc  = "";
+    $this->stat  = clienttranslate('Gold from Castles');
     $this->text  = [
       clienttranslate("3 gold for each castle with your own settlements built adjacents to")
     ];

@@ -37,10 +37,6 @@ class kingdombuilder extends Table
       'firstPlayer'  => FIRST_PLAYER,
     ]);
 
-    // Initialize terrains cards
-//    $this->cards = self::getNew('module.common.deck');
-//    $this->cards->init('card');
-
     // Initialize logger, board and cards
     $this->log   = new KingdomBuilderLog($this);
     $this->board = new KingdomBuilderBoard($this);
@@ -68,6 +64,9 @@ class kingdombuilder extends Table
     $optionSetup = intval(self::getGameStateValue('optionSetup'));
 		$this->board->setupNewGame($optionSetup);
     $this->cards->setupNewGame($players, $optionSetup);
+
+    // Init stats
+    $this->log->initStats($players);
 
     // Initialize players (and settlements)
     $this->playerManager->setupNewGame($players);
@@ -177,7 +176,6 @@ class kingdombuilder extends Table
   	$table = [$headers];
 
     // Objectives
-    $table[] = $this->cards->getObjective(CASTLE)->scoringEnd();
     foreach($this->cards->getObjectives() as $objective){
       $table[] = $objective->scoringEnd();
     }

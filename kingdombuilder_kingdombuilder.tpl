@@ -22,7 +22,7 @@
 var jstpl_objective = `
 <div class="objective objective-\${id}">
   <div class="objective-background"></div>
-  <div class="objective-mask"></div>
+  <div class="objective-mask" id="objective-mask-\${id}"></div>
   <div class="objective-name">\${name}</div>
   <div class="objective-desc"><p>\${desc}</p><p>\${text}</p></div>
   <div class="objective-picto"></div>

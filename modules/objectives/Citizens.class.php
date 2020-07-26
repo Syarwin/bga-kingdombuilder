@@ -8,6 +8,7 @@ class ObjectiveCitizens extends KingdomBuilderObjective
     $this->id    = CITIZENS;
     $this->name  = clienttranslate('Citizens');
     $this->desc  = clienttranslate("Create a large settlement area");
+    $this->stat  = clienttranslate('Gold from Citizens');
     $this->text  = [
       clienttranslate("1 gold for every 2 of your own settlements in your largest own settlement area")
     ];
@@ -37,6 +38,7 @@ class ObjectiveCitizens extends KingdomBuilderObjective
       if($val == 0 || $val != $maxArea)
         continue;
 
+      $this->addHighlight(['x' => $i, 'y' => $j]);
       if($first){
         $first = false;
       } else {

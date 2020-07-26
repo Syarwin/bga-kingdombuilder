@@ -24,22 +24,32 @@ class KingdomBuilderLog extends APP_GameClass
    */
   public function initStats($players)
   {
-    /*
     $this->game->initStat('table', 'move', 0);
-    $this->game->initStat('table', 'buildBlock', 0);
-    $this->game->initStat('table', 'buildDome', 0);
-    $this->game->initStat('table', 'buildTower', 0);
+    $this->game->initStat('table', 'build', 0);
+
+    $this->game->initStat('table', 'grass', 0);
+    $this->game->initStat('table', 'canyon', 0);
+    $this->game->initStat('table', 'desert', 0);
+    $this->game->initStat('table', 'flower', 0);
+    $this->game->initStat('table', 'forest', 0);
 
     foreach ($players as $pId => $player) {
-      $this->game->initStat('player', 'playerPower', 0, $pId);
-      $this->game->initStat('player', 'usePower', 0, $pId);
+      $this->game->initStat('player', 'obtainTile', 0, $pId);
+      $this->game->initStat('player', 'useTile', 0, $pId);
       $this->game->initStat('player', 'move', 0, $pId);
-      $this->game->initStat('player', 'moveUp', 0, $pId);
-      $this->game->initStat('player', 'moveDown', 0, $pId);
-      $this->game->initStat('player', 'buildBlock', 0, $pId);
-      $this->game->initStat('player', 'buildDome', 0, $pId);
+      $this->game->initStat('player', 'build', 0, $pId);
+      $this->game->initStat('player', 'largestBuild', 0, $pId);
+
+      $this->game->initStat('player', 'grass', 0, $pId);
+      $this->game->initStat('player', 'canyon', 0, $pId);
+      $this->game->initStat('player', 'desert', 0, $pId);
+      $this->game->initStat('player', 'flower', 0, $pId);
+      $this->game->initStat('player', 'forest', 0, $pId);
+
+      foreach($this->game->cards->getObjectives() as $objective){
+        $this->game->initStat('player', $objective->getName(), 0, $pId);
+      }
     }
-    */
   }
 
   /*
@@ -50,15 +60,43 @@ class KingdomBuilderLog extends APP_GameClass
 //    $this->game->setStat($this->game->board->getCompleteTowerCount(), 'buildTower');
   }
 
-  public function incrementStats($stats, $value = 1)
+
+  /*
+   * incrementStats: adjust individual game statistics
+   *   - array $stats: format is array of [ playerId, name, value ].
+   *     example: [ ['table', 'move'], [23647584, 'move'], ... ]
+   *       - playerId: the player ID for a player state, or 'table' for a table stat
+   *       - name: the state name, such as 'move' or 'usePower'
+   *       - value (optional): amount to add, defaults to 1
+   *   - boolean $subtract: true if the values should be decremented
+   */
+  public function incrementStats($stats, $subtract = false)
   {
-    foreach ($stats as $pId => $names) {
-      foreach ($names as $name) {
-        if ($pId == 'table') {
-          $pId = null;
-        }
-        $this->game->incStat($value, $name, $pId);
+    // $this->game->notifyAllPlayers('message', "incrementStats: " . json_encode($stats, JSON_PRETTY_PRINT), []);
+    foreach ($stats as $stat) {
+      if (!is_array($stat)) {
+        throw new BgaVisibleSystemException("incrementStats: Not an array");
       }
+
+      $pId = $stat[0];
+      if ($pId == 'table' || empty($pId)) {
+        $pId = null;
+      }
+
+      $name = $stat[1];
+      if (empty($name)) {
+        throw new BgaVisibleSystemException("incrementStats: Missing name");
+      }
+
+      $value = 1;
+      if (count($stat) > 2) {
+        $value = $stat[2];
+      }
+      if ($subtract) {
+        $value = $value * -1;
+      }
+
+      $this->game->incStat($value, $name, $pId);
     }
   }
 
@@ -77,33 +115,29 @@ class KingdomBuilderLog extends APP_GameClass
    *   - string $action : the name of the action
    *   - array $args : action arguments (eg space)
    */
-  public function insert($playerId, $pieceId, $action, $args = [])
+  public function insert($playerId, $pieceId, $action, $args = [], $stats = [])
   {
     $playerId = $playerId == -1 ? $this->game->getActivePlayerId() : $playerId;
     $moveId = self::getUniqueValueFromDB("SELECT `global_value` FROM `global` WHERE `global_id` = 3");
     $round = $this->game->getGameStateValue("currentRound");
 
-/*
+
     if ($action == 'move') {
-      $args['stats'] = [
-        'table' => ['move'],
-        $playerId => ['move'],
-      ];
-      if ($args['to']['z'] > $args['from']['z']) {
-        $args['stats'][$playerId][] = 'moveUp';
-      } else if ($args['to']['z'] < $args['from']['z']) {
-        $args['stats'][$playerId][] = 'moveDown';
-      }
+      $stats[] = ['table','move'];
+      $stats[] = [$playerId, 'move'];
     } else if ($action == 'build') {
-      $statName = $args['to']['arg'] == 3 ? 'buildDome' : 'buildBlock';
-      $args['stats'] = [
-        'table' => [$statName],
-        $playerId => [$statName],
-      ];
+      $stats[] = ['table','build'];
+      $stats[] = [$playerId, 'build'];
+    } else if ($action == 'obtainTile') {
+      $stats[] = [$playerId, 'obtainTile'];
+    } else if ($action == 'useTile') {
+      $stats[] = [$playerId, 'useTile'];
     }
-*/
-    if (array_key_exists('stats', $args)) {
-      $this->incrementStats($args['stats']);
+
+
+    if (!empty($stats)) {
+      $this->incrementStats($stats);
+      $args['stats'] = $stats;
     }
 
     $actionArgs = json_encode($args);
@@ -159,7 +193,7 @@ class KingdomBuilderLog extends APP_GameClass
    */
   public function addObtainTile($tile)
   {
-    $this->insert(-1, $tile['id'], 'obtainTile',[]);
+    $this->insert(-1, $tile['id'], 'obtainTile');
   }
 
   /*
@@ -167,7 +201,7 @@ class KingdomBuilderLog extends APP_GameClass
    */
   public function addUseTile($tile)
   {
-    $this->insert(-1, $tile['id'], 'useTile',[]);
+    $this->insert(-1, $tile['id'], 'useTile');
   }
 
   /*

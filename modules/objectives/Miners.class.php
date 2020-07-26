@@ -8,6 +8,7 @@ class ObjectiveMiners extends KingdomBuilderObjective
     $this->id    = MINERS;
     $this->name  = clienttranslate('Miners');
     $this->desc  = clienttranslate("Build settlements next to a mountain");
+    $this->stat  = clienttranslate('Gold from Miners');
     $this->text  = [
       clienttranslate("1 gold for each of your own settlements built adjacents to one or more mountain hexes")
     ];

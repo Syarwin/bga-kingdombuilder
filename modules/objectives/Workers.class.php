@@ -8,6 +8,7 @@ class ObjectiveWorkers extends KingdomBuilderObjective
     $this->id    = WORKERS;
     $this->name  = clienttranslate('Workers');
     $this->desc  = clienttranslate("Build settlements next to location or castle hex");
+    $this->stat  = clienttranslate('Gold from Workers');
     $this->text  = [
       clienttranslate("1 gold for each of your own settlements built adjacents to a location or castle hex")
     ];

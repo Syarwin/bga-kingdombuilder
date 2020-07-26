@@ -8,6 +8,7 @@ class ObjectiveFarmers extends KingdomBuilderObjective
     $this->id    = FARMERS;
     $this->name  = clienttranslate('Farmers');
     $this->desc  = clienttranslate("Build settlements in all sectors");
+    $this->stat  = clienttranslate('Gold from Farmers');
     $this->text  = [
       clienttranslate("3 gold for each of your own settlements in that sector with the fewest of your own settlements")
     ];

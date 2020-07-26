@@ -114,6 +114,11 @@ class KingdomBuilderPlayer extends APP_GameClass
 
     // Draw a terrain card
     $card = $this->game->cards->terrains->pickCard('deck', $this->id);
+
+    $stats = [HEX_GRASS => 'grass', HEX_CANYON => 'canyon', HEX_DESERT => 'desert', HEX_FLOWER => 'flower', HEX_FOREST => 'forest' ];
+    $statName = $stats[$card["type"]];
+    $stats = [ ['table',$statName], [$this->getId(), $statName] ];
+    $this->game->log->incrementStats($stats);
     $this->game->notifyPlayer($this->id, 'showTerrain', clienttranslate('At your next turn, you will be building on a ${terrainName}'), [
       'pId' => $this->id,
       'terrain' => $card['type'],

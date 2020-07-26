@@ -42,3 +42,14 @@ $game_options = [
     ],
   ],
 ];
+
+$game_preferences = [
+  BORDERS => [
+    'name' => totranslate('Display borders around clickable hexes'),
+    'needReload' => false,
+    'values' => [
+      ENABLED => ['name' => totranslate('Enabled')],
+      DISABLED => ['name' => totranslate('Disabled')],
+    ]
+  ]
+];

@@ -8,6 +8,7 @@ class ObjectiveKnights extends KingdomBuilderObjective
     $this->id    = KNIGHTS;
     $this->name  = clienttranslate('Knights');
     $this->desc  = clienttranslate("Build many settlements on one horizontal line");
+    $this->stat  = clienttranslate('Gold from Knights');
     $this->text  = [
       clienttranslate("2 gold for each of your own settlements built on that horizontal line with the most of your own settlements")
     ];
@@ -29,5 +30,8 @@ class ObjectiveKnights extends KingdomBuilderObjective
       if($settlement['x'] == $bestLine)
         $this->addScoring($settlement, 2);
     }
+
+    for($i = 0; $i < 20; $i++)
+      $this->addHighlight(['x' => $bestLine, 'y' => $i]);
   }
 }

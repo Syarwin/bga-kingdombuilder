@@ -8,6 +8,7 @@ class ObjectiveLords extends KingdomBuilderObjective
     $this->id    = LORDS;
     $this->name  = clienttranslate('Lords');
     $this->desc  = clienttranslate("Build the most settlements in each sector");
+    $this->stat  = clienttranslate('Gold from Lords');
     $this->text  = [
        clienttranslate("Each sector : 12 gold for maximum number of settlements there, 6 golds for the next highest number of settlements")
     ];

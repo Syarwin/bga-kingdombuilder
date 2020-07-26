@@ -21,7 +21,7 @@ div#game_play_area {
 
 div#board {
   width: 100%;
-  max-width:1000px;
+  max-width:1100px;
   flex-shrink: 0;
   margin-bottom: 5%;
 }
@@ -44,9 +44,10 @@ div#board {
 *****************/
 
 div#objectives {
-  width: 600px;
+  width: 400px;
   display: flex;
   flex-flow: row;
+  flex-wrap:wrap;
   justify-content: space-around;
   flex-grow: 1;
 }
@@ -56,10 +57,14 @@ div#objectives div.objective {
   height:0;
   position:relative;
   padding-bottom:318px;
+  margin-bottom:20px;
 }
-div#objectives div.objective.selected {
+div#objectives div.objective.active {
   border: 2px solid blue;
   border-radius: 20px;
+}
+div#objectives div.objective.inactive {
+  opacity:0.5;
 }
 
 div#objectives div.objective div.objective-mask {
@@ -82,18 +87,19 @@ div#objectives div.objective div.objective-background {
   width: 85%;
   height: 48%;
   background-image:url("img/card-backgrounds.jpg");
-  background-size:1000%;
+  background-size:1100%;
 }
 
-div#objectives div.objective.objective-1 div.objective-background { background-position: 0% 0%; }
-div#objectives div.objective.objective-2 div.objective-background { background-position: 11.1% 0%; }
-div#objectives div.objective.objective-3 div.objective-background { background-position: 22.2% 0%; }
-div#objectives div.objective.objective-4 div.objective-background { background-position: 33.3% 0%; }
-div#objectives div.objective.objective-5 div.objective-background { background-position: 44.4% 0%; }
-div#objectives div.objective.objective-6 div.objective-background { background-position: 55.5% 0%; }
-div#objectives div.objective.objective-7 div.objective-background { background-position: 66.6% 0%; }
-div#objectives div.objective.objective-8 div.objective-background { background-position: 77.7% 0%; }
-div#objectives div.objective.objective-9 div.objective-background { background-position: 88.8% 0%; }
+div#objectives div.objective.objective-0 div.objective-background { background-position: 0% 0%; }
+div#objectives div.objective.objective-1 div.objective-background { background-position: 10% 0%; }
+div#objectives div.objective.objective-2 div.objective-background { background-position: 20% 0%; }
+div#objectives div.objective.objective-3 div.objective-background { background-position: 30% 0%; }
+div#objectives div.objective.objective-4 div.objective-background { background-position: 40% 0%; }
+div#objectives div.objective.objective-5 div.objective-background { background-position: 50% 0%; }
+div#objectives div.objective.objective-6 div.objective-background { background-position: 60% 0%; }
+div#objectives div.objective.objective-7 div.objective-background { background-position: 70% 0%; }
+div#objectives div.objective.objective-8 div.objective-background { background-position: 80% 0%; }
+div#objectives div.objective.objective-9 div.objective-background { background-position: 90% 0%; }
 div#objectives div.objective.objective-10 div.objective-background { background-position: 100% 0%; }
 
 div#objectives div.objective div.objective-name {
@@ -146,19 +152,20 @@ div#objectives div.objective div.objective-desc p:nth-of-type(2){
   grid-column: 2;
   grid-row:1 / span 2;
   width:230px;
-  height:163px;
+  height:180px;
   background-image:url("img/objectives.jpg");
   background-size:100%;
 }
-div.objective.objective-1 div.objective-picto { background-position: 0% 0%; }
-div.objective.objective-2 div.objective-picto { background-position: 0% 11.1%; }
-div.objective.objective-3 div.objective-picto { background-position: 0% 22.2%; }
-div.objective.objective-4 div.objective-picto { background-position: 0% 33.3%; }
-div.objective.objective-5 div.objective-picto { background-position: 0% 44.4%; }
-div.objective.objective-6 div.objective-picto { background-position: 0% 55.5%; }
-div.objective.objective-7 div.objective-picto { background-position: 0% 66.6%; }
-div.objective.objective-8 div.objective-picto { background-position: 0% 77.7%; }
-div.objective.objective-9 div.objective-picto { background-position: 0% 88.8%; }
+div.objective.objective-0 div.objective-picto { background-position: 0% 0%; }
+div.objective.objective-1 div.objective-picto { background-position: 0% 10%; }
+div.objective.objective-2 div.objective-picto { background-position: 0% 20%; }
+div.objective.objective-3 div.objective-picto { background-position: 0% 30%; }
+div.objective.objective-4 div.objective-picto { background-position: 0% 40%; }
+div.objective.objective-5 div.objective-picto { background-position: 0% 50%; }
+div.objective.objective-6 div.objective-picto { background-position: 0% 60%; }
+div.objective.objective-7 div.objective-picto { background-position: 0% 70%; }
+div.objective.objective-8 div.objective-picto { background-position: 0% 80%; }
+div.objective.objective-9 div.objective-picto { background-position: 0% 90%; }
 div.objective.objective-10 div.objective-picto { background-position: 0% 100%%; }
 
 
@@ -230,7 +237,7 @@ div.objective.objective-10 div.objective-picto { background-position: 0% 100%%; 
   top: 0;
   width: 40px;
   height: 40px;
-  background-image: url('img/settlements.png');
+  background-image: url('img/settlements.svg');
   background-size: 400%;
   background-repeat: no-repeat;
   z-index:10;
@@ -292,7 +299,7 @@ div.objective.objective-10 div.objective-picto { background-position: 0% 100%%; 
   height:60%;
   left: 20%;
   top: 20%;
-  background-image: url('img/settlements.png');
+  background-image: url('img/settlements.svg');
   background-size: 400%;
   background-repeat: no-repeat;
   z-index:10;
@@ -319,6 +326,9 @@ div#board li .hex-grid-content.cell-player-4,
 div#board li .hex-grid-content.selectable {
   background-image:url("img/border.svg");
 }
+div#board.no-hex-border li .hex-grid-content {
+  background-image:none;
+}
 
 div#board li .hex-grid-content.selectable {
   cursor: pointer;
@@ -336,10 +346,26 @@ div#board li .hex-grid-content.selected {
 }
 
 
+
+div#board li.hex-grid-item.inactive .hex-grid-content::before {
+  content:"";
+  display:block;
+  width:100%;
+  height:100%;
+  position:absolute;
+  background-color:rgba(255,255,255,0.5);
+  z-index:12;
+}
+
+
+
 .tile-container {
   position:absolute;
   width:100%;
   height:100%;
+}
+div#board li.hex-grid-item.inactive .tile-container {
+  display:none;
 }
 
 .tile-container div:first-child{
@@ -355,6 +381,7 @@ div#board li .hex-grid-content.selected {
   text-align: center;
   top: -18%;
   left: 25%;
+  line-height: 1.5em;
 }
 .tile-container div:first-child:nth-last-child(1)::after { content:"0"; }
 .tile-container div:first-child:nth-last-child(2)::after { content:"1"; }

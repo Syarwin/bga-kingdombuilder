@@ -8,6 +8,7 @@ class ObjectiveDiscoverers extends KingdomBuilderObjective
     $this->id    = DISCOVERERS;
     $this->name  = clienttranslate('Discoverers');
     $this->desc  = clienttranslate("Build settlements on many horizontal lines");
+    $this->stat  = clienttranslate('Gold from Discoverers');
     $this->text  = [
       clienttranslate("1 gold for each horizontal line on which you have built at least one of your own settlement")
     ];
@@ -25,8 +26,12 @@ class ObjectiveDiscoverers extends KingdomBuilderObjective
     }
 
     for($i = 0; $i < 20; $i++){
-      if($lines[$i] > 0)
+      if($lines[$i] > 0){
         $this->addScoring(['x' => $i, 'y' => 0], 1);
+        for($j = 0; $j < 20; $j++){
+          $this->addHighlight(['x' => $i, 'y' => $j]);
+        }
+      }
     }
   }
 }

@@ -13,9 +13,12 @@ abstract class KingdomBuilderObjective extends APP_GameClass
   protected $id = 0;
   protected $name = '';
   protected $desc = '';
+  protected $stat = '';
   protected $text = [];
 
   public function getId() { return $this->id;  }
+  public function getStatId() { return $this->id + 100;  }
+  public function getStatName() { return $this->stat; }
   public function getName() { return $this->name; }
   public function getDesc() { return $this->desc; }
   public function getText() { return $this->text; }
@@ -33,17 +36,28 @@ abstract class KingdomBuilderObjective extends APP_GameClass
   protected function scoringEndPlayer($playerId){
     $this->result = [
       'detail' => [],
+      'highlights' => [],
       'total' => 0,
     ];
   }
 
-  protected function addScoring($hexes, $score)
+  protected function addScoring($hexes, $score, $highlights = null)
   {
+    $hexes = array_key_exists('x', $hexes)? [$hexes] : $hexes;
     array_push($this->result['detail'], [
-      'hexes' => array_key_exists('x', $hexes)? [$hexes] : $hexes,
+      'hexes' => $hexes,
       'score' => $score,
     ]);
+    $highlights = $highlights ?? $hexes;
+    $this->result['highlights'] = array_merge($this->result['highlights'], $highlights);
     $this->result['total'] += $score;
+  }
+  protected function addHighlight($hexes)
+  {
+    if(array_key_exists('x', $hexes))
+      array_push($this->result['highlights'], $hexes);
+    else
+      $this->result['highlights'] = array_merge($this->result['highlights'], $hexes);
   }
 
   public function scoringEnd()
@@ -52,6 +66,8 @@ abstract class KingdomBuilderObjective extends APP_GameClass
     foreach($this->game->playerManager->getPlayers() as $player){
       $this->scoringEndPlayer($player->getId());
       $row[] = $this->result['total'];
+      $this->game->log->incrementStats([ [$player->getId(), $this->getName(), $this->result['total']] ]);
+
 
       self::DbQuery("UPDATE player SET player_score = player_score + {$this->result['total']} WHERE player_id='{$player->getId()}'" );
       $msg = clienttranslate('${objective_name}: ${player_name} obtains ${total} gold');
@@ -65,6 +81,7 @@ abstract class KingdomBuilderObjective extends APP_GameClass
         'objectiveId' => $this->getId(),
         'total' => $this->result['total'],
         'detail' => $this->result['detail'],
+        'highlights' => $this->result['highlights'],
       ]);
     }
 

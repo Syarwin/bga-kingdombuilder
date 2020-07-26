@@ -8,6 +8,7 @@ class ObjectiveFishermen extends KingdomBuilderObjective
     $this->id    = FISHERMEN;
     $this->name  = clienttranslate('Fishermen');
     $this->desc  = clienttranslate("Build settlements on the waterfront");
+    $this->stat  = clienttranslate('Gold from Fishermen');
     $this->text  = [
       clienttranslate("1 gold for each of your own settlements built adjacents to one or more water hexes")
     ];

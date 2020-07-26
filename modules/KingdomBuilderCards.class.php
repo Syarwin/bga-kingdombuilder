@@ -72,6 +72,7 @@ class KingdomBuilderCards extends APP_GameClass
   public function getObjectives()
   {
     $cardsIds = array_values(array_map(function($card){ return $card['id']; }, $this->objectives->getCardsInLocation("board")));
+    $cardsIds[] = CASTLE;
     return array_map(function ($objectiveId) {
       return $this->getObjective($objectiveId);
     }, $cardsIds);

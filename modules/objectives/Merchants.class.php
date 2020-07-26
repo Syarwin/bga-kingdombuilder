@@ -8,6 +8,7 @@ class ObjectiveMerchants extends KingdomBuilderObjective
     $this->id    = MERCHANTS;
     $this->name  = clienttranslate('Merchants');
     $this->desc  = clienttranslate("Connect location and castle hexes");
+    $this->stat  = clienttranslate('Gold from Merchants');
     $this->text  = [
       clienttranslate("4 gold for each location and/or castle hex linked contiguously by your own settlements to other locations and/or castle hexes")
     ];

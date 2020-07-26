@@ -90,6 +90,7 @@ setup: function (gamedatas) {
     _this.addTooltipHtml(div.id, _this.format_block( 'jstpl_objective', objective));
   });
 
+  this.setupPreference();
 
   // Setup game notifications
   this.setupNotifications();
@@ -117,6 +118,21 @@ setupBoard: function(board, firstInit){
   board.tiles.forEach(function(tile){
     dojo.place(_this.format_block( 'jstpl_tile', tile), 'tile-container-' + tile.x + '-' + tile.y);
   });
+},
+
+
+setupPreference: function () {
+  var preferenceSelect = $('preference_control_100');
+  var updatePreference = () => {
+    var value = preferenceSelect.options[preferenceSelect.selectedIndex].value;
+    if(value == 2)
+      dojo.addClass("board", "no-hex-border")
+    else
+      dojo.removeClass("board", "no-hex-border")
+  };
+
+  dojo.connect(preferenceSelect, 'onchange', updatePreference);
+  updatePreference();
 },
 
 
@@ -154,7 +170,7 @@ onEnteringState: function (stateName, args) {
   }
 
   // Stop here if it's not the current player's turn for some states
-  if (["playerBuild", "confirmTurn"].includes(stateName)) {
+  if (["playerBuild", "playerMove", "confirmTurn"].includes(stateName)) {
     if (!this.isCurrentPlayerActive()) return;
   }
 
@@ -546,16 +562,27 @@ notif_move: function (n) {
 ////////////////////////////
 ////////////////////////////
 notif_scoringEnd:function(n){
-  var _this = this;
   debug("Notif: scoring end", n);
 
-  dojo.query('#objectives .objective').removeClass('selected');
-  if($("objective-" + n.args.objectiveId))
-    dojo.addClass("objective-" + n.args.objectiveId, 'selected');
+  dojo.query('#objectives .objective').removeClass('active');
+  dojo.query('#objectives .objective').addClass('inactive');
+  if($("objective-" + n.args.objectiveId)){
+    dojo.removeClass("objective-" + n.args.objectiveId, 'inactive');
+    dojo.addClass("objective-" + n.args.objectiveId, 'active');
+    this.displayScoring("objective-mask-" + n.args.objectiveId, this.gamedatas.players[n.args.playerId].color, n.args.total, 1900);
+  }
 
-  n.args.detail.forEach(function(detail){
+  dojo.query("li.hex-grid-item").addClass("inactive");
+  n.args.highlights.forEach(cell => {
+    var id = "cell-container-" + cell.x + "-" + cell.y;
+    if(!$(id)) return;
+    dojo.removeClass(id, "inactive");
+    setTimeout( () => dojo.addClass(id, "inactive"), 3000);
+  });
+
+  n.args.detail.forEach(detail => {
     var cell = detail.hexes[0];
-    _this.displayScoring("cell-" + cell.x + "-" + cell.y, _this.gamedatas.players[n.args.playerId].color, detail.score, 2000 );
+    this.displayScoring("cell-" + cell.x + "-" + cell.y, this.gamedatas.players[n.args.playerId].color, detail.score, 1900);
   });
   this.scoreCtrl[n.args.playerId].incValue(n.args.total);
 },
@@ -654,7 +681,7 @@ setupNotifications: function () {
     ['showTerrain', 1],
     ['enableTiles', 1],
     ['argPlayerMoveTarget', 1],
-    ['scoringEnd', 3000],
+    ['scoringEnd', 4000],
   ];
 
   var _this = this;

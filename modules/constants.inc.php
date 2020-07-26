@@ -1,6 +1,22 @@
 <?php
 
 /*
+ * Game statistics constants
+ */
+define('STAT_MOVE', 20);
+define('STAT_BUILD', 21);
+define('STAT_OBTAIN_TILE', 22);
+define('STAT_USE_TILE', 23);
+define('STAT_LARGEST_BUILD', 24);
+
+define('STAT_GRASS', 200);
+define('STAT_CANYON', 201);
+define('STAT_DESERT', 202);
+define('STAT_FLOWER', 203);
+define('STAT_FOREST', 204);
+
+
+/*
  * State constants
  */
 define('ST_GAME_SETUP', 1);
@@ -22,6 +38,11 @@ define('ST_GAME_END', 99);
 define('OPTION_SETUP', 102);
 define('BASIC', 0);
 define('RANDOM', 1);
+
+
+define('BORDERS', 100);
+define('ENABLED', 1);
+define('DISABLED', 2);
 
 /*
  * Global game variables

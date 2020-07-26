@@ -8,6 +8,7 @@ class ObjectiveHermits extends KingdomBuilderObjective
     $this->id    = HERMITS;
     $this->name  = clienttranslate('Hermits');
     $this->desc  = clienttranslate("Create many settlements area");
+    $this->stat  = clienttranslate('Gold from Hermits');
     $this->text  = [
       clienttranslate("1 gold for each of your own separate settlement and for each separate settlement area")
     ];
