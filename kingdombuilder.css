@@ -76,6 +76,8 @@ div#objectives div.objective div.objective-mask {
   height:100%;
   background-image:url("img/card-mask.png");
   background-size:cover;
+  border:1px solid black;
+  border-radius:20px;
 }
 
 
@@ -383,7 +385,8 @@ div#board li.hex-grid-item.inactive .tile-container {
   left: 25%;
   line-height: 1.5em;
 }
-.tile-container div:first-child:nth-last-child(1)::after { content:"0"; }
+/*.tile-container div:first-child:nth-last-child(1)::after { content:"0"; }*/
+.tile-container div:first-child:nth-last-child(1) { display:none; }
 .tile-container div:first-child:nth-last-child(2)::after { content:"1"; }
 .tile-container div:first-child:nth-last-child(3)::after { content:"2"; }
 
@@ -572,3 +575,17 @@ div#board li.hex-grid-item.inactive .tile-container {
   clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   -webkit-clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
 }
+
+div#board li .hex-grid-content[data-location] {
+  background-image:url("img/locations.png");
+  background-size:cover;
+}
+div#board li .hex-grid-content[data-location="5"] { background-position:center calc(0 * 100% / 8);  }
+div#board li .hex-grid-content[data-location="8"] { background-position:center calc(1 * 100% / 8);  }
+div#board li .hex-grid-content[data-location="9"] { background-position:center calc(2 * 100% / 8);  }
+div#board li .hex-grid-content[data-location="10"] { background-position:center calc(3 * 100% / 8);  }
+div#board li .hex-grid-content[data-location="11"] { background-position:center calc(4 * 100% / 8);  }
+div#board li .hex-grid-content[data-location="12"] { background-position:center calc(5 * 100% / 8);  }
+div#board li .hex-grid-content[data-location="13"] { background-position:center calc(6 * 100% / 8);  }
+div#board li .hex-grid-content[data-location="14"] { background-position:center calc(7 * 100% / 8);  }
+div#board li .hex-grid-content[data-location="15"] { background-position:center calc(8 * 100% / 8);  }

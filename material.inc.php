@@ -36,9 +36,9 @@ foreach (KingdomBuilderLocationManager::$classes as $className) {
 }
 
 $this->terrainNames = [
-   HEX_GRASS => clienttranslate('Grass'),
-   HEX_CANYON => clienttranslate('Canyon'),
-   HEX_DESERT => clienttranslate('Desert'),
-   HEX_FLOWER => clienttranslate('Flower Field'),
-   HEX_FOREST => clienttranslate('Forest'),
+   HEX_GRASS => clienttranslate('a Grass'),
+   HEX_CANYON => clienttranslate('a Canyon'),
+   HEX_DESERT => clienttranslate('a Desert'),
+   HEX_FLOWER => clienttranslate('a Flower Field'),
+   HEX_FOREST => clienttranslate('a Forest'),
 ];

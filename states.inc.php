@@ -124,10 +124,10 @@ $machinestates = [
 
   ST_BUILD => [
     'name' => 'playerBuild',
-    'description' => clienttranslate('${actplayer} must build on a ${terrainName} ${nbr}'),
-    'descriptionmyturn' => clienttranslate('${you} must build on a ${terrainName} ${nbr}'),
-    'descriptiontile' => clienttranslate('${tileName} : ${actplayer} must build on a ${terrainName}'),
-    'descriptiontilemyturn' => clienttranslate('${tileName} : ${you} must build on a ${terrainName}'),
+    'description' => clienttranslate('${actplayer} must build on ${terrainName} ${nbr}'),
+    'descriptionmyturn' => clienttranslate('${you} must build on ${terrainName} ${nbr}'),
+    'descriptiontile' => clienttranslate('${tileName} : ${actplayer} must build on ${terrainName}'),
+    'descriptiontilemyturn' => clienttranslate('${tileName} : ${you} must build on ${terrainName}'),
     'type' => 'activeplayer',
     'args' => 'argPlayerBuild',
     'action' => 'stBeforeBuild',

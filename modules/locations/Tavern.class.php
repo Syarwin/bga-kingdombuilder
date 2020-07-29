@@ -20,7 +20,7 @@ class Tavern extends KingdomBuilderLocation
   public function argPlayerBuild()
   {
     $arg = $this->game->argPlayerBuildAux(0);
-    $arg['terrainName'] = clienttranslate("end of a line");
+    $arg['terrainName'] = clienttranslate("an end of a line");
     $arg['hexes'] = $this->getAvailableHexes();
     return $arg;
   }

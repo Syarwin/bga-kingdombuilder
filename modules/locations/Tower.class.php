@@ -20,7 +20,7 @@ class Tower extends KingdomBuilderLocation
   public function argPlayerBuild()
   {
     $arg = $this->game->argPlayerBuildAux(0);
-    $arg['terrainName'] = clienttranslate("edge of the board");
+    $arg['terrainName'] = clienttranslate("an edge of the board");
     $arg['hexes'] = $this->getAvailableHexes();
     return $arg;
   }

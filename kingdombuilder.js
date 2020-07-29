@@ -15,8 +15,8 @@
  *
  */
 
-//# sourceURL=santorini.js
-//@ sourceURL=santorini.js
+//# sourceURL=kingdombuilder.js
+//@ sourceURL=kingdombuilder.js
 var isDebug = window.location.host == 'studio.boardgamearena.com';
 var debug = isDebug ? console.info.bind(window.console) : function () { };
 define(["dojo", "dojo/_base/declare", "ebg/core/gamegui", "ebg/counter"], function (dojo, declare) {
@@ -106,13 +106,16 @@ setupBoard: function(board, firstInit){
   board.settlements.forEach(this.addSettlement.bind(this));
 
   board.locations.forEach(function(location){
+    dojo.attr("cell-" + location.x + "-" + location.y, "data-location", location.location);
     if(firstInit){
       dojo.place(_this.format_block('jstpl_tile_container', location) , 'cell-container-' + location.x + '-' + location.y);
     } else {
       dojo.query('#tile-container-' + location.x + '-' + location.y + ' .tile').forEach(dojo.destroy);
     }
 
-    _this.addTooltipHtml('cell-container-' + location.x + '-' + location.y, _this.format_block( 'jstpl_tilePrompt',  _this.getLocation(location)));
+    var l = _this.getLocation(location);
+    if(l)
+      _this.addTooltipHtml('cell-container-' + location.x + '-' + location.y, _this.format_block( 'jstpl_tilePrompt', l));
   });
 
   board.tiles.forEach(function(tile){
@@ -564,6 +567,7 @@ notif_move: function (n) {
 notif_scoringEnd:function(n){
   debug("Notif: scoring end", n);
 
+  dojo.query("#game_play_area .scorenumber").forEach(dojo.destroy);
   dojo.query('#objectives .objective').removeClass('active');
   dojo.query('#objectives .objective').addClass('inactive');
   if($("objective-" + n.args.objectiveId)){
@@ -585,6 +589,7 @@ notif_scoringEnd:function(n){
     this.displayScoring("cell-" + cell.x + "-" + cell.y, this.gamedatas.players[n.args.playerId].color, detail.score, 1900);
   });
   this.scoreCtrl[n.args.playerId].incValue(n.args.total);
+  setTimeout( () => dojo.query("#game_play_area .scorenumber").forEach(dojo.destroy), 2000);
 },
 
 
@@ -650,6 +655,7 @@ slideTemporary: function (template, data, container, sourceId, targetId, duratio
 
 getLocation: function(tile){
   var location = this.gamedatas.locations[tile.location];
+  if(typeof location == "undefined") return null;
   location.location = tile.location;
   location.description = location.text.join("");
   return location;
