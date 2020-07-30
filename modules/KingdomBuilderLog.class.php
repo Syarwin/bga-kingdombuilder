@@ -125,7 +125,7 @@ class KingdomBuilderLog extends APP_GameClass
     if ($action == 'move') {
       $stats[] = ['table','move'];
       $stats[] = [$playerId, 'move'];
-    } else if ($action == 'build') {
+    } else if (in_array($action, ['build','tileBuild'])) {
       $stats[] = ['table','build'];
       $stats[] = [$playerId, 'build'];
     } else if ($action == 'obtainTile') {

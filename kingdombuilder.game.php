@@ -102,9 +102,11 @@ class kingdombuilder extends Table
    */
   public function getGameProgression()
   {
-    $total = 40 * $this->playerManager->getPlayerCount();
-    $placed = count($this->board->getPlacedSettlements());
-    return (int) $placed * 100 / $total;
+    $m = 0;
+    foreach($this->playerManager->getPlayers() as $player){
+      $m = min($m, $player->getSettlementsInHand());
+    }
+    return (int) (40 - $m) * 100 / 40;
   }
 
 
