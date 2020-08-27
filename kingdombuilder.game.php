@@ -102,7 +102,7 @@ class kingdombuilder extends Table
    */
   public function getGameProgression()
   {
-    $m = 0;
+    $m = 40;
     foreach($this->playerManager->getPlayers() as $player){
       $m = min($m, $player->getSettlementsInHand());
     }
@@ -359,6 +359,7 @@ class kingdombuilder extends Table
     $nbr = count($this->log->getLastBuilds());
 
     return [
+      'i18n' => ['terrainName', 'tileName'],
       'terrain' => $terrain,
       'terrainName' => $this->terrainNames[$terrain],
       'hexes' => $this->board->getAvailableHexes($terrain),

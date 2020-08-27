@@ -84,7 +84,9 @@ setup: function (gamedatas) {
 
   // Setup objectives
   gamedatas.objectives.forEach(function(objective){
-    objective.text = objective.text.join("<br />");
+    objective.name = _(objective.name);
+    objective.desc = _(objective.desc);
+    objective.text = objective.text.map(text => _(text)).join("<br />");
     var div = dojo.place( _this.format_block( 'jstpl_objective', objective) , 'objectives' );
     div.id = "objective-" + objective.id;
     _this.addTooltipHtml(div.id, _this.format_block( 'jstpl_objective', objective));

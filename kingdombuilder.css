@@ -89,7 +89,7 @@ div#objectives div.objective div.objective-background {
   width: 85%;
   height: 48%;
   background-image:url("img/card-backgrounds.jpg");
-  background-size:1100%;
+  background-size:cover;
 }
 
 div#objectives div.objective.objective-0 div.objective-background { background-position: 0% 0%; }
@@ -168,7 +168,7 @@ div.objective.objective-6 div.objective-picto { background-position: 0% 60%; }
 div.objective.objective-7 div.objective-picto { background-position: 0% 70%; }
 div.objective.objective-8 div.objective-picto { background-position: 0% 80%; }
 div.objective.objective-9 div.objective-picto { background-position: 0% 90%; }
-div.objective.objective-10 div.objective-picto { background-position: 0% 100%%; }
+div.objective.objective-10 div.objective-picto { background-position: 0% 100%; }
 
 
 
@@ -282,14 +282,14 @@ div.objective.objective-10 div.objective-picto { background-position: 0% 100%%; 
   opacity:0.6;
 }
 
-.tile.location-8 { background-position:0% calc(0 * 100% / 7); }
-.tile.location-9 { background-position:0% calc(1 * 100% / 7); }
-.tile.location-10 { background-position:0% calc(2 * 100% / 7); }
-.tile.location-11 { background-position:0% calc(3 * 100% / 7); }
-.tile.location-12 { background-position:0% calc(4 * 100% / 7); }
-.tile.location-13 { background-position:0% calc(5 * 100% / 7); }
-.tile.location-14 { background-position:0% calc(6 * 100% / 7); }
-.tile.location-15 { background-position:0% calc(7 * 100% / 7); }
+.tile.location-8 { background-position:0% 0%; }
+.tile.location-9 { background-position:0% 14.28%; }
+.tile.location-10 { background-position:0% 28.57%; }
+.tile.location-11 { background-position:0% 42.87%; }
+.tile.location-12 { background-position:0% 57.14%; }
+.tile.location-13 { background-position:0% 71.43%; }
+.tile.location-14 { background-position:0% 85.71%; }
+.tile.location-15 { background-position:0% 100%; }
 
 
 
@@ -471,15 +471,14 @@ div#board li.hex-grid-item.inactive .tile-container {
   background-repeat:no-repeat;
   background-image:url("img/pictograms.png");
 }
-.tile-prompt .tile-picto.location-8 { background-position:0% calc(0 * 100% / 7); }
-.tile-prompt .tile-picto.location-9 { background-position:0% calc(1 * 100% / 7); }
-.tile-prompt .tile-picto.location-10 { background-position:0% calc(2 * 100% / 7); }
-.tile-prompt .tile-picto.location-11 { background-position:0% calc(3 * 100% / 7); }
-.tile-prompt .tile-picto.location-12 { background-position:0% calc(4 * 100% / 7); }
-.tile-prompt .tile-picto.location-13 { background-position:0% calc(5 * 100% / 7); }
-.tile-prompt .tile-picto.location-14 { background-position:0% calc(6 * 100% / 7); }
-.tile-prompt .tile-picto.location-15 { background-position:0% calc(7 * 100% / 7); }
-
+.tile-prompt .tile-picto.location-8 { background-position:0% 0%; }
+.tile-prompt .tile-picto.location-9 { background-position:0% 14.28%; }
+.tile-prompt .tile-picto.location-10 { background-position:0% 28.57%; }
+.tile-prompt .tile-picto.location-11 { background-position:0% 42.87%; }
+.tile-prompt .tile-picto.location-12 { background-position:0% 57.14%; }
+.tile-prompt .tile-picto.location-13 { background-position:0% 71.43%; }
+.tile-prompt .tile-picto.location-14 { background-position:0% 85.71%; }
+.tile-prompt .tile-picto.location-15 { background-position:0% 100%; }
 
 
 /**********************************
@@ -580,12 +579,12 @@ div#board li .hex-grid-content[data-location] {
   background-image:url("img/locations.png");
   background-size:cover;
 }
-div#board li .hex-grid-content[data-location="5"] { background-position:center calc(0 * 100% / 8);  }
-div#board li .hex-grid-content[data-location="8"] { background-position:center calc(1 * 100% / 8);  }
-div#board li .hex-grid-content[data-location="9"] { background-position:center calc(2 * 100% / 8);  }
-div#board li .hex-grid-content[data-location="10"] { background-position:center calc(3 * 100% / 8);  }
-div#board li .hex-grid-content[data-location="11"] { background-position:center calc(4 * 100% / 8);  }
-div#board li .hex-grid-content[data-location="12"] { background-position:center calc(5 * 100% / 8);  }
-div#board li .hex-grid-content[data-location="13"] { background-position:center calc(6 * 100% / 8);  }
-div#board li .hex-grid-content[data-location="14"] { background-position:center calc(7 * 100% / 8);  }
-div#board li .hex-grid-content[data-location="15"] { background-position:center calc(8 * 100% / 8);  }
+div#board li .hex-grid-content[data-location="5"] { background-position:center calc(0 * 100% / 8); }
+div#board li .hex-grid-content[data-location="8"] { background-position:center calc(1 * 100% / 8); }
+div#board li .hex-grid-content[data-location="9"] { background-position:center calc(2 * 100% / 8); }
+div#board li .hex-grid-content[data-location="10"] { background-position:center calc(3 * 100% / 8); }
+div#board li .hex-grid-content[data-location="11"] { background-position:center calc(4 * 100% / 8); }
+div#board li .hex-grid-content[data-location="12"] { background-position:center calc(5 * 100% / 8); }
+div#board li .hex-grid-content[data-location="13"] { background-position:center calc(6 * 100% / 8); }
+div#board li .hex-grid-content[data-location="14"] { background-position:center calc(7 * 100% / 8); }
+div#board li .hex-grid-content[data-location="15"] { background-position:center calc(8 * 100% / 8); }
