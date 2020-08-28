@@ -246,27 +246,27 @@ div.objective.objective-10 div.objective-picto { background-position: 0% 100%; }
 }
 
 .player-panel.player-1 .player-settlements .player-settlements-counter::after,
-.player-panel.player-1 .player-settlements .hex-settlement { background-position:0% center; }
+.player-panel.player-1 .player-settlements .hex-settlement { background-position:0 center; }
 .player-panel.player-2 .player-settlements .player-settlements-counter::after,
-.player-panel.player-2 .player-settlements .hex-settlement { background-position:9.9% center; }
+.player-panel.player-2 .player-settlements .hex-settlement { background-position:10% center; }
 .player-panel.player-3 .player-settlements .player-settlements-counter::after,
-.player-panel.player-3 .player-settlements .hex-settlement { background-position:19.9% center; }
+.player-panel.player-3 .player-settlements .hex-settlement { background-position:20% center; }
 .player-panel.player-4 .player-settlements .player-settlements-counter::after,
-.player-panel.player-4 .player-settlements .hex-settlement { background-position:29.75% center; }
+.player-panel.player-4 .player-settlements .hex-settlement { background-position:30% center; }
 .player-panel.player-5 .player-settlements .player-settlements-counter::after,
-.player-panel.player-5 .player-settlements .hex-settlement { background-position:39.64% center; }
+.player-panel.player-5 .player-settlements .hex-settlement { background-position:40% center; }
 .player-panel.player-6 .player-settlements .player-settlements-counter::after,
-.player-panel.player-6 .player-settlements .hex-settlement { background-position:49.5% center; }
+.player-panel.player-6 .player-settlements .hex-settlement { background-position:50% center; }
 .player-panel.player-7 .player-settlements .player-settlements-counter::after,
-.player-panel.player-7 .player-settlements .hex-settlement { background-position:59.4% center; }
+.player-panel.player-7 .player-settlements .hex-settlement { background-position:60% center; }
 .player-panel.player-8 .player-settlements .player-settlements-counter::after,
-.player-panel.player-8 .player-settlements .hex-settlement { background-position:69.3% center; }
+.player-panel.player-8 .player-settlements .hex-settlement { background-position:70% center; }
 .player-panel.player-9 .player-settlements .player-settlements-counter::after,
-.player-panel.player-9 .player-settlements .hex-settlement { background-position:79.2% center; }
+.player-panel.player-9 .player-settlements .hex-settlement { background-position:80% center; }
 .player-panel.player-10 .player-settlements .player-settlements-counter::after,
-.player-panel.player-10 .player-settlements .hex-settlement { background-position:89.1% center; }
+.player-panel.player-10 .player-settlements .hex-settlement { background-position:90% center; }
 .player-panel.player-11 .player-settlements .player-settlements-counter::after,
-.player-panel.player-11 .player-settlements .hex-settlement { background-position:99% center; }
+.player-panel.player-11 .player-settlements .hex-settlement { background-position:100% center; }
 
 .player-panel .player-tiles {
   grid-row:2;
@@ -320,17 +320,17 @@ div.objective.objective-10 div.objective-picto { background-position: 0% 100%; }
   background-repeat: no-repeat;
   z-index:10;
 }
-.hex-grid-container .hex-settlement.player-1 { background-position:1.5% center; }
-.hex-grid-container .hex-settlement.player-2 { background-position:11.2% center; }
-.hex-grid-container .hex-settlement.player-3 { background-position:20.9% center; }
-.hex-grid-container .hex-settlement.player-4 { background-position:30.6% center; }
-.hex-grid-container .hex-settlement.player-5 { background-position:40.3% center; }
+.hex-grid-container .hex-settlement.player-1 { background-position:0% center; }
+.hex-grid-container .hex-settlement.player-2 { background-position:10% center; }
+.hex-grid-container .hex-settlement.player-3 { background-position:20% center; }
+.hex-grid-container .hex-settlement.player-4 { background-position:30% center; }
+.hex-grid-container .hex-settlement.player-5 { background-position:40% center; }
 .hex-grid-container .hex-settlement.player-6 { background-position:50% center; }
-.hex-grid-container .hex-settlement.player-7 { background-position:59.6% center; }
-.hex-grid-container .hex-settlement.player-8 { background-position:69.2% center; }
-.hex-grid-container .hex-settlement.player-9 { background-position:78.8% center; }
-.hex-grid-container .hex-settlement.player-10 { background-position:88.4% center; }
-.hex-grid-container .hex-settlement.player-11 { background-position:98% center; }
+.hex-grid-container .hex-settlement.player-7 { background-position:60% center; }
+.hex-grid-container .hex-settlement.player-8 { background-position:70% center; }
+.hex-grid-container .hex-settlement.player-9 { background-position:80% center; }
+.hex-grid-container .hex-settlement.player-10 { background-position:90% center; }
+.hex-grid-container .hex-settlement.player-11 { background-position:100% center; }
 
 
 div#board li .hex-grid-content.cell-player-1 { background-color:rgba(167, 33, 33, 0.3);  background-position:9.09% center; }

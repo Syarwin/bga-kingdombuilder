@@ -7,9 +7,10 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="34.167786mm"
+   width="31.532701mm"
    height="3.0118105mm"
-   viewBox="0 0 403.55422 35.572485"
+   viewBox="0 0 372.43135 35.572485"
+   preserveAspectRatio="xMinYMid slice"
    version="1.1"
    id="svg3"
    sodipodi:docname="settlements.svg"
@@ -41,20 +42,20 @@
      inkscape:window-height="1025"
      id="namedview5"
      showgrid="false"
-     inkscape:zoom="9.2633407"
-     inkscape:cx="117.84306"
-     inkscape:cy="-15.681648"
+     inkscape:zoom="6.550171"
+     inkscape:cx="14.182414"
+     inkscape:cy="-15.345844"
      inkscape:window-x="0"
      inkscape:window-y="27"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg3"
-     fit-margin-left="0.0001"
-     fit-margin-right="0.2"
+     fit-margin-left="0.03"
+     fit-margin-right="0.03"
      fit-margin-top="0"
      fit-margin-bottom="0" />
   <g
      id="g1619"
-     transform="translate(9.6395838e-4)">
+     transform="translate(0.35482006)">
     <path
        style="fill:#d42b2b;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel"
        d="m 0.69589692,14.356239 c 0,0 10.96000008,-10.3500001 10.96000008,-10.3500001 0,0 10.78,-3.34999993 10.78,-3.34999993 0,0 10.53,11.74000003 10.53,11.74000003 0,0 -0.13,16.66 -0.13,16.66 0,0 -11.7,5.86 -11.7,5.86 0,0 -20.35000008,-4.04 -20.35000008,-4.04 0,0 -0.13,-16.52 -0.13,-16.52"
@@ -80,7 +81,7 @@
   </g>
   <g
      id="g1629"
-     transform="translate(9.6395838e-4)">
+     transform="translate(-2.5920079)">
     <path
        inkscape:connector-curvature="0"
        style="fill:#5cbe31;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel"
@@ -106,7 +107,7 @@
   </g>
   <g
      id="g868"
-     transform="translate(9.6395838e-4)">
+     transform="translate(-5.5388358)">
     <path
        inkscape:connector-curvature="0"
        style="fill:#5382c6;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel"
@@ -132,7 +133,7 @@
   </g>
   <g
      id="g874"
-     transform="translate(9.4395838e-4)">
+     transform="translate(-8.4856708)">
     <path
        inkscape:connector-curvature="0"
        style="fill:#ffa500;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel"
@@ -158,7 +159,7 @@
   </g>
   <g
      id="g937"
-     transform="translate(0.68565396)">
+     transform="translate(-10.747786)">
     <path
        style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel"
        d="m 147.03904,14.356239 c 0,0 10.96,-10.3500001 10.96,-10.3500001 0,0 10.78,-3.34999993 10.78,-3.34999993 0,0 10.53,11.74000003 10.53,11.74000003 0,0 -0.13,16.66 -0.13,16.66 0,0 -11.7,5.86 -11.7,5.86 0,0 -20.35,-4.04 -20.35,-4.04 0,0 -0.13,-16.52 -0.13,-16.52"
@@ -184,7 +185,7 @@
   </g>
   <g
      id="g1652"
-     transform="translate(9.5395838e-4)">
+     transform="translate(-14.379311)">
     <path
        inkscape:connector-curvature="0"
        style="fill:#e94190;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel"
@@ -210,7 +211,7 @@
   </g>
   <g
      id="g1662"
-     transform="translate(9.0395838e-4)">
+     transform="translate(-17.326166)">
     <path
        inkscape:connector-curvature="0"
        style="fill:#982fff;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel"
@@ -236,7 +237,7 @@
   </g>
   <g
      id="g1672"
-     transform="translate(9.1395838e-4)">
+     transform="translate(-20.272981)">
     <path
        inkscape:connector-curvature="0"
        style="fill:#72c3b1;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel"
@@ -262,7 +263,7 @@
   </g>
   <g
      id="g1682"
-     transform="translate(9.0395838e-4)">
+     transform="translate(-23.219816)">
     <path
        inkscape:connector-curvature="0"
        style="fill:#f07f16;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel"
@@ -288,7 +289,7 @@
   </g>
   <g
      id="g1692"
-     transform="translate(9.1395838e-4)">
+     transform="translate(-26.166631)">
     <path
        inkscape:connector-curvature="0"
        style="fill:#bdd002;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel"
@@ -314,7 +315,7 @@
   </g>
   <g
      id="g1702"
-     transform="translate(9.1395838e-4)">
+     transform="translate(-29.113456)">
     <path
        inkscape:connector-curvature="0"
        style="fill:#7b7b7b;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel"
