@@ -71,9 +71,14 @@ class KingdomBuilderPlayer extends APP_GameClass
 
   public function getUiData($currentPlayerId = null)
   {
+    $colorToNo = [
+      "ff0000" => 1, "008000" => 2, "0000ff" => 3, "ffa500" => 4, "ffffff" => 5,
+      "e94190" => 6, "982fff" => 7, "72c3b1" => 8, "f07f16" => 9, "bdd002" => 10, "7b7b7b" => 11
+    ];
     return [
       'id'        => $this->id,
       'no'        => $this->no,
+      'cno'       => $colorToNo[$this->color],
       'name'      => $this->name,
       'color'     => $this->color,
       'settlements' => $this->getSettlementsInHand(),
@@ -120,6 +125,7 @@ class KingdomBuilderPlayer extends APP_GameClass
     $stats = [ ['table',$statName], [$this->getId(), $statName] ];
     $this->game->log->incrementStats($stats);
     $this->game->notifyPlayer($this->id, 'showTerrain', clienttranslate('At your next turn, you will be building on a ${terrainName}'), [
+      'i18n' => ['terrainName'],
       'pId' => $this->id,
       'terrain' => $card['type'],
       'terrainName' => $this->game->terrainNames[$card['type']],

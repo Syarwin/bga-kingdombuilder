@@ -10,7 +10,8 @@ class ObjectiveFishermen extends KingdomBuilderObjective
     $this->desc  = clienttranslate("Build settlements on the waterfront");
     $this->stat  = clienttranslate('Gold from Fishermen');
     $this->text  = [
-      clienttranslate("1 gold for each of your own settlements built adjacents to one or more water hexes")
+      clienttranslate("1 gold for each of your own settlements built adjacents to one or more water hexes"),
+      clienttranslate("(settlements on water tiles don't score)")
     ];
   }
 

@@ -29,7 +29,7 @@ var jstpl_objective = `
 </div>`;
 
 
-var jstpl_player_panel = `<div class="player-panel player-\${no}">
+var jstpl_player_panel = `<div class="player-panel player-\${cno}">
   <div class="player-terrain terrain-\${terrain}" id="player-terrain-\${id}"></div>
   <div class='player-settlements' id='player-settlements-\${id}'><div class='player-settlements-counter'>\${settlements}</div></div>
   <div class='player-tiles' id='player-tiles-\${id}'></div>

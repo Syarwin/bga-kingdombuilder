@@ -27,6 +27,7 @@ class KingdomBuilderPlayerManager extends APP_GameClass
       $values[] = "('" . $pId . "','$color','" . $player['player_canal'] . "','" . addslashes($player['player_name']) . "','" . addslashes($player['player_avatar']) . "')";
     }
     self::DbQuery($sql . implode($values, ','));
+    $this->game->reattributeColorsBasedOnPreferences($players, [ "ff0000", "008000", "0000ff", "ffa500", "000000", "ffffff", "e94190", "982fff", "72c3b1", "f07f16", "bdd002", "7b7b7b" ]);
     $this->game->reloadPlayersBasicInfos();
 
     foreach($this->getPlayers() as $player){

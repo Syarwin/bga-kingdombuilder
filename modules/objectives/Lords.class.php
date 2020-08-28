@@ -31,7 +31,7 @@ class ObjectiveLords extends KingdomBuilderObjective
       }
     }
 
-    $centers = [ ['x' => 4, 'y' => 4], ['x' => 14, 'y' => 4], ['x' => 4, 'y' => 14], ['x' => 14, 'y' => 14]];
+    $centers = [ ['x' => 4, 'y' => 4], ['x' => 4, 'y' => 14], ['x' => 14, 'y' => 4], ['x' => 14, 'y' => 14]];
     for($i = 0; $i < 4; $i++){
       $values = array_unique(array_values($sectors[$i]));
       rsort($values);

@@ -50,30 +50,32 @@ constructor: function () { },
  *  - mixed gamedatas : contains all datas retrieved by the getAllDatas PHP method.
  */
 setup: function (gamedatas) {
-  var _this = this;
   debug('SETUP', gamedatas);
 
-  // Setup the board
-  var callback = function(x,y){
-    return function(evt){
-      evt.preventDefault(); evt.stopPropagation();
-      _this.onClickCell(x,y);
-    }
-  };
+  Object.values(gamedatas.locations).forEach(location => {
+    location.name = _(location.name);
+    location.description = location.text.map(text => _(text)).join("");
+  });
 
+
+  // Setup the board
   for(var i = 0; i < 20; i++){
   for(var j = 0; j < 20; j++){
     var cellC = $('cell-container-' + i + "-" + j);
     cellC.style.gridRow = (3*i + 1) + " / span 4";
     cellC.style.gridColumn = 2*j + (i % 2 == 0? 1 : 2) + " / span 2";
 
-    dojo.connect($('cell-' + i + "-" + j), 'onclick', callback(i,j));
+    let x = i, y = j;
+    dojo.connect($('cell-' + i + "-" + j), 'onclick', evt => {
+      evt.preventDefault(); evt.stopPropagation();
+      this.onClickCell(x,y);
+    });
   }}
 
   // Setup player's board
-  gamedatas.fplayers.forEach(function(player){
-    dojo.place( _this.format_block( 'jstpl_player_panel', player) , 'overall_player_board_' + player.id );
-    player.tiles.forEach(_this.addTile.bind(_this));
+  gamedatas.fplayers.forEach(player => {
+    dojo.place( this.format_block( 'jstpl_player_panel', player) , 'overall_player_board_' + player.id );
+    player.tiles.forEach(tile => this.addTile(tile));
   });
   dojo.place("<div id='first-player'></div>", "player_name_" + gamedatas.firstPlayer);
   this.addTooltip('first-player', _('First player'));
@@ -83,14 +85,15 @@ setup: function (gamedatas) {
   this.setupBoard(gamedatas.board, true);
 
   // Setup objectives
-  gamedatas.objectives.forEach(function(objective){
+  gamedatas.objectives.forEach(objective => {
     objective.name = _(objective.name);
     objective.desc = _(objective.desc);
     objective.text = objective.text.map(text => _(text)).join("<br />");
-    var div = dojo.place( _this.format_block( 'jstpl_objective', objective) , 'objectives' );
+    var div = dojo.place( this.format_block( 'jstpl_objective', objective) , 'objectives' );
     div.id = "objective-" + objective.id;
-    _this.addTooltipHtml(div.id, _this.format_block( 'jstpl_objective', objective));
+    this.addTooltipHtml(div.id, this.format_block( 'jstpl_objective', objective));
   });
+
 
   this.setupPreference();
 
@@ -103,25 +106,24 @@ setup: function (gamedatas) {
  * setupBoard : setup settlements and tiles on the board
  */
 setupBoard: function(board, firstInit){
-  var _this = this;
   debug("Setting up the board", board);
   board.settlements.forEach(this.addSettlement.bind(this));
 
-  board.locations.forEach(function(location){
+  board.locations.forEach(location => {
     dojo.attr("cell-" + location.x + "-" + location.y, "data-location", location.location);
     if(firstInit){
-      dojo.place(_this.format_block('jstpl_tile_container', location) , 'cell-container-' + location.x + '-' + location.y);
+      dojo.place(this.format_block('jstpl_tile_container', location) , 'cell-container-' + location.x + '-' + location.y);
     } else {
       dojo.query('#tile-container-' + location.x + '-' + location.y + ' .tile').forEach(dojo.destroy);
     }
 
-    var l = _this.getLocation(location);
+    var l = this.getLocation(location);
     if(l)
-      _this.addTooltipHtml('cell-container-' + location.x + '-' + location.y, _this.format_block( 'jstpl_tilePrompt', l));
+      this.addTooltipHtml('cell-container-' + location.x + '-' + location.y, this.format_block( 'jstpl_tilePrompt', l));
   });
 
-  board.tiles.forEach(function(tile){
-    dojo.place(_this.format_block( 'jstpl_tile', tile), 'tile-container-' + tile.x + '-' + tile.y);
+  board.tiles.forEach(tile => {
+    dojo.place(this.format_block( 'jstpl_tile', tile), 'tile-container-' + tile.x + '-' + tile.y);
   });
 },
 
@@ -271,21 +273,20 @@ takeAction: function (action, data, callback) {
  *   called whenever a player restart their turn
  */
 notif_cancel: function (n) {
-  var _this = this;
   debug('Notif: cancel turn', n.args);
 
   // Clear existing settlements
-  dojo.query(".hex-settlement").forEach(function(settlement){
+  dojo.query(".hex-settlement").forEach(settlement => {
     settlement.parentNode.className = "hex-grid-content";
     dojo.destroy(settlement);
   });
 
   // Reset settlements counter
-  n.args.fplayers.forEach(function(player){
+  n.args.fplayers.forEach(player => {
     $("player-settlements-" + player.id).firstChild.innerHTML = player.settlements;
 
     dojo.empty("player-tiles-"+ player.id);
-    player.tiles.forEach(_this.addTile.bind(_this));
+    player.tiles.forEach(this.addTile.bind(this));
   });
 
   // Reset board
@@ -316,7 +317,6 @@ onEnteringStateConfirmTurn: function(args){
  * Add a timer to an action and trigger action when timer is done
  */
 startActionTimer: function (buttonId) {
-  var _this = this;
   if(!$(buttonId))
     return;
 
@@ -328,13 +328,13 @@ startActionTimer: function (buttonId) {
 
   this.actionTimerLabel = $(buttonId).innerHTML;
   this.actionTimerSeconds = 15;
-  this.actionTimerFunction = function () {
+  this.actionTimerFunction = () => {
     var button = $(buttonId);
     if (button == null) {
-      _this.stopActionTimer();
-    } else if (_this.actionTimerSeconds-- > 1) {
-      debug('Timer ' + buttonId + ' has ' + _this.actionTimerSeconds + ' seconds left');
-      button.innerHTML = _this.actionTimerLabel + ' (' + _this.actionTimerSeconds + ')';
+      this.stopActionTimer();
+    } else if (this.actionTimerSeconds-- > 1) {
+      debug('Timer ' + buttonId + ' has ' + this.actionTimerSeconds + ' seconds left');
+      button.innerHTML = this.actionTimerLabel + ' (' + this.actionTimerSeconds + ')';
     } else {
       debug('Timer ' + buttonId + ' execute');
       button.click();
@@ -419,7 +419,6 @@ onClickCell: function(x,y){
 
 
 notif_build: function (n) {
-  var _this = this;
   debug('Notif: building a settlement', n.args);
 
   var container = "player-settlements-" + n.args.player_id,
@@ -427,21 +426,20 @@ notif_build: function (n) {
       number = $(container).firstChild;
 
   this.slideTemporary('jstpl_settlement', { no:this.getPlayerNo(n.args.player_id) }, container, container, target, 1000, 0)
-    .then(function(){ _this.addSettlement(n.args);  }),
+    .then(() => this.addSettlement(n.args) ),
   number.innerHTML = parseInt(number.innerHTML) - 1;
 },
 
 
 
 notif_obtainTile: function (n) {
-  var _this = this;
   debug('Notif: obtaining a tile', n.args);
 
   var container = "player-tiles-" + n.args.player_id,
       tile  = dojo.query("#tile-container-" + n.args.x + "-" + n.args.y + " .tile")[0];
 
   this.slideDestroy(tile, container, 1000, 0)
-    .then(function(){ _this.addTile(n.args);  });
+    .then(() =>  this.addTile(n.args) );
 },
 
 
@@ -457,17 +455,16 @@ notif_loseTile: function(n){
 /////////////////////////////////
 /////////////////////////////////
 onClickUseTile: function(){
-  var _this = this;
   var dial = new ebg.popindialog();
   dial.create('chooseTile');
   dial.setTitle(_("Choose the location tile"));
 
-  this.gamedatas.gamestate.args.tiles.forEach(function (tile) {
-    var div = dojo.place(_this.format_block('jstpl_tilePrompt', _this.getLocation(tile)), $('popin_chooseTile_contents'));
+  this.gamedatas.gamestate.args.tiles.forEach(tile => {
+    var div = dojo.place(this.format_block('jstpl_tilePrompt', this.getLocation(tile)), $('popin_chooseTile_contents'));
 
-    dojo.connect(div, 'onclick', function (e) {
+    dojo.connect(div, 'onclick', (e) => {
       dial.destroy();
-      _this.onClickSelectTile(tile);
+      this.onClickSelectTile(tile);
     });
   });
   dial.show();
@@ -545,7 +542,6 @@ onClickCancelSelectedHex: function(){
 },
 
 notif_move: function (n) {
-  var _this = this;
   debug('Notif: moving a settlement', n.args);
 
   var container = "player-settlements-" + n.args.player_id,
@@ -553,7 +549,7 @@ notif_move: function (n) {
       target  = "cell-" + n.args.x + "-" + n.args.y;
 
   this.slideTemporary('jstpl_settlement', { no:this.getPlayerNo(n.args.player_id) }, container, source, target, 1000, 0)
-    .then(function(){ _this.addSettlement(n.args);  }),
+    .then(() => this.addSettlement(n.args) ),
 
   dojo.empty(source);
   $(source).className = "hex-grid-content";
@@ -615,28 +611,25 @@ addSettlement: function(settlement){
 },
 
 addTile: function(tile){
-  console.log(tile);
-  var _this = this;
   var div = dojo.place( this.format_block( 'jstpl_tile', tile), "player-tiles-" + tile.player_id);
   if(tile.status == "pending"){
     dojo.addClass(div, "pending");
   }
 
   this.addTooltipHtml(div.id, this.format_block( 'jstpl_tilePrompt',  this.getLocation(tile)));
-  dojo.connect(div, 'onclick', function(){ _this.onClickSelectTile(tile) });
+  dojo.connect(div, 'onclick', () => this.onClickSelectTile(tile) );
 },
 
 
 
 getPlayerNo: function(playerId){
-  return this.gamedatas.fplayers.reduce(function(carry, player){ return player.id == playerId? player.no : carry}, 0);
+  return this.gamedatas.fplayers.reduce(function(carry, player){ return player.id == playerId? player.cno : carry}, 0);
 },
 
 
 slideDestroy: function (node, to, duration, delay) {
-  var _this = this;
-  return new Promise(function (resolve, reject) {
-    var animation = _this.slideToObjectAndDestroy(node, to, duration, delay);
+  return new Promise((resolve, reject) => {
+    var animation = this.slideToObjectAndDestroy(node, to, duration, delay);
     setTimeout(function(){
       resolve();
     }, duration + delay + 2)
@@ -645,9 +638,8 @@ slideDestroy: function (node, to, duration, delay) {
 
 
 slideTemporary: function (template, data, container, sourceId, targetId, duration, delay) {
-  var _this = this;
-  return new Promise(function (resolve, reject) {
-    var animation = _this.slideTemporaryObject(_this.format_block(template, data), container, sourceId, targetId, duration, delay);
+  return new Promise((resolve, reject) => {
+    var animation = this.slideTemporaryObject(this.format_block(template, data), container, sourceId, targetId, duration, delay);
     setTimeout(function(){
       resolve();
     }, duration + delay + 1)
@@ -659,7 +651,6 @@ getLocation: function(tile){
   var location = this.gamedatas.locations[tile.location];
   if(typeof location == "undefined") return null;
   location.location = tile.location;
-  location.description = location.text.join("");
   return location;
 },
 
@@ -692,10 +683,9 @@ setupNotifications: function () {
     ['scoringEnd', 4000],
   ];
 
-  var _this = this;
-  notifs.forEach(function (notif) {
-    dojo.subscribe(notif[0], _this, "notif_" + notif[0]);
-    _this.notifqueue.setSynchronous(notif[0], notif[1]);
+  notifs.forEach(notif => {
+    dojo.subscribe(notif[0], this, "notif_" + notif[0]);
+    this.notifqueue.setSynchronous(notif[0], notif[1]);
   });
 }
 
