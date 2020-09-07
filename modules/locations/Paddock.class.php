@@ -50,6 +50,7 @@ class Paddock extends KingdomBuilderLocation
     }
 
     return [
+      'i18n' => ['tileName'],
       'cancelable' => $this->game->log->getLastActions() != null,
       'hexes' => $hexes,
       'tileName' => $this->getName(),

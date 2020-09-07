@@ -26,6 +26,7 @@ class Barn extends KingdomBuilderLocation
   public function argPlayerMove()
   {
     return [
+      'i18n' => ['tileName'],
       'cancelable' => $this->game->log->getLastActions() != null,
       'hexes' => $this->game->board->getPlacedSettlementsCoords($this->playerId),
       'tileName' => $this->getName(),

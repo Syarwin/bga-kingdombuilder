@@ -611,7 +611,7 @@ addTile: function(tile){
     dojo.addClass(div, "pending");
   }
 
-  this.addTooltipHtml(div.id, this.format_block( 'jstpl_tilePrompt',  this.getLocation(tile)));
+  setTimeout( () => this.addTooltipHtml(div.id, this.format_block( 'jstpl_tilePrompt',  this.getLocation(tile))), 1);
   dojo.connect(div, 'onclick', () => this.onClickSelectTile(tile) );
 },
 

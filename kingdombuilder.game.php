@@ -294,7 +294,9 @@ class kingdombuilder extends Table
    */
   public function useTile($tileId)
   {
-    $this->gamestate->nextState($this->locationManager->useTile($tileId));
+    $location = $this->locationManager->getActiveLocation();
+    if(is_null($location))
+      $this->gamestate->nextState($this->locationManager->useTile($tileId));
   }
 
 
