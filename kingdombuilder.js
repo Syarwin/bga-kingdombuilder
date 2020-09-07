@@ -210,8 +210,6 @@ clearPossible: function clearPossible() {
   this.onUpdateActionButtons(this.gamedatas.gamestate.name, this.gamedatas.gamestate.args);
 
   dojo.query(".hex-grid-content").removeClass("selectable selected");
-//  this._connections.forEach(dojo.disconnect);
-//  this._connections = [];
 },
 
 
@@ -234,18 +232,14 @@ onUpdateActionButtons: function (stateName, args, suppressTimers) {
   if (args && args.skippable)
     this.addActionButton('buttonSkip', _('Skip'), 'onClickSkip', null, false, 'gray');
 
-  if ((stateName == "playerBuild" || stateName == "playerUsePower" || stateName == "playerUseTile")) {
-    if (args.cancelable)
-      this.addActionButton('buttonRestart', _('Restart turn'), 'onClickRestart', null, false, 'gray');
-  }
-
-  if (args && args.undoable)
-    this.addActionButton('buttonCancel', _('Cancel'), 'onClickCancel', null, false, 'gray');
-
-
   if (stateName == "confirmTurn") {
     this.addActionButton('buttonConfirm', _('Confirm'), 'onClickConfirm', null, false, 'blue');
+    args = { cancelable : true };
+  }
+
+  if (args && args.cancelable){
     this.addActionButton('buttonRestart', _('Restart turn'), 'onClickRestart', null, false, 'gray');
+    this.addActionButton('buttonUndo', _('Undo'), 'onClickUndo', null, false, 'gray');
   }
 },
 
@@ -355,15 +349,16 @@ stopActionTimer: function () {
 
 
 /*
- * onClickCancel: is called when the active player decide to deselect tile
+ * onClickCancel: is called when the active player decide to undo last action
  */
-onClickCancel: function () {
-  if (!this.checkAction('cancel')) {
+onClickUndo: function () {
+  if (!this.checkAction('undoAction')) {
     return;
   }
-  this.takeAction("cancel");
+  this.takeAction("undoAction");
   this.clearPossible();
 },
+
 
 
 /*

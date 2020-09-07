@@ -213,6 +213,14 @@ class KingdomBuilderLog extends APP_GameClass
   }
 
 
+  /*
+   * addSwitchTile: add a new entry to log when a tile is switched before lost
+   */
+  public function addSwitchTile($tile)
+  {
+    $this->insert(-1, $tile['id'], 'switchTile', []);
+  }
+
 
   /*
    * addAction: add a new action to log
@@ -269,7 +277,7 @@ class KingdomBuilderLog extends APP_GameClass
   /*
    * getLastActions : get works and actions of player (used to cancel previous action)
    */
-  public function getLastActions($actions = ['build', 'usedPower', 'useTile'], $pId = null, $offset = null)
+  public function getLastActions($actions = ['build', 'useTile'], $pId = null, $offset = null)
   {
     $pId = $pId ?? $this->game->getActivePlayerId();
     $offset = $offset ?? 0;
@@ -304,15 +312,9 @@ class KingdomBuilderLog extends APP_GameClass
 //////////   Cancel   //////////
 ////////////////////////////////
 ////////////////////////////////
-  /*
-   * cancelTurn: cancel the last actions of active player of current turn
-   */
-  public function cancelTurn($limit = null)
-  {
-    $limitClause = is_null($limit)? "" : (" LIMIT ".$limit);
-    $pId = $this->game->getActivePlayerId();
-    $logs = self::getObjectListFromDb("SELECT * FROM log WHERE `player_id` = '$pId' AND `round` = (SELECT round FROM log WHERE `player_id` = $pId AND `action` = 'startTurn' ORDER BY log_id DESC LIMIT 1) ORDER BY log_id DESC".$limitClause);
 
+  public function cancelLogs($logs, $pId)
+  {
     $ids = [];
     $moveIds = [];
     foreach ($logs as $log) {
@@ -335,6 +337,10 @@ class KingdomBuilderLog extends APP_GameClass
           self::DbQuery("UPDATE piece SET location = '{$args["location"]}' WHERE id = {$log['piece_id']}");
           break;
 
+        // SwitchTile : put tile back on pending
+        case 'switchTile':
+          self::DbQuery("UPDATE piece SET location = 'pending' WHERE id = {$log['piece_id']}");
+          break;
 
         // UseTile : put tile back in hand
         case 'useTile':
@@ -366,6 +372,28 @@ class KingdomBuilderLog extends APP_GameClass
     self::DbQuery("UPDATE gamelog SET `cancel` = 1 WHERE `gamelog_move_id` IN (" . implode(',', $moveIds) . ")");
     return $moveIds;
   }
+
+  /*
+   * cancelTurn: cancel the last actions of active player of current turn
+   */
+  public function cancelTurn($limit = null)
+  {
+    $limitClause = is_null($limit)? "" : (" LIMIT ".$limit);
+    $pId = $this->game->getActivePlayerId();
+    $logs = self::getObjectListFromDb("SELECT * FROM log WHERE `player_id` = '$pId' AND `round` = (SELECT round FROM log WHERE `player_id` = $pId AND `action` = 'startTurn' ORDER BY log_id DESC LIMIT 1) ORDER BY log_id DESC".$limitClause);
+    return $this->cancelLogs($logs, $pId);
+  }
+
+
+  public function cancelLastAction()
+  {
+    $pId = $this->game->getActivePlayerId();
+    $action = self::getObjectFromDb("SELECT * FROM log WHERE `action` IN ('build', 'useTile') AND `player_id` = '$pId' AND `round` = (SELECT round FROM log WHERE `player_id` = $pId AND `action` = 'startTurn' ORDER BY log_id DESC LIMIT 1) ORDER BY log_id DESC LIMIT 1");
+    $logs = self::getObjectListFromDb("SELECT * FROM log WHERE `player_id` = '$pId' AND log_id >= {$action['log_id']} ORDER BY log_id DESC");
+    return $this->cancelLogs($logs, $pId);
+  }
+
+
 
   /*
    * getCancelMoveIds : get all cancelled move IDs from BGA gamelog, used for styling the notifications on page reload

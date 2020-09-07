@@ -113,12 +113,21 @@ class KingdomBuilderLocationManager extends APP_GameClass
     if(!empty($settlements))
       return;
 
-    // Already obtained a tile from this location (or a similar type) before ?
-    $tile = self::getObjectFromDB("SELECT * FROM piece WHERE player_id = {$playerId} AND type = 'tile' AND location != 'box' AND type_arg = (SELECT type_arg FROM piece WHERE x = {$location['x']} AND y = {$location['y']} LIMIT 1) ORDER BY location DESC LIMIT 1");
+    // Already obtained a tile from this location before ?
+    $tile = self::getObjectFromDB("SELECT * FROM piece WHERE player_id = {$playerId} AND type = 'tile' AND location != 'box' AND x = {$location['x']} AND y = {$location['y']}");
     if(is_null($tile))
       return;
 
-    // Put this to the box
+    // If it was unused, then mark the potential other tile of same location unused before discarding
+    if($tile['location'] == "hand"){
+      $tile2 = self::getObjectFromDB("SELECT * FROM piece WHERE player_id = {$playerId} AND type = 'tile' AND location != 'box' AND type_arg = {$tile['type_arg']} AND id != {$tile['id']}");
+      if(!is_null($tile2) && $tile2['location' == "pending"]){
+        self::DbQuery("UPDATE piece SET location = 'hand' WHERE id = {$tile2['id']} ");
+        $this->game->log->addSwitchTile($tile2);
+      }
+    }
+
+    // Put this tile to the box
     self::DbQuery("UPDATE piece SET location = 'box' WHERE id = {$tile['id']}");
     $this->game->log->addLoseTile($tile);
 

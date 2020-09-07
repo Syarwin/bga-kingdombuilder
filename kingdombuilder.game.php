@@ -152,17 +152,10 @@ class kingdombuilder extends Table
   public function stEndOfTurn()
   {
     $this->playerManager->getPlayer()->endOfTurn();
-    $this->stCheckEndOfGame();
     $this->gamestate->nextState('next');
   }
 
-  /*
-   * stCheckEndOfGame: check if the game is finished
-   */
-  public function stCheckEndOfGame()
-  {
-		return false;
-  }
+
 
   public function stScoringEnd()
   {
@@ -202,154 +195,15 @@ class kingdombuilder extends Table
   }
 
 
-  /*
-   * restartTurn: called when a player decide to go back at the beggining of the turn
-   */
-  public function restartTurn()
-  {
-    self::checkAction('restartTurn');
-
-    if ($this->log->getLastActions() == null) {
-      throw new BgaUserException(_("You have nothing to cancel"));
-    }
-
-    // Undo the turn
-    $moveIds = $this->log->cancelTurn();
-    self::notifyAllPlayers('cancel', clienttranslate('${player_name} restarts their turn'), [
-      'player_name' => self::getActivePlayerName(),
-      'moveIds' => $moveIds,
-      'board' => $this->board->getUiData(),
-      'fplayers' => $this->playerManager->getUiData(self::getCurrentPlayerId()),
-    ]);
-
-    // Apply power
-    $this->gamestate->nextState('restartTurn');
-  }
-
-  /*
-   * confirmTurn: called whenever a player confirm their turn
-   */
-  public function confirmTurn()
-  {
-    $this->gamestate->nextState('confirm');
-  }
-
-  /*
-   * undo: called when a player decide to go back at the beggining of the turn
-   */
-  public function cancel()
-  {
-    self::checkAction('cancel');
-
-    if ($this->log->getLastActions() == null) {
-      throw new BgaUserException(_("You have nothing to cancel"));
-    }
-
-    // Undo the turn
-    $moveIds = $this->log->cancelTurn(1);
-    self::notifyAllPlayers('cancel', '', [
-      'player_name' => self::getActivePlayerName(),
-      'moveIds' => $moveIds,
-      'board' => $this->board->getUiData(),
-      'fplayers' => $this->playerManager->getUiData(self::getCurrentPlayerId()),
-    ]);
-
-    $this->stateAfterWork();
-  }
-
-
-  public function stateAfterWork(){
-    $player = $this->playerManager->getPlayer();
-    $nextState =  (count($this->log->getLastBuilds()) == 3 || $player->getSettlementsInHand() == 0)? "done" : "build";
-    if($nextState == "done" && (count($player->getPlayableTilesInHand()) > 0))
-      $nextState = "useTile";
-    $this->gamestate->nextState($nextState);
-  }
-
-  ////////////////////////////////////////
-  ////////////////////////////////////////
-  ///////////    UseTile    //////////////
-  ////////////////////////////////////////
-  ////////////////////////////////////////
-  public function argUseTile()
-  {
-    return [
-      'tiles' => $this->playerManager->getPlayer()->getPlayableTilesInHand(),
-      'skippable' => true,
-      'cancelable' => true,
-    ];
-  }
-
-  public function skip()
-  {
-    $this->gamestate->nextState('skip');
-  }
-
-  /*
-   * useTile: called when a player decide to a tile location
-   */
-  public function useTile($tileId)
-  {
-    $this->gamestate->nextState($this->locationManager->useTile($tileId));
-  }
-
-
-  /*
-   * skip: called when a player decide to skip the use of power
-   */
-  public function skipPower()
-  {
-    self::checkAction('skip');
-
-    $args = $this->gamestate->state()['args'];
-    if (!$args['skippable']) {
-      throw new BgaUserException(_("You can't skip this action"));
-    }
-    $this->log->addAction("skippedPower");
-
-    // Apply power
-    $state = $this->powerManager->stateAfterSkipPower() ?? 'move';
-    $this->gamestate->nextState($state);
-  }
-
-
-  /*
-   * argPlayerMove: give the list of settlements that can move
-   */
-  public function argPlayerMove()
-  {
-    $arg = $this->locationManager->argPlayerMove();
-    $arg['undoable'] = true;
-    return $arg;
-  }
-
-  /*
-	 * Build : TODO
-   */
-  public function playerMove($from, $to)
-  {
-    // Check if work is possible
-    self::checkAction('move');
-    $arg = $this->argPlayerMove();
-    if(!in_array($from, $arg['hexes']))
-      throw new BgaUserException(_("You cannot move this settlement"));
-
-    $arg2 = $this->locationManager->argPlayerMoveTarget($from);
-    if(!in_array($to, $arg2['hexes']))
-      throw new BgaUserException(_("You cannot move this settlement here"));
-
-    $player = $this->playerManager->getPlayer();
-    $player->move($from, $to);
-    $this->stateAfterWork();
-  }
-
-
   /////////////////////////////////////////
   /////////////////////////////////////////
   /////////////    Build    ///////////////
   /////////////////////////////////////////
   /////////////////////////////////////////
 
+  /*
+   * Generic function that return the set of hexes available to build onto
+   */
   public function argPlayerBuildAux($terrain = null)
   {
     $player = $this->playerManager->getPlayer();
@@ -363,7 +217,6 @@ class kingdombuilder extends Table
       'terrain' => $terrain,
       'terrainName' => $this->terrainNames[$terrain],
       'hexes' => $this->board->getAvailableHexes($terrain),
-      'undoable' => !is_null($location),
       'cancelable' => $this->log->getLastActions() != null,
       'nbr' => "(". ($nbr + 1)."/3)",
       'tiles' => ($nbr == 0 && is_null($location))? $tiles : [],
@@ -386,20 +239,7 @@ class kingdombuilder extends Table
 
 
   /*
-   * stBeforeWork: Check if a build is possible
-   */
-  public function stBeforeBuild()
-  {
-/*
-    if ($this->stCheckEndOfGame()) {
-      return;
-    }
-*/
-  }
-
-
-  /*
-	 * Build : TODO
+	 * Build : build a settlement
    */
   public function playerBuild($pos)
   {
@@ -413,6 +253,148 @@ class kingdombuilder extends Table
     $player->build($pos);
     $this->stateAfterWork();
   }
+
+
+  /*
+	 * stateAfterWork: according to number of settlement builds, either build again or end turn
+   */
+  public function stateAfterWork(){
+    $player = $this->playerManager->getPlayer();
+    $nextState =  (count($this->log->getLastBuilds()) == 3 || $player->getSettlementsInHand() == 0)? "done" : "build";
+    if($nextState == "done" && (count($player->getPlayableTilesInHand()) > 0))
+      $nextState = "useTile";
+    $this->gamestate->nextState($nextState);
+  }
+
+
+  ////////////////////////////////////////
+  ////////////////////////////////////////
+  ///////////    UseTile    //////////////
+  ////////////////////////////////////////
+  ////////////////////////////////////////
+  public function argUseTile()
+  {
+    return [
+      'tiles' => $this->playerManager->getPlayer()->getPlayableTilesInHand(),
+      'skippable' => true,
+      'cancelable' => true,
+    ];
+  }
+
+  /*
+   * skip: called when a player decide to skip the use of tile
+   */
+  public function skip()
+  {
+    $this->gamestate->nextState('skip');
+  }
+
+  /*
+   * useTile: called when a player decide to a tile location
+   */
+  public function useTile($tileId)
+  {
+    $this->gamestate->nextState($this->locationManager->useTile($tileId));
+  }
+
+
+
+  /*
+   * argPlayerMove: give the list of settlements that can move
+   */
+  public function argPlayerMove()
+  {
+    $arg = $this->locationManager->argPlayerMove();
+    return $arg;
+  }
+
+  /*
+	 * Move : move a settlement
+   */
+  public function playerMove($from, $to)
+  {
+    // Check if work is possible
+    self::checkAction('move');
+    $arg = $this->argPlayerMove();
+    if(!in_array($from, $arg['hexes']))
+      throw new BgaUserException(_("You cannot move this settlement"));
+
+    $arg2 = $this->locationManager->argPlayerMoveTarget($from);
+    if(!in_array($to, $arg2['hexes']))
+      throw new BgaUserException(_("You cannot move this settlement here"));
+
+    $player = $this->playerManager->getPlayer();
+    $player->move($from, $to);
+    $this->stateAfterWork();
+  }
+
+
+
+
+  ////////////////////////////////////////
+  ////////////////////////////////////////
+  ///////// Undo/restart/confirm  ////////
+  ////////////////////////////////////////
+  ////////////////////////////////////////
+
+  /*
+   * undoAction: called when a player decide to undo last action
+   */
+  public function undoAction()
+  {
+    self::checkAction('undoAction');
+
+    if ($this->log->getLastActions() == null) {
+      throw new BgaUserException(_("You have nothing to cancel"));
+    }
+
+    // Undo the action
+    $moveIds = $this->log->cancelLastAction();
+    self::notifyAllPlayers('cancel', clienttranslate('${player_name} undo their last action'), [
+      'player_name' => self::getActivePlayerName(),
+      'moveIds' => $moveIds,
+      'board' => $this->board->getUiData(),
+      'fplayers' => $this->playerManager->getUiData(self::getCurrentPlayerId()),
+    ]);
+
+    $this->stateAfterWork();
+  }
+
+
+
+  /*
+   * restartTurn: called when a player decide to go back at the beggining of the turn
+   */
+  public function restartTurn()
+  {
+    self::checkAction('restartTurn');
+
+    if ($this->log->getLastActions() == null) {
+      throw new BgaUserException(_("You have nothing to cancel"));
+    }
+
+    // Undo the turn
+    $moveIds = $this->log->cancelTurn();
+    self::notifyAllPlayers('cancel', clienttranslate('${player_name} restarts their turn'), [
+      'player_name' => self::getActivePlayerName(),
+      'moveIds' => $moveIds,
+      'board' => $this->board->getUiData(),
+      'fplayers' => $this->playerManager->getUiData(self::getCurrentPlayerId()),
+    ]);
+
+    $this->gamestate->nextState('restartTurn');
+  }
+
+  /*
+   * confirmTurn: called whenever a player confirm their turn
+   */
+  public function confirmTurn()
+  {
+    $this->gamestate->nextState('confirm');
+  }
+
+
+
 
   ////////////////////////////////////
   ////////////   Zombie   ////////////
