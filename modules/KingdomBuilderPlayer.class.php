@@ -83,7 +83,7 @@ class KingdomBuilderPlayer extends APP_GameClass
       'color'     => $this->color,
       'settlements' => $this->getSettlementsInHand(),
       'tiles' => $this->getTilesInHand(true),
-      'terrain' => ($this->id == $currentPlayerId)? $this->getTerrain() : 'back',
+      'terrain' => ($this->id == $currentPlayerId || $this->game->getActivePlayerId() == $this->id)? $this->getTerrain() : 'back',
     ];
   }
 
@@ -152,9 +152,11 @@ class KingdomBuilderPlayer extends APP_GameClass
 
     self::DbQuery("UPDATE piece SET x = {$pos['x']}, y = {$pos['y']}, location = 'board' WHERE id = {$settlement['id']}");
     $this->game->log->addBuild($settlement, $pos);
-    $this->game->notifyAllPlayers('build', clienttranslate('${player_name} build a settlement'), [
+    $this->game->notifyAllPlayers('build', clienttranslate('${player_name} build a settlement on ${terrainName}'), [
+      'i18n' => ['terrainName'],
       'player_name' => $this->getName(),
       'player_id' => $this->getId(),
+      'terrainName' => $this->game->terrainNames[$this->game->board->getBoard()[$pos['x']][$pos['y']]],
       'x' => $pos['x'],
       'y' => $pos['y'],
     ]);
@@ -180,9 +182,11 @@ class KingdomBuilderPlayer extends APP_GameClass
 
     self::DbQuery("UPDATE piece SET x = {$to['x']}, y = {$to['y']} WHERE id = {$settlement['id']}");
     $this->game->log->addMove($settlement, $to);
-    $this->game->notifyAllPlayers('move', clienttranslate('${player_name} move a settlement'), [
+    $this->game->notifyAllPlayers('move', clienttranslate('${player_name} move a settlement to ${terrainName}'), [
+      'i18n' => ['terrainName'],
       'player_name' => $this->getName(),
       'player_id' => $this->getId(),
+      'terrainName' => $this->game->terrainNames[$this->game->board->getBoard()[$to['x']][$to['y']]],
       'from' => $from,
       'x' => $to['x'],
       'y' => $to['y'],

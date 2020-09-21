@@ -122,6 +122,9 @@ class kingdombuilder extends Table
   {
     $pId = $this->activeNextPlayer();
     self::giveExtraTime($pId);
+    $player = $this->playerManager->getPlayer();
+    self::giveExtraTime($pId, count($player->getPlayableTilesInHand()) * 20);
+    
     if (self::getGamestateValue("firstPlayer") == $pId) {
       $n = (int) self::getGamestateValue('currentRound') + 1;
       self::setGamestateValue("currentRound", $n);

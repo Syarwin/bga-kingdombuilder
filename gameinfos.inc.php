@@ -19,7 +19,7 @@ $gameinfos = [
 	'publisher_website' => 'https://ssl.queen-games.com/',
 	'publisher_bgg_id' => 47,
 	'bgg_id' => 107529,
-	'players' => [2,3,4],
+	'players' => [2,3,4,5],
 
 	'suggest_player_number' => null,
 	'not_recommend_player_number' => null,
@@ -48,7 +48,7 @@ $gameinfos = [
 	'strategy' => 3,
 	'diplomacy' => 3,
 
-	'player_colors' => [ "ff0000", "008000", "0000ff", "ffa500" ],
+	'player_colors' => [ "ff0000", "008000", "0000ff", "ffa500", "ffffff"],
 
 	'favorite_colors_support' => true,
 
@@ -66,9 +66,9 @@ $gameinfos = [
 	// Each paragraph must be wrapped with totranslate() for translation and should not contain html (plain text without formatting).
 	// A good length for this text is between 100 and 150 words (about 6 to 9 lines on a standard display)
 	'presentation' => [
-	//    totranslate("This wonderful game is about geometric shapes!"),
-	//    totranslate("It was awarded best triangle game of the year in 2005 and nominated for the Spiel des Jahres."),
-	//    ...
+		clienttranslate("Kingdom Builder is a construction game in which each player creates a kingdom by placing settlers' houses in various locations. The winner of the game is the player with the most gold. However, the gold is only awarded at the end of the game, according to three sets of rules that were randomly revealed at the beginning."),
+		clienttranslate("The rules are simple but each game is likely to play out differently due to the random selection of board sections (choosing four from eight) and scoring rules (choosing three from ten), the luck of the draw, and competition for resources. "),
+		clienttranslate("The game received the 2012 Spiel des Jahres (Game of the Year), German game prize (Deutscher Spiele Preis) for 2012 listed it at number 7 out of 10 best games for that year."),
 	],
 
 	// Games categories

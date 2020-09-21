@@ -102,6 +102,7 @@ $machinestates = [
       'build' => ST_BUILD,
       'move' => ST_MOVE,
       'skip' => ST_PRE_END_OF_TURN,
+      'useTile'    => ST_USE_TILE,
       'restartTurn' => ST_START_OF_TURN,
     ],
   ],
