@@ -40,6 +40,9 @@ define('BASIC', 0);
 define('RANDOM', 1);
 
 
+define('OPTION_RUNNING_SCORES', 103);
+
+
 define('BORDERS', 100);
 define('ENABLED', 1);
 define('DISABLED', 2);

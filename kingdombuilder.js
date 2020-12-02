@@ -1,7 +1,7 @@
 /**
  *------
  * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
- * KingdomBuilder implementation : © <Your name here> <Your email address here>
+ * KingdomBuilder implementation : © Timothée Pecatte tim.pecatte@gmail.com
  *
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
@@ -557,6 +557,17 @@ notif_move: function (n) {
 ///////   Scoring    ///////
 ////////////////////////////
 ////////////////////////////
+notif_updateScores(n){
+  debug("Notif: update scores", n);
+  for(var pId in n.args.scores){
+    if(n.args.scores[pId] == 0)
+      this.scoreCtrl[pId].setValue(0);
+    else
+      this.scoreCtrl[pId].toValue(n.args.scores[pId]);
+  }
+},
+
+
 notif_scoringEnd:function(n){
   debug("Notif: scoring end", n);
 
@@ -585,6 +596,9 @@ notif_scoringEnd:function(n){
   setTimeout( () => dojo.query("#game_play_area .scorenumber").forEach(dojo.destroy), 2000);
 },
 
+onEnteringStateGameEnd(){
+  dojo.query("li.hex-grid-item").removeClass("inactive");
+},
 
 
 ////////////////////////////////
@@ -676,6 +690,7 @@ setupNotifications: function () {
     ['enableTiles', 1],
     ['argPlayerMoveTarget', 1],
     ['scoringEnd', 4000],
+    ['updateScores', 1],
   ];
 
   notifs.forEach(notif => {

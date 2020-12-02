@@ -2,7 +2,7 @@
  /**
   *------
   * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
-  * KingdomBuilder implementation : © <Your name here> <Your email address here>
+  * KingdomBuilder implementation : © Timothée Pecatte tim.pecatte@gmail.com
   *
   * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
   * See http://en.boardgamearena.com/#!doc/Studio for more information.
@@ -33,6 +33,7 @@ class kingdombuilder extends Table
     parent::__construct();
     self::initGameStateLabels([
       'optionSetup'  => OPTION_SETUP,
+      'optionRunningScores'  => OPTION_RUNNING_SCORES,
       'currentRound' => CURRENT_ROUND,
       'firstPlayer'  => FIRST_PLAYER,
     ]);
@@ -85,7 +86,7 @@ class kingdombuilder extends Table
   protected function getAllDatas()
   {
     $currentPlayerId = self::getCurrentPlayerId();
-    return [
+    $data = [
       'objectives' => $this->cards->getUiData(),
       'board' => $this->board->getUiData(),
       'fplayers' => $this->playerManager->getUiData($currentPlayerId),
@@ -93,6 +94,12 @@ class kingdombuilder extends Table
       'cancelMoveIds' => $this->log->getCancelMoveIds(),
       'locations' => $this->locationManager->getUiData(),
     ];
+
+    if(intval(self::getGameStateValue('optionRunningScores')) == ENABLED){
+      $data['players'] = self::getCollectionFromDB("SELECT player_id id, player_no no, player_name name, player_color color, player_score score FROM player");
+    }
+
+    return $data;
   }
 
   /*
@@ -124,7 +131,7 @@ class kingdombuilder extends Table
     self::giveExtraTime($pId);
     $player = $this->playerManager->getPlayer();
     self::giveExtraTime($pId, count($player->getPlayableTilesInHand()) * 20);
-    
+
     if (self::getGamestateValue("firstPlayer") == $pId) {
       $n = (int) self::getGamestateValue('currentRound') + 1;
       self::setGamestateValue("currentRound", $n);
@@ -155,6 +162,25 @@ class kingdombuilder extends Table
   public function stEndOfTurn()
   {
     $this->playerManager->getPlayer()->endOfTurn();
+
+    if(intval(self::getGameStateValue('optionRunningScores')) == ENABLED){
+      $scores = [];
+      foreach($this->playerManager->getPlayers() as $player){
+        $score = 0;
+        foreach($this->cards->getObjectives() as $objective){
+          $score += $objective->getScoring($player->getId());
+        }
+
+        $scores[$player->getId()] = $score;
+        self::DbQuery("UPDATE player SET player_score = {$score} WHERE player_id='{$player->getId()}'" );
+      }
+
+      $this->notifyAllPlayers("updateScores", '', [
+    		"scores" => $scores
+    	]);
+
+    }
+
     $this->gamestate->nextState('next');
   }
 
@@ -162,6 +188,15 @@ class kingdombuilder extends Table
 
   public function stScoringEnd()
   {
+    // Reset scores
+    self::DbQuery("UPDATE player SET player_score = 0");
+    $scores = [];
+    foreach($this->playerManager->getPlayers() as $player){
+      $scores[$player->getId()] = 0;
+    }
+    $this->notifyAllPlayers("updateScores", '', [ "scores" => $scores ]);
+
+
     // Header line
   	$headers = [''];
   	foreach($this->playerManager->getPlayers() as $player){

@@ -30,6 +30,9 @@ class ObjectiveCitizens extends KingdomBuilderObjective
       $areas[$val]++;
     }}
 
+    if(empty($areas))
+      return;
+
     $maxArea = array_search(max($areas), $areas);
     $first = true;
     for($i = 0; $i < 20; $i++){

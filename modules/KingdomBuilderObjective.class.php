@@ -41,6 +41,11 @@ abstract class KingdomBuilderObjective extends APP_GameClass
     ];
   }
 
+  public function getScoring($playerId){
+    $this->scoringEndPlayer($playerId);
+    return $this->result['total'];
+  }
+
   protected function addScoring($hexes, $score, $highlights = null)
   {
     $hexes = array_key_exists('x', $hexes)? [$hexes] : $hexes;

@@ -2,7 +2,7 @@
 /**
  *------
  * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
- * KingdomBuilder implementation : © <Your name here> <Your email address here>
+ * KingdomBuilder implementation : © Timothée Pecatte tim.pecatte@gmail.com
  *
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
@@ -41,4 +41,5 @@ $this->terrainNames = [
    HEX_DESERT => clienttranslate('a Desert'),
    HEX_FLOWER => clienttranslate('a Flower Field'),
    HEX_FOREST => clienttranslate('a Forest'),
+   HEX_WATER => clienttranslate('a Water'),
 ];

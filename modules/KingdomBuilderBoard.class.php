@@ -131,6 +131,7 @@ class KingdomBuilderBoard extends APP_GameClass
       $quadrants = [7, 6, 5, 1];
     } else {
       $quadrants = array_rand(self::$boards, 4);
+			shuffle($quadrants);
       for($i = 0; $i < 4; $i++){
         if(rand(0,1) == 1)
           $quadrants[$i] += count(self::$boards);
