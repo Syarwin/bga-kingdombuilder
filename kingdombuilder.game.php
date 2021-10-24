@@ -332,6 +332,18 @@ class kingdombuilder extends Table
    */
   public function useTile($tileId)
   {
+    $tiles = array_map(function($tile) { return $tile['id']; }, $this->playerManager->getPlayer()->getPlayableTilesInHand() );
+    if(!in_array($tileId, $tiles)){
+      throw new \feException("You can't use that tile");
+    }
+
+    $nbr = count($this->log->getLastBuilds());
+    $location = $this->locationManager->getActiveLocation();
+    $state = $this->gamestate->state_id();
+    if($state == ST_BUILD && $nbr != 0 && is_null($location)){
+      throw new \feException("You can't use a tile in the middle of your mandatory action");      
+    }
+
     $location = $this->locationManager->getActiveLocation();
     if(is_null($location))
       $this->gamestate->nextState($this->locationManager->useTile($tileId));
