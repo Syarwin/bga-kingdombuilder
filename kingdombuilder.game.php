@@ -34,6 +34,7 @@ class kingdombuilder extends Table
     self::initGameStateLabels([
       'optionSetup'  => OPTION_SETUP,
       'optionRunningScores'  => OPTION_RUNNING_SCORES,
+      'optionLords'  => OPTION_DISABLE_LORDS,
       'currentRound' => CURRENT_ROUND,
       'firstPlayer'  => FIRST_PLAYER,
     ]);
@@ -63,8 +64,9 @@ class kingdombuilder extends Table
   {
 		// Initialize board and cards
     $optionSetup = intval(self::getGameStateValue('optionSetup'));
+    $optionLords = intval(self::getGameStateValue('optionLords'));
 		$this->board->setupNewGame($optionSetup);
-    $this->cards->setupNewGame($players, $optionSetup);
+    $this->cards->setupNewGame($players, $optionSetup, $optionLords);
 
     // Init stats
     $this->log->initStats($players);
@@ -341,7 +343,7 @@ class kingdombuilder extends Table
     $location = $this->locationManager->getActiveLocation();
     $state = $this->gamestate->state_id();
     if($state == ST_BUILD && $nbr != 0 && is_null($location)){
-      throw new \feException("You can't use a tile in the middle of your mandatory action");      
+      throw new \feException("You can't use a tile in the middle of your mandatory action");
     }
 
     $location = $this->locationManager->getActiveLocation();

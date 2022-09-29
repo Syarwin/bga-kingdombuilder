@@ -18,7 +18,7 @@ class KingdomBuilderCards extends APP_GameClass
     $this->objectives->init("objectives");
   }
 
-  public function setupNewGame($players, $optionSetup)
+  public function setupNewGame($players, $optionSetup, $optionLords)
   {
     // Create terrains cards
     $terrains = [];
@@ -34,6 +34,9 @@ class KingdomBuilderCards extends APP_GameClass
     if($optionSetup == BASIC){
       $this->objectives->moveCards([FISHERMEN,  MERCHANTS, KNIGHTS], 'board');
     } else {
+      if($optionLords == ENABLED) {
+        $this->objectives->moveCards([LORDS], 'box');
+      }
       $this->objectives->pickCardsForLocation(3, 'deck', 'board');
     }
   }

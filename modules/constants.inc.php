@@ -42,6 +42,7 @@ define('RANDOM', 1);
 
 define('OPTION_RUNNING_SCORES', 103);
 
+define('OPTION_DISABLE_LORDS', 104);
 
 define('BORDERS', 100);
 define('ENABLED', 1);
