@@ -15,7 +15,6 @@ define('STAT_DESERT', 202);
 define('STAT_FLOWER', 203);
 define('STAT_FOREST', 204);
 
-
 /*
  * State constants
  */
@@ -39,10 +38,11 @@ define('OPTION_SETUP', 102);
 define('BASIC', 0);
 define('RANDOM', 1);
 
-
 define('OPTION_RUNNING_SCORES', 103);
 
 define('OPTION_DISABLE_LORDS', 104);
+
+define('OPTION_NOMADS_EXPANSION', 105);
 
 define('BORDERS', 100);
 define('ENABLED', 1);
@@ -53,8 +53,6 @@ define('DISABLED', 2);
  */
 define('CURRENT_ROUND', 20);
 define('FIRST_PLAYER', 21);
-
-
 
 /*
  * Hex types
@@ -78,6 +76,12 @@ define('HEX_PADDOCK', 13);
 define('HEX_OASIS', 14);
 define('HEX_BARN', 15);
 
+// NOMADS
+define('HEX_CARAVAN', 16);
+define('HEX_VILLAGE', 17);
+define('HEX_GARDEN', 18);
+define('HEX_QUARRY', 19);
+define('HEX_NOMADS', 20);
 
 /*
  * KB Cards

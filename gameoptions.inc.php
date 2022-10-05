@@ -10,7 +10,7 @@
  *
  * gameoptions.inc.php
  *
- * santorini game options description
+ * Kingdom Builder game options description
  *
  * In this file, you can define your game options (= game variants).
  *
@@ -23,47 +23,59 @@
  *
  */
 
-require_once "modules/constants.inc.php";
+require_once 'modules/constants.inc.php';
 
 $game_options = [
     OPTION_SETUP => [
-        "name" => totranslate("Board and objectives"),
-        "values" => [
+        'name' => totranslate('Board and objectives'),
+        'values' => [
             BASIC => [
-                "name" => totranslate("First game"),
+                'name' => totranslate('First game'),
             ],
             RANDOM => [
-                "name" => totranslate("Random"),
-                "tmdisplay" => totranslate("Random"),
-                "description" => totranslate(
-                    "Board and Builder cards are random"
+                'name' => totranslate('Random'),
+                'tmdisplay' => totranslate('Random'),
+                'description' => totranslate(
+                    'Board and Builder cards are random'
                 ),
-                "nobeginner" => true,
+                'nobeginner' => true,
             ],
         ],
-        "default" => RANDOM,
+        'default' => RANDOM,
     ],
 
     OPTION_RUNNING_SCORES => [
-        "name" => totranslate("Running scores"),
-        "values" => [
+        'name' => totranslate('Running scores'),
+        'values' => [
             DISABLED => [
-                "name" => totranslate("Disabled"),
+                'name' => totranslate('Disabled'),
             ],
             ENABLED => [
-                "name" => totranslate("Enabled"),
+                'name' => totranslate('Enabled'),
             ],
         ],
     ],
 
     OPTION_DISABLE_LORDS => [
-        "name" => totranslate("Lords card"),
-        "values" => [
+        'name' => totranslate('Lords card'),
+        'values' => [
             DISABLED => [
-                "name" => totranslate("Included"),
+                'name' => totranslate('Included'),
             ],
             ENABLED => [
-                "name" => totranslate("Excluded"),
+                'name' => totranslate('Excluded'),
+            ],
+        ],
+    ],
+
+    OPTION_NOMADS_EXPANSION => [
+        'name' => totranslate('Nomads expansion'),
+        'values' => [
+            DISABLED => [
+                'name' => totranslate('Disabled'),
+            ],
+            ENABLED => [
+                'name' => totranslate('Enabled'),
             ],
         ],
     ],
@@ -71,11 +83,11 @@ $game_options = [
 
 $game_preferences = [
     BORDERS => [
-        "name" => totranslate("Display borders around clickable hexes"),
-        "needReload" => false,
-        "values" => [
-            ENABLED => ["name" => totranslate("Enabled")],
-            DISABLED => ["name" => totranslate("Disabled")],
+        'name' => totranslate('Display borders around clickable hexes'),
+        'needReload' => false,
+        'values' => [
+            ENABLED => ['name' => totranslate('Enabled')],
+            DISABLED => ['name' => totranslate('Disabled')],
         ],
     ],
 ];
