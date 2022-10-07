@@ -51,7 +51,7 @@ class kingdombuilder extends Table
         return 'kingdombuilder';
     }
 
-    protected function isNomads()
+    public function isNomads()
     {
         return self::getGameStateValue('nomads') == ENABLED;
     }

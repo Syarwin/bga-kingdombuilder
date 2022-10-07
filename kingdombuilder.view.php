@@ -24,41 +24,44 @@
  *
  */
 
-require_once( APP_BASE_PATH."view/common/game.view.php" );
+require_once APP_BASE_PATH . 'view/common/game.view.php';
 
 class view_kingdombuilder_kingdombuilder extends game_view
 {
-  function getGameName() {
-      return "kingdombuilder";
-  }
-
-	function build_page( $viewArgs )
-	{
-    // Get players & players number
-    $players = $this->game->loadPlayersBasicInfos();
-    $players_nbr = count( $players );
-
-    $quadrants = $this->game->board->getQuadrants();
-    $n = count(KingdomBuilderBoard::$boards);
-    for($i = 0; $i < 4; $i++){
-      $flipped = false;
-      $k = $quadrants[$i];
-      if($k >= $n){
-        $flipped = true;
-        $k -= $n;
-      }
-
-      $this->tpl["QUAD".$i] = $k. ($flipped? " flipped" : "");
+    function getGameName()
+    {
+        return 'kingdombuilder';
     }
 
-    // Create the board
-    $this->page->begin_block( "kingdombuilder_kingdombuilder", "cell");
-    for($i = 0; $i < 20; $i++)
-    for($j = 0; $j < 20; $j++){
-      $this->page->insert_block( "cell", [
-        'I' => $i,
-        'J' => $j,
-      ]);
+    function build_page($viewArgs)
+    {
+        // Get players & players number
+        $players = $this->game->loadPlayersBasicInfos();
+        $players_nbr = count($players);
+
+        $quadrants = $this->game->board->getQuadrants();
+        $n = count(KingdomBuilderBoard::$boards);
+        for ($i = 0; $i < 4; $i++) {
+            $flipped = false;
+            $k = $quadrants[$i];
+            // TODO : remove
+            if ($k >= 8 || $k >= 100) {
+                $flipped = true;
+                $k -= $k >= 100 ? 100 : 8;
+            }
+
+            $this->tpl['QUAD' . $i] = $k . ($flipped ? ' flipped' : '');
+        }
+
+        // Create the board
+        $this->page->begin_block('kingdombuilder_kingdombuilder', 'cell');
+        for ($i = 0; $i < 20; $i++) {
+            for ($j = 0; $j < 20; $j++) {
+                $this->page->insert_block('cell', [
+                    'I' => $i,
+                    'J' => $j,
+                ]);
+            }
+        }
     }
-	}
 }
