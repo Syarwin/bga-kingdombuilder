@@ -26,68 +26,66 @@
 require_once 'modules/constants.inc.php';
 
 $game_options = [
-    OPTION_SETUP => [
-        'name' => totranslate('Board and objectives'),
-        'values' => [
-            BASIC => [
-                'name' => totranslate('First game'),
-            ],
-            RANDOM => [
-                'name' => totranslate('Random'),
-                'tmdisplay' => totranslate('Random'),
-                'description' => totranslate(
-                    'Board and Builder cards are random'
-                ),
-                'nobeginner' => true,
-            ],
-        ],
-        'default' => RANDOM,
+  OPTION_SETUP => [
+    'name' => totranslate('Board and objectives'),
+    'values' => [
+      BASIC => [
+        'name' => totranslate('First game'),
+      ],
+      RANDOM => [
+        'name' => totranslate('Random'),
+        'tmdisplay' => totranslate('Random'),
+        'description' => totranslate('Board and Builder cards are random'),
+        'nobeginner' => true,
+      ],
     ],
+    'default' => RANDOM,
+  ],
 
-    OPTION_RUNNING_SCORES => [
-        'name' => totranslate('Running scores'),
-        'values' => [
-            DISABLED => [
-                'name' => totranslate('Disabled'),
-            ],
-            ENABLED => [
-                'name' => totranslate('Enabled'),
-            ],
-        ],
+  OPTION_RUNNING_SCORES => [
+    'name' => totranslate('Running scores'),
+    'values' => [
+      DISABLED => [
+        'name' => totranslate('Disabled'),
+      ],
+      ENABLED => [
+        'name' => totranslate('Enabled'),
+      ],
     ],
+  ],
 
-    OPTION_DISABLE_LORDS => [
-        'name' => totranslate('Lords card'),
-        'values' => [
-            DISABLED => [
-                'name' => totranslate('Included'),
-            ],
-            ENABLED => [
-                'name' => totranslate('Excluded'),
-            ],
-        ],
+  OPTION_DISABLE_LORDS => [
+    'name' => totranslate('Lords card'),
+    'values' => [
+      DISABLED => [
+        'name' => totranslate('Included'),
+      ],
+      ENABLED => [
+        'name' => totranslate('Excluded'),
+      ],
     ],
+  ],
 
-    OPTION_NOMADS_EXPANSION => [
-        'name' => totranslate('Nomads expansion'),
-        'values' => [
-            DISABLED => [
-                'name' => totranslate('Disabled'),
-            ],
-            ENABLED => [
-                'name' => totranslate('Enabled'),
-            ],
-        ],
-    ],
+  // OPTION_NOMADS_EXPANSION => [
+  //     'name' => totranslate('Nomads expansion'),
+  //     'values' => [
+  //         DISABLED => [
+  //             'name' => totranslate('Disabled'),
+  //         ],
+  //         ENABLED => [
+  //             'name' => totranslate('Enabled'),
+  //         ],
+  //     ],
+  // ],
 ];
 
 $game_preferences = [
-    BORDERS => [
-        'name' => totranslate('Display borders around clickable hexes'),
-        'needReload' => false,
-        'values' => [
-            ENABLED => ['name' => totranslate('Enabled')],
-            DISABLED => ['name' => totranslate('Disabled')],
-        ],
+  BORDERS => [
+    'name' => totranslate('Display borders around clickable hexes'),
+    'needReload' => false,
+    'values' => [
+      ENABLED => ['name' => totranslate('Enabled')],
+      DISABLED => ['name' => totranslate('Disabled')],
     ],
+  ],
 ];

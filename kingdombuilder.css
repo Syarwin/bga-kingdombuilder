@@ -249,19 +249,19 @@ div.objective.objective-10 div.objective-picto {
   background-position: 0% center; }
 
 .player-panel .player-terrain.terrain-0 {
-  background-position: 0% center; }
-
-.player-panel .player-terrain.terrain-1 {
   background-position: 20% center; }
 
-.player-panel .player-terrain.terrain-2 {
+.player-panel .player-terrain.terrain-1 {
   background-position: 40% center; }
 
-.player-panel .player-terrain.terrain-3 {
+.player-panel .player-terrain.terrain-2 {
   background-position: 60% center; }
 
-.player-panel .player-terrain.terrain-4 {
+.player-panel .player-terrain.terrain-3 {
   background-position: 80% center; }
+
+.player-panel .player-terrain.terrain-4 {
+  background-position: 100% center; }
 
 .player-panel .player-settlements {
   position: relative;
