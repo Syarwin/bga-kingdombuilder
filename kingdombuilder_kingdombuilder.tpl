@@ -17,7 +17,6 @@
 </div>
 
 <div id="objectives"></div>
-<script src="https://rawgit.com/FremyCompany/css-grid-polyfill/master/bin/css-polyfills.min.js"></script>
 <script type="text/javascript">
 var jstpl_objective = `
 <div class="objective objective-\${id}">

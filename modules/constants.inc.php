@@ -78,9 +78,9 @@ define('HEX_BARN', 15);
 
 // NOMADS
 define('HEX_CARAVAN', 16);
-define('HEX_VILLAGE', 17);
-define('HEX_GARDEN', 18);
-define('HEX_QUARRY', 19);
+define('HEX_QUARRY', 17);
+define('HEX_VILLAGE', 18);
+define('HEX_GARDEN', 19);
 define('HEX_NOMADS', 20);
 
 /*

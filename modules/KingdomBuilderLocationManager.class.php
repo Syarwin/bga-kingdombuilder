@@ -14,6 +14,12 @@ class KingdomBuilderLocationManager extends APP_GameClass
     HEX_PADDOCK => 'Paddock',
     HEX_TAVERN => 'Tavern',
     HEX_TOWER => 'Tower',
+    // Nomads
+    HEX_QUARRY => 'Quarry',
+    HEX_CARAVAN => 'Caravan',
+    HEX_VILLAGE => 'Village',
+    HEX_GARDEN => 'Garden',
+
   ];
 
   public function getLocationTypes()

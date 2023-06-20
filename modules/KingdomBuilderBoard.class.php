@@ -134,7 +134,7 @@ class KingdomBuilderBoard extends APP_GameClass
     [
       [0, 0, 0, 6, 6, 6, 7, 1, 1, 1],
       [0, 0, 6, 4, 2, 6, 6, 6, 1, 1],
-      [0, 7, 6, 4, 19, 2, 2, 2, 6, 7],
+      [0, 7, 6, 4, 17, 2, 2, 2, 6, 7],
       [3, 6, 4, 4, 1, 1, 2, 3, 3, 3],
       [3, 6, 0, 0, 1, 1, 2, 2, 7, 3],
       [3, 6, 20, 0, 1, 1, 2, 20, 3, 3],
@@ -145,11 +145,11 @@ class KingdomBuilderBoard extends APP_GameClass
     ],
     [
       [1, 1, 1, 6, 6, 6, 6, 2, 2, 2],
-      [1, 1, 1, 6, 18, 3, 2, 2, 7, 2],
+      [1, 1, 1, 6, 19, 3, 2, 2, 7, 2],
       [1, 1, 1, 1, 1, 1, 3, 2, 7, 2],
       [1, 0, 0, 1, 1, 7, 3, 7, 2, 2],
       [1, 0, 0, 0, 2, 7, 7, 3, 3, 3],
-      [4, 3, 0, 18, 2, 2, 3, 3, 3, 3],
+      [4, 3, 0, 19, 2, 2, 3, 3, 3, 3],
       [4, 4, 3, 3, 2, 7, 3, 0, 0, 3],
       [4, 4, 7, 3, 7, 4, 20, 0, 0, 0],
       [4, 7, 4, 4, 4, 4, 6, 6, 0, 0],
@@ -159,10 +159,10 @@ class KingdomBuilderBoard extends APP_GameClass
       [2, 2, 2, 2, 2, 2, 2, 0, 0, 0],
       [2, 2, 2, 7, 2, 3, 3, 3, 0, 0],
       [2, 7, 2, 2, 2, 3, 6, 3, 0, 4],
-      [1, 4, 6, 2, 20, 6, 3, 4, 4, 4],
-      [1, 4, 4, 6, 6, 6, 2, 17, 1, 4],
-      [1, 4, 4, 4, 6, 6, 3, 1, 1, 1],
-      [1, 1, 1, 17, 4, 6, 6, 3, 7, 1],
+      [1, 3, 6, 2, 20, 6, 3, 4, 4, 4],
+      [1, 3, 3, 6, 6, 6, 3, 18, 1, 4],
+      [1, 3, 3, 3, 6, 6, 3, 1, 1, 1],
+      [1, 1, 1, 18, 4, 6, 6, 3, 7, 1],
       [0, 1, 0, 0, 4, 6, 3, 1, 1, 1],
       [0, 0, 0, 0, 4, 4, 4, 4, 1, 7],
       [0, 0, 0, 4, 4, 4, 4, 4, 7, 7],
@@ -330,8 +330,7 @@ class KingdomBuilderBoard extends APP_GameClass
     $quadrants = $this->getQuadrants();
     for ($k = 0; $k < 4; $k++) {
       $nBoard = (int) $quadrants[$k];
-      // TODO : remove
-      $flipped = $nBoard >= 8 || $nBoard >= 100;
+      $flipped = $nBoard >= 100;
       if ($flipped) {
         $nBoard -= $nBoard >= 100 ? 100 : 8;
       }
@@ -374,31 +373,46 @@ class KingdomBuilderBoard extends APP_GameClass
   }
 
   /*#################################
-#### Computing available hexes ####
-#################################*/
-  public function getHexesOfType($types)
+  #### Computing available hexes ####
+  #################################*/
+  public function getHexes($types = null)
   {
     $hexes = [];
     $board = $this->getBoard();
-    if (!is_array($types)) {
-      $types = [$types];
-    }
 
     for ($x = 0; $x < 20; $x++) {
       for ($y = 0; $y < 20; $y++) {
-        if (in_array($board[$x][$y], $types)) {
-          $hexes[] = ['x' => $x, 'y' => $y];
+        if (!is_null($types) && !in_array($board[$x][$y], $types)) {
+          continue;
         }
+
+        $hexes[] = ['x' => $x, 'y' => $y];
       }
     }
 
     return $hexes;
   }
 
+  public function getHexesOfType($types)
+  {
+    if (!is_array($types)) {
+      $types = [$types];
+    }
+
+    return $this->getHexes($types);
+  }
+
   public function keepFreeHexes(&$hexes)
   {
     $settlements = $this->getPlacedSettlementsCoords();
     $hexes = array_values(array_udiff($hexes, $settlements, ['KingdomBuilderBoard', 'compareCoords']));
+  }
+
+  public function getFreeHexes()
+  {
+    $hexes = $this->getHexes();
+    $this->keepFreeHexes($hexes);
+    return $hexes;
   }
 
   public function getFreeHexesOfType($type)
