@@ -26,11 +26,11 @@ class KingdomBuilderPlayerManager extends APP_GameClass
       $color = $gameInfos['player_colors'][$i++];
       $values[] = "('" . $pId . "','$color','" . $player['player_canal'] . "','" . addslashes($player['player_name']) . "','" . addslashes($player['player_avatar']) . "')";
     }
-    self::DbQuery($sql . implode($values, ','));
-    $this->game->reattributeColorsBasedOnPreferences($players, [ "ff0000", "008000", "0000ff", "ffa500", "ffffff", "e94190", "982fff", "72c3b1", "bdd002", "7b7b7b" ]);
+    self::DbQuery($sql . implode(',', $values));
+    $this->game->reattributeColorsBasedOnPreferences($players, ["ff0000", "008000", "0000ff", "ffa500", "ffffff", "e94190", "982fff", "72c3b1", "bdd002", "7b7b7b"]);
     $this->game->reloadPlayersBasicInfos();
 
-    foreach($this->getPlayers() as $player){
+    foreach ($this->getPlayers() as $player) {
       $player->setupNewGame();
     }
   }
@@ -81,7 +81,7 @@ class KingdomBuilderPlayerManager extends APP_GameClass
   {
     $ui = [];
     foreach ($this->getPlayers() as $player)
-       $ui[] = $player->getUiData($currentPlayerId);
+      $ui[] = $player->getUiData($currentPlayerId);
 
     return $ui;
   }

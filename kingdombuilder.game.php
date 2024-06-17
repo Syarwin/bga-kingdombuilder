@@ -1,4 +1,5 @@
 <?php
+
 /**
  *------
  * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
@@ -305,8 +306,8 @@ class kingdombuilder extends Table
         $nextState =
             count($this->log->getLastBuilds()) == 3 ||
             $player->getSettlementsInHand() == 0
-                ? 'done'
-                : 'build';
+            ? 'done'
+            : 'build';
         if (
             $nextState == 'done' &&
             count($player->getPlayableTilesInHand()) > 0

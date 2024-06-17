@@ -1,4 +1,5 @@
 <?php
+
 /**
  *------
  * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
@@ -66,17 +67,17 @@ $game_options = [
     ],
   ],
 
-  OPTION_NOMADS_EXPANSION => [
-    'name' => totranslate('Nomads expansion'),
-    'values' => [
-      DISABLED => [
-        'name' => totranslate('Disabled'),
-      ],
-      ENABLED => [
-        'name' => totranslate('Enabled'),
-      ],
-    ],
-  ],
+  // OPTION_NOMADS_EXPANSION => [
+  //   'name' => totranslate('Nomads expansion'),
+  //   'values' => [
+  //     DISABLED => [
+  //       'name' => totranslate('Disabled'),
+  //     ],
+  //     ENABLED => [
+  //       'name' => totranslate('Enabled'),
+  //     ],
+  //   ],
+  // ],
 ];
 
 $game_preferences = [
